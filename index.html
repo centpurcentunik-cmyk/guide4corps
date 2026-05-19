@@ -1539,7 +1539,7 @@
             phone: "0692 21.74.82",
             siteUrl: "https://www.guidedes4corps.re",
             siteLabel: "www.guidedes4corps.re",
-            contactEmail: "contact@guidedes4corps.re",
+            contactEmail: "runinstinct4@gmail.com",
             copyright: "© 2026 ETERN'AILE & CTV974 — Saint-Paul, La Réunion",
             motto: "Le libre arbitre est la seule règle.",
             adminPassword: "4corps"
@@ -1701,7 +1701,36 @@
             refreshAdminTable();
         }
 
-        function envoyerDemandeContact() {
+        async function transmettreLeadParEmail(lead) {
+            const destination = platformSettings.contactEmail || defaultPlatformSettings.contactEmail;
+            const payload = {
+                _subject: `Nouvelle demande Etern'Aile - ${lead.source || "Contact"}`,
+                _template: "table",
+                _captcha: "false",
+                _replyto: lead.email,
+                source: lead.source || "Inscription",
+                email: lead.email,
+                nom: lead.p1 || "-",
+                telephone_ou_partenaire: lead.p2 || "-",
+                message_ou_resultat: lead.score || "-",
+                date: new Date().toLocaleString('fr-FR')
+            };
+
+            const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(destination)}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error("Transmission email impossible");
+            }
+        }
+
+        async function envoyerDemandeContact() {
             const name = document.getElementById('contact-name').value.trim();
             const phone = document.getElementById('contact-phone').value.trim();
             const email = document.getElementById('contact-email').value.trim();
@@ -1715,13 +1744,27 @@
                 return;
             }
 
-            enregistrerLead({
+            const lead = {
                 source: "Demande de renseignement",
                 email,
                 p1: name,
                 p2: phone || "-",
                 score: message.slice(0, 80)
-            });
+            };
+
+            status.innerText = "Transmission en cours...";
+            status.className = "text-xs text-center text-lava-gold";
+            status.classList.remove('hidden');
+
+            try {
+                await transmettreLeadParEmail({ ...lead, score: message });
+            } catch (error) {
+                status.innerText = "La transmission email n'a pas abouti. Merci de réessayer dans quelques instants.";
+                status.className = "text-xs text-center text-red-500";
+                return;
+            }
+
+            enregistrerLead(lead);
 
             document.getElementById('contact-name').value = "";
             document.getElementById('contact-phone').value = "";
@@ -1816,7 +1859,7 @@
             }, 800);
         }
 
-        function validerEmailEtReveler() {
+        async function validerEmailEtReveler() {
             const emailInput = document.getElementById('user-email').value.trim();
             const err = document.getElementById('email-error');
 
@@ -1828,6 +1871,22 @@
 
             err.classList.add('hidden');
 
+            const lead = {
+                source: "Compatibilité couple",
+                email: emailInput,
+                p1: `${resultatsCourants.p1.prenom} ${resultatsCourants.p1.nom}`,
+                p2: `${resultatsCourants.p2.prenom} ${resultatsCourants.p2.nom}`,
+                score: `${resultatsCourants.scores.glob}%`
+            };
+
+            try {
+                await transmettreLeadParEmail(lead);
+            } catch (error) {
+                err.innerText = "⚠️ La transmission email n'a pas abouti. Merci de réessayer dans quelques instants.";
+                err.classList.remove('hidden');
+                return;
+            }
+
             document.getElementById('section-conversion').innerHTML = `
                 <div class="py-12">
                     <svg class="w-16 h-16 mx-auto text-green-500 animate-bounce mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1837,13 +1896,7 @@
                 </div>
             `;
 
-            enregistrerLead({
-                source: "Compatibilité couple",
-                email: emailInput,
-                p1: `${resultatsCourants.p1.prenom} ${resultatsCourants.p1.nom}`,
-                p2: `${resultatsCourants.p2.prenom} ${resultatsCourants.p2.nom}`,
-                score: `${resultatsCourants.scores.glob}%`
-            });
+            enregistrerLead(lead);
 
             setTimeout(() => {
                 document.getElementById('section-conversion').classList.add('hidden');
@@ -2199,7 +2252,7 @@
             gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        function validerEmailOracleEtReveler() {
+        async function validerEmailOracleEtReveler() {
             const emailInput = document.getElementById('tarot-user-email').value.trim();
             const err = document.getElementById('tarot-email-error');
 
@@ -2211,13 +2264,26 @@
 
             err.classList.add('hidden');
             const corpsDetectes = [...new Set(stateTarotSelectedSpread.map(card => card.corps))].join(", ");
-            enregistrerLead({
+            const lead = {
                 source: "Oracle difficulté",
                 email: emailInput,
                 p1: stateTarotQuery || "Guidance libre",
                 p2: corpsDetectes || "-",
                 score: stateTarotSelectedSpread[0]?.nom || "-"
-            });
+            };
+
+            try {
+                await transmettreLeadParEmail({
+                    ...lead,
+                    score: `Carte principale : ${lead.score}. Corps détectés : ${lead.p2}. Question : ${lead.p1}`
+                });
+            } catch (error) {
+                err.innerText = "⚠️ La transmission email n'a pas abouti. Merci de réessayer dans quelques instants.";
+                err.classList.remove('hidden');
+                return;
+            }
+
+            enregistrerLead(lead);
             document.getElementById('tarot-lead-gate').classList.add('hidden');
             genererRapportTarotFinal();
         }
