@@ -447,6 +447,240 @@
             background: radial-gradient(circle, rgba(212,175,55,0.24), transparent 70%);
             text-shadow: 0 0 22px rgba(240,192,64,0.85);
         }
+
+        .guide-page {
+            --guide-cyan: #19d3e6;
+            --guide-gold: #d9902c;
+            --guide-copper: #9f5724;
+            position: relative;
+            overflow: hidden;
+            margin-inline: calc(50% - 50vw);
+            padding-inline: max(1rem, calc((100vw - 1280px) / 2));
+            color: #f4efe5;
+            background:
+                radial-gradient(circle at 70% 8%, rgba(25, 211, 230, 0.18), transparent 28%),
+                radial-gradient(circle at 30% 20%, rgba(217, 144, 44, 0.14), transparent 30%),
+                linear-gradient(180deg, rgba(1, 10, 10, 0.86), rgba(0, 0, 0, 0.98)),
+                url("images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg") center top / cover fixed no-repeat;
+        }
+        .guide-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.55;
+            background-image:
+                radial-gradient(circle, rgba(255,198,83,0.75) 0 1px, transparent 1.8px),
+                radial-gradient(circle, rgba(25,211,230,0.6) 0 1px, transparent 1.7px);
+            background-size: 140px 140px, 220px 220px;
+            background-position: 20px 40px, 90px 120px;
+        }
+        .guide-page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.72), transparent 34%, rgba(0,0,0,0.62)),
+                linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.96) 100%);
+        }
+        .guide-layer {
+            position: relative;
+            z-index: 1;
+        }
+        .guide-nav {
+            position: sticky;
+            top: 86px;
+            z-index: 20;
+            margin-inline: calc(50% - 50vw);
+            padding: 0.8rem max(1rem, calc((100vw - 1280px) / 2));
+            background: rgba(0, 10, 12, 0.82);
+            border-bottom: 1px solid rgba(217, 144, 44, 0.38);
+            backdrop-filter: blur(14px);
+        }
+        .guide-nav a {
+            color: #f4efe5;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+        .guide-nav a:hover {
+            color: var(--guide-cyan);
+            text-shadow: 0 0 18px rgba(25, 211, 230, 0.5);
+        }
+        .guide-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .guide-nav {
+            scrollbar-width: none;
+        }
+        .guide-hero-title {
+            font-size: clamp(3.2rem, 11vw, 7.8rem);
+            line-height: 0.82;
+            letter-spacing: 0.03em;
+        }
+        .guide-hero-title .number {
+            color: var(--guide-cyan);
+            text-shadow: 0 0 28px rgba(25, 211, 230, 0.55);
+        }
+        .guide-hero-title .word {
+            background: linear-gradient(110deg, #f7c35f, #e78225 45%, #fff0c8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .guide-btn-cyan,
+        .guide-btn-ghost {
+            border-radius: 4px;
+            padding: 0.9rem 1.25rem;
+            font-size: 0.72rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .guide-btn-cyan {
+            background: linear-gradient(135deg, #04899b, #1fd6e8);
+            color: white;
+            box-shadow: 0 0 30px rgba(25, 211, 230, 0.22);
+        }
+        .guide-btn-ghost {
+            border: 1px solid rgba(217,144,44,0.75);
+            color: #f4efe5;
+            background: rgba(0,0,0,0.32);
+        }
+        .guide-btn-cyan:hover,
+        .guide-btn-ghost:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(217, 144, 44, 0.26);
+            border-color: var(--guide-cyan);
+        }
+        .guide-badge,
+        .guide-card,
+        .guide-quote,
+        .guide-testimonial,
+        .guide-faq details {
+            border: 1px solid rgba(217,144,44,0.42);
+            background: linear-gradient(145deg, rgba(0, 18, 20, 0.74), rgba(0,0,0,0.66));
+            box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+        }
+        .guide-badge {
+            padding: 0.7rem 0.9rem;
+            border-radius: 4px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #f4efe5;
+        }
+        .guide-section {
+            padding-block: clamp(3rem, 7vw, 6rem);
+            border-top: 1px solid rgba(217,144,44,0.34);
+        }
+        .guide-kicker {
+            color: var(--guide-cyan);
+            font-family: Cinzel, serif;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .guide-heading {
+            font-size: clamp(2rem, 5vw, 4.2rem);
+            line-height: 1.02;
+            letter-spacing: 0.04em;
+        }
+        .guide-copy {
+            color: rgba(244,239,229,0.78);
+            line-height: 1.85;
+        }
+        .guide-visual {
+            min-height: 320px;
+            border: 1px solid rgba(217,144,44,0.38);
+            background:
+                linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.78)),
+                var(--guide-image, url("images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg")) center / cover no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+        .guide-visual::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 1rem;
+            bottom: 1rem;
+            color: rgba(244,239,229,0.5);
+            font-size: 0.62rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        .guide-card {
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+        .guide-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(25,211,230,0.8);
+        }
+        .guide-card h3,
+        .guide-testimonial h3 {
+            color: #f6b449;
+            font-family: Cinzel, serif;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .guide-switch {
+            width: 72px;
+            height: 34px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(217,70,24,0.85), rgba(25,211,230,0.85));
+            position: relative;
+            box-shadow: 0 0 24px rgba(25,211,230,0.22);
+        }
+        .guide-switch::after {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            right: 4px;
+            top: 4px;
+            background: #f4efe5;
+        }
+        .guide-element {
+            border-top: 1px solid rgba(25,211,230,0.36);
+            padding-top: 0.8rem;
+        }
+        .guide-testimonial {
+            border-radius: 6px;
+            padding: 1.35rem;
+        }
+        .guide-faq details {
+            border-radius: 6px;
+            padding: 1rem 1.1rem;
+        }
+        .guide-faq summary {
+            cursor: pointer;
+            list-style: none;
+            font-weight: 700;
+            color: #f4efe5;
+        }
+        .guide-faq summary::-webkit-details-marker {
+            display: none;
+        }
+        .guide-faq summary::after {
+            content: "+";
+            float: right;
+            color: var(--guide-gold);
+            font-weight: 900;
+        }
+        .guide-faq details[open] summary::after {
+            content: "-";
+        }
+        .guide-contact-box {
+            border-left: 1px solid rgba(217,144,44,0.45);
+        }
         @media (max-width: 900px) {
             .oracle-home::before {
                 opacity: 0.36;
@@ -465,6 +699,15 @@
             .zodiac-ornament {
                 opacity: 0.25;
                 width: 260px;
+            }
+            .guide-nav {
+                top: 76px;
+                overflow-x: auto;
+            }
+            .guide-contact-box {
+                border-left: 0;
+                border-top: 1px solid rgba(217,144,44,0.45);
+                padding-top: 2rem;
             }
         }
     </style>
@@ -525,6 +768,9 @@
                 <button onclick="switchTab('tarot')" id="tab-btn-home" class="lux-nav-btn is-active px-1 py-2 text-lava-gold transition-all duration-300">
                     Accueil
                 </button>
+                <button onclick="switchTab('guide')" id="tab-btn-guide" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
+                    Guide des 4 corps
+                </button>
                 <button onclick="switchTab('resonance')" id="tab-btn-resonance" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     <span id="tab-label-resonance">Résonance</span>
                 </button>
@@ -539,6 +785,212 @@
 
     <!-- Corps principal -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 flex-grow w-full">
+
+        <!-- ============================================== -->
+        <!-- ONGLET : GUIDE DES 4 CORPS - SITE VITRINE      -->
+        <!-- ============================================== -->
+        <section id="tab-guide" class="guide-page hidden">
+            <nav class="guide-nav guide-layer">
+                <div class="flex gap-5 sm:gap-8 whitespace-nowrap">
+                    <a href="#guide-hero">Accueil</a>
+                    <a href="#guide-qui">Qui je suis</a>
+                    <a href="#guide-corps">Les 4 corps</a>
+                    <a href="#guide-accompagnement">Consultation</a>
+                    <a href="#guide-nature">La nature</a>
+                    <a href="#guide-temoignages">Témoignages</a>
+                    <a href="#guide-faq">FAQ</a>
+                    <a href="#guide-contact">Contact</a>
+                </div>
+            </nav>
+
+            <div id="guide-hero" class="guide-layer min-h-[760px] grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center py-16 sm:py-24">
+                <div class="space-y-8 max-w-2xl">
+                    <div>
+                        <p class="font-display text-3xl sm:text-4xl tracking-[0.28em] uppercase text-white">Guide des</p>
+                        <h1 class="guide-hero-title font-display uppercase">
+                            <span class="number">4</span> <span class="word">Corps</span>
+                        </h1>
+                        <p class="font-display uppercase tracking-[0.22em] text-sm sm:text-base text-[#f4efe5] mt-4">Retour à l'état naturel et surnaturel</p>
+                    </div>
+                    <p class="guide-copy max-w-xl">
+                        J'accompagne les personnes bloquées dans leurs 4 corps : <span class="text-cyan-300">physique, émotionnel, mental et spirituel</span>, grâce aux états de conscience modifiés pour favoriser l'auto-guérison.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="document.getElementById('guide-accompagnement').scrollIntoView({behavior:'smooth'})" class="guide-btn-cyan">Découvrir l'accompagnement</button>
+                        <button onclick="scrollToContact('Je souhaite prendre rendez-vous pour un accompagnement Guide des 4 Corps.')" class="guide-btn-ghost">Prendre RDV</button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                        <div class="guide-badge">♧ 100% naturel</div>
+                        <div class="guide-badge">◇ Sans dogmes</div>
+                        <div class="guide-badge">⬡ Approche éthique</div>
+                        <div class="guide-badge">⌂ La Réunion</div>
+                    </div>
+                </div>
+                <div class="guide-visual min-h-[520px]" data-label="Mascotte arbre/esprit - image remplaçable"></div>
+            </div>
+
+            <section id="guide-qui" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.86fr_1.14fr] gap-10 items-stretch">
+                <div class="space-y-7">
+                    <p class="guide-kicker">1. Qui je suis</p>
+                    <h2 class="guide-heading font-display uppercase text-white">
+                        Ni gourou,<br>ni religion.<br>Le pilote de<br>votre invisible.
+                    </h2>
+                    <p class="guide-copy">
+                        Je ne guéris personne à sa place. Je suis le moniteur auto-école de l'invisible. Je vous apprends à piloter vos véhicules intérieurs pour reprendre le volant de votre vie.
+                    </p>
+                    <blockquote class="guide-quote rounded-lg p-5 text-sm italic text-[#f6c76a] leading-relaxed">
+                        “Mon rôle est exactement celui d'un moniteur d'auto-école de l'invisible : je m'assieds sur le siège passager, mais c'est vous qui apprenez à piloter ce qui se passe en vous.”
+                    </blockquote>
+                </div>
+                <div class="guide-visual min-h-[620px]" data-label="Cascade, méditation, racines lumineuses" style="--guide-image:url('images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png')"></div>
+            </section>
+
+            <section id="guide-corps" class="guide-section guide-layer">
+                <div class="max-w-3xl mb-10 space-y-4">
+                    <p class="guide-kicker">2. Les 4 corps</p>
+                    <p class="guide-copy">
+                        Un blocage n'est jamais isolé. En voyageant à travers vos 4 corps, nous libérons les nœuds pour restaurer votre flux naturel.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                    <article class="guide-card">
+                        <h3>Corps Émotionnel</h3>
+                        <p class="guide-copy text-sm mt-4">Blessures, colères, peurs, dépendances affectives.</p>
+                        <p class="text-cyan-300 text-sm font-bold mt-4">Libérer pour ressentir sans subir.</p>
+                    </article>
+                    <article class="guide-card">
+                        <h3>Corps Physique</h3>
+                        <p class="guide-copy text-sm mt-4">Fatigue, douleurs, tensions, stress somatisé.</p>
+                        <p class="text-cyan-300 text-sm font-bold mt-4">Libérer pour retrouver vitalité et énergie.</p>
+                    </article>
+                    <article class="guide-card">
+                        <h3>Corps Mental</h3>
+                        <p class="guide-copy text-sm mt-4">Pensées bouclées, charge mentale, peurs, doutes.</p>
+                        <p class="text-cyan-300 text-sm font-bold mt-4">Libérer pour retrouver clarté et focus.</p>
+                    </article>
+                    <article class="guide-card">
+                        <h3>Corps Spirituel</h3>
+                        <p class="guide-copy text-sm mt-4">Déconnexion, mémoires, influences invisibles, perte de sens.</p>
+                        <p class="text-cyan-300 text-sm font-bold mt-4">Libérer pour retrouver sens et guidance.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="guide-accompagnement" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-2">
+                <div class="p-6 sm:p-10 space-y-6">
+                    <p class="guide-kicker text-[#f6b449]">3. L'accompagnement</p>
+                    <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider">La carte avant le voyage</h2>
+                    <p class="guide-copy">
+                        Je ne fais rien sans consultation. Avant tout accompagnement, j'ai besoin de comprendre votre histoire pour dresser un diagnostic éthique et vous orienter vers le bon protocole.
+                    </p>
+                    <button onclick="scrollToContact('Je souhaite prendre rendez-vous pour une consultation de diagnostic.')" class="guide-btn-cyan">Prendre RDV</button>
+                </div>
+                <div class="guide-visual min-h-[360px]" data-label="Mains tenant une boussole dans la nature"></div>
+            </section>
+
+            <section id="guide-pilote" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.82fr_0.36fr_0.82fr] gap-8 items-center">
+                <div class="space-y-6">
+                    <p class="guide-kicker text-[#f6b449]">4. Changement de pilote</p>
+                    <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider">De la survie automatique à la conscience éveillée</h2>
+                    <div class="guide-card border-red-700/50">
+                        <h3 class="text-red-300">Pilote de survie</h3>
+                        <ul class="guide-copy text-sm mt-4 space-y-1">
+                            <li>Traumatismes</li>
+                            <li>Mémoires familiales</li>
+                            <li>Mental & peur</li>
+                            <li>Déconnexion</li>
+                        </ul>
+                        <p class="text-red-300 text-sm font-bold mt-4">Vous subissez votre vie.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-5">
+                    <div class="guide-visual w-full min-h-[300px]" data-label="Visage/arbre énergétique"></div>
+                    <div class="guide-switch"></div>
+                </div>
+                <div class="guide-card">
+                    <h3 class="text-cyan-300">Pilote conscient</h3>
+                    <ul class="guide-copy text-sm mt-4 space-y-1">
+                        <li>Présence</li>
+                        <li>Intuition</li>
+                        <li>Liberté intérieure</li>
+                        <li>Alignement</li>
+                    </ul>
+                    <p class="text-cyan-300 text-sm font-bold mt-4">Vous reprenez le volant.</p>
+                </div>
+            </section>
+
+            <section id="guide-nature" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-10 items-center">
+                <div class="guide-visual min-h-[360px]" data-label="Forêt, rivière, cascade, pierres de feu"></div>
+                <div class="space-y-7">
+                    <p class="guide-kicker text-[#f6b449]">5. La nature n'est pas un décor, c'est la source.</p>
+                    <p class="guide-copy">
+                        La nature réunionnaise existait bien avant les dogmes. En se connectant de manière brute aux cascades, à la vapeur, aux rivières et aux pierres de feu, nous revenons à la réalité originelle de nos forces innées.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="guide-element"><h3 class="text-cyan-300 font-display uppercase">Eau</h3><p class="text-xs text-gray-300 mt-1">Purifie et emporte</p></div>
+                        <div class="guide-element"><h3 class="text-[#f6b449] font-display uppercase">Vapeur</h3><p class="text-xs text-gray-300 mt-1">Lâche prise mental</p></div>
+                        <div class="guide-element"><h3 class="text-white font-display uppercase">Terre</h3><p class="text-xs text-gray-300 mt-1">Ancre et restructure</p></div>
+                        <div class="guide-element"><h3 class="text-cyan-200 font-display uppercase">Air</h3><p class="text-xs text-gray-300 mt-1">Ouvre la conscience</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="guide-temoignages" class="guide-section guide-layer">
+                <p class="guide-kicker text-[#f6b449] text-center mb-8">6. Témoignages</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="guide-testimonial">
+                        <p class="text-3xl text-[#f6b449]">“</p>
+                        <p class="guide-copy text-sm">En une consultation, Etern'Aile a localisé le nœud d'influence ancestrale. Le bain de plantes m'a totalement libérée.</p>
+                        <p class="text-xs text-gray-300 mt-5">— Accompagnement individuel, Saint-Denis</p>
+                        <p class="text-[#f6b449] mt-3">★★★★★</p>
+                    </article>
+                    <article class="guide-testimonial">
+                        <p class="text-3xl text-[#f6b449]">“</p>
+                        <p class="guide-copy text-sm">Ce n'est pas de la voyance de foire. C'est structuré, d'une norme juste. Sa métaphore m'a touché.</p>
+                        <p class="text-xs text-gray-300 mt-5">— Accompagnement individuel, Saint-Pierre</p>
+                        <p class="text-[#f6b449] mt-3">★★★★★</p>
+                    </article>
+                    <article class="guide-testimonial">
+                        <p class="text-3xl text-[#f6b449]">“</p>
+                        <p class="guide-copy text-sm">La vapeur de plantes en nature est une expérience inoubliable de renaissance. Un accompagnateur d'une éthique irréprochable.</p>
+                        <p class="text-xs text-gray-300 mt-5">— Accompagnement individuel, Saint-Paul</p>
+                        <p class="text-[#f6b449] mt-3">★★★★★</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="guide-faq" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10">
+                <div class="guide-faq space-y-3">
+                    <p class="guide-kicker text-[#f6b449] mb-5">7. FAQ</p>
+                    <details><summary>Est-ce religieux ou lié à un dogme particulier ?</summary><p class="guide-copy text-sm mt-3">Non. L'approche est naturelle, symbolique et expérientielle, sans appartenance religieuse imposée.</p></details>
+                    <details><summary>Est-ce dangereux d'accéder à un état de conscience modifié ?</summary><p class="guide-copy text-sm mt-3">L'accompagnement se fait avec cadre, écoute et consentement. Le diagnostic sert justement à adapter le protocole.</p></details>
+                    <details><summary>Pourquoi passer par la consultation de diagnostic ?</summary><p class="guide-copy text-sm mt-3">Parce que chaque blocage a une origine différente. La consultation évite les protocoles génériques.</p></details>
+                    <details><summary>Dois-je croire à quelque chose d'ésotérique ?</summary><p class="guide-copy text-sm mt-3">Non. Vous pouvez venir avec votre vécu, vos sensations et vos questions, sans croyance préalable.</p></details>
+                    <details><summary>Puis-je venir même si je suis sceptique ?</summary><p class="guide-copy text-sm mt-3">Oui. Le scepticisme sain est compatible avec un travail sérieux et respectueux.</p></details>
+                </div>
+                <div id="guide-contact" class="guide-contact-box pl-0 lg:pl-12 space-y-8">
+                    <div>
+                        <p class="guide-kicker text-[#f6b449]">8. Prendre contact</p>
+                        <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider mt-3">Le premier pas vers votre souveraineté.</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+                        <div><p class="text-[#f6b449] uppercase font-bold">Saint-Paul</p><p class="text-gray-300">Île de La Réunion</p></div>
+                        <div><p class="text-[#f6b449] uppercase font-bold">WhatsApp</p><p class="text-gray-300">+262 6 92 XX XX XX</p></div>
+                        <div><p class="text-[#f6b449] uppercase font-bold">Suivez l'invisible</p><p class="text-gray-300">Facebook / Instagram</p></div>
+                    </div>
+                    <button onclick="scrollToContact('Je souhaite prendre rendez-vous avec Etern’Aile.')" class="guide-btn-cyan">Prendre RDV</button>
+                </div>
+            </section>
+
+            <div class="guide-layer py-8 border-t border-[#d9902c55] flex flex-col sm:flex-row gap-4 justify-between text-[11px] text-gray-400">
+                <div class="flex flex-wrap gap-4">
+                    <span>Mentions légales</span>
+                    <span>Confidentialité</span>
+                    <span>Conditions générales</span>
+                </div>
+                <p>© 2026 Etern'Aile — Tous droits réservés.</p>
+            </div>
+        </section>
 
         <!-- ============================================== -->
         <!-- ONGLET 1 : L'ORACLE DE DÉTECTION DES BLOCAGES  -->
@@ -1303,14 +1755,14 @@
     <script>
         // Switcher d'onglet
         function switchTab(tabId) {
-            const tabs = ['tarot', 'resonance'];
+            const tabs = ['tarot', 'guide', 'resonance'];
             tabs.forEach(t => {
                 const sec = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`tab-btn-${t}`);
-                const homeBtn = document.getElementById('tab-btn-home');
+                const btn = t === 'tarot' ? document.getElementById('tab-btn-home') : document.getElementById(`tab-btn-${t}`);
+                if (!sec) return;
                 if (t === tabId) {
                     sec.classList.remove('hidden');
-                    if (btn && t === 'resonance') {
+                    if (btn) {
                         btn.classList.add('is-active', 'text-lava-gold');
                         btn.classList.remove('text-gray-500');
                     }
@@ -1321,12 +1773,8 @@
                         btn.classList.add('text-gray-500');
                     }
                 }
-                if (homeBtn) {
-                    homeBtn.classList.toggle('is-active', tabId === 'tarot');
-                    homeBtn.classList.toggle('text-lava-gold', tabId === 'tarot');
-                    homeBtn.classList.toggle('text-gray-500', tabId !== 'tarot');
-                }
             });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Gematria pythagoricienne pour la Grille d'Inclusion
