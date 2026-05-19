@@ -1549,6 +1549,10 @@
             ...defaultPlatformSettings,
             ...(JSON.parse(localStorage.getItem('platform_settings_yann')) || {})
         };
+        if (platformSettings.contactEmail === "contact@guidedes4corps.re") {
+            platformSettings.contactEmail = defaultPlatformSettings.contactEmail;
+            localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
+        }
 
         function setText(id, value) {
             const element = document.getElementById(id);
