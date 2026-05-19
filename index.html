@@ -1707,10 +1707,9 @@
 
         async function transmettreLeadParEmail(lead) {
             const destination = platformSettings.contactEmail || defaultPlatformSettings.contactEmail;
-            const payload = {
+            const payload = new URLSearchParams({
+                _to: destination,
                 _subject: `Nouvelle demande Etern'Aile - ${lead.source || "Contact"}`,
-                _template: "table",
-                _captcha: "false",
                 _replyto: lead.email,
                 source: lead.source || "Inscription",
                 email: lead.email,
@@ -1718,20 +1717,16 @@
                 telephone_ou_partenaire: lead.p2 || "-",
                 message_ou_resultat: lead.score || "-",
                 date: new Date().toLocaleString('fr-FR')
-            };
-
-            const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(destination)}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                throw new Error("Transmission email impossible");
-            }
+            await fetch("https://flowform.to/submit", {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: payload
+            });
         }
 
         async function envoyerDemandeContact() {
