@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>L'Oracle des 4 Corps & Table d'Inclusion — Yann | Guide Alchimiste</title>
-    <!-- Fonts Google: Cinzel & Montserrat -->
+    <!-- Fonts Google: Cormorant Garamond, Cinzel & Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind config AVANT le chargement du CDN -->
     <script>
@@ -17,6 +17,7 @@
                     fontFamily: {
                         sans: ['Montserrat', 'sans-serif'],
                         display: ['Cinzel', 'serif'],
+                        editorial: ['Cormorant Garamond', 'serif'],
                     },
                     colors: {
                         basalt: {
@@ -463,6 +464,11 @@
                 linear-gradient(180deg, rgba(1, 10, 10, 0.86), rgba(0, 0, 0, 0.98)),
                 url("images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg") center top / cover fixed no-repeat;
         }
+        .guide-page,
+        .guide-page button,
+        .guide-page a {
+            font-family: Montserrat, sans-serif;
+        }
         .guide-page::before {
             content: "";
             position: absolute;
@@ -517,9 +523,11 @@
             scrollbar-width: none;
         }
         .guide-hero-title {
+            font-family: "Cormorant Garamond", serif;
             font-size: clamp(3.2rem, 11vw, 7.8rem);
             line-height: 0.82;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.11em;
+            font-weight: 700;
         }
         .guide-hero-title .number {
             color: var(--guide-cyan);
@@ -581,15 +589,17 @@
         }
         .guide-kicker {
             color: var(--guide-cyan);
-            font-family: Cinzel, serif;
+            font-family: "Cormorant Garamond", serif;
             font-weight: 800;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
         }
         .guide-heading {
+            font-family: "Cormorant Garamond", serif;
             font-size: clamp(2rem, 5vw, 4.2rem);
             line-height: 1.02;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.12em;
+            font-weight: 700;
         }
         .guide-copy {
             color: rgba(244,239,229,0.78);
@@ -626,9 +636,10 @@
         .guide-card h3,
         .guide-testimonial h3 {
             color: #f6b449;
-            font-family: Cinzel, serif;
+            font-family: "Cormorant Garamond", serif;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.13em;
+            font-weight: 700;
         }
         .guide-switch {
             width: 72px;
@@ -806,11 +817,11 @@
             <div id="guide-hero" class="guide-layer min-h-[760px] grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center py-16 sm:py-24">
                 <div class="space-y-8 max-w-2xl">
                     <div>
-                        <p class="font-display text-3xl sm:text-4xl tracking-[0.28em] uppercase text-white">Guide des</p>
-                        <h1 class="guide-hero-title font-display uppercase">
+                        <p class="font-editorial text-3xl sm:text-4xl tracking-[0.28em] uppercase text-white">Guide des</p>
+                        <h1 class="guide-hero-title uppercase">
                             <span class="number">4</span> <span class="word">Corps</span>
                         </h1>
-                        <p class="font-display uppercase tracking-[0.22em] text-sm sm:text-base text-[#f4efe5] mt-4">Retour à votre état naturel et souverain.</p>
+                        <p class="font-editorial italic uppercase tracking-[0.18em] text-base sm:text-lg text-[#f4efe5] mt-4">Retour à votre état naturel et souverain.</p>
                     </div>
                     <div class="guide-copy max-w-2xl space-y-4">
                         <p>Vous avez la sensation de répéter les mêmes schémas ? D'être bloqué dans vos choix, fatigué dans votre corps ou déconnecté de votre sens profond ?</p>
@@ -833,7 +844,7 @@
             <section id="guide-qui" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.86fr_1.14fr] gap-10 items-stretch">
                 <div class="space-y-7">
                     <p class="guide-kicker">1. Qui je suis</p>
-                    <h2 class="guide-heading font-display uppercase text-white">
+                    <h2 class="guide-heading uppercase text-white">
                         Ni gourou,<br>ni religion.<br>Un moniteur pour<br>votre invisible.
                     </h2>
                     <div class="guide-copy space-y-4">
@@ -882,7 +893,7 @@
             <section id="guide-accompagnement" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-2">
                 <div class="p-6 sm:p-10 space-y-6">
                     <p class="guide-kicker text-[#f6b449]">3. L'accompagnement</p>
-                    <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider">La carte avant le voyage</h2>
+                    <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em]">La carte avant le voyage</h2>
                     <p class="guide-copy">
                         Je ne fais rien sans consultation. Avant tout accompagnement, j'ai besoin de comprendre votre histoire pour dresser un diagnostic éthique et vous orienter vers le bon protocole.
                     </p>
@@ -894,7 +905,7 @@
             <section id="guide-pilote" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.82fr_0.36fr_0.82fr] gap-8 items-center">
                 <div class="space-y-6">
                     <p class="guide-kicker text-[#f6b449]">4. Changement de pilote</p>
-                    <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider">De la survie automatique à la conscience éveillée</h2>
+                    <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em]">De la survie automatique à la conscience éveillée</h2>
                     <div class="guide-card border-red-700/50">
                         <h3 class="text-red-300">Pilote de survie</h3>
                         <ul class="guide-copy text-sm mt-4 space-y-1">
@@ -930,10 +941,10 @@
                         La nature réunionnaise existait bien avant les dogmes. En se connectant de manière brute aux cascades, à la vapeur, aux rivières et aux pierres de feu, nous revenons à la réalité originelle de nos forces innées.
                     </p>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="guide-element"><h3 class="text-cyan-300 font-display uppercase">Eau</h3><p class="text-xs text-gray-300 mt-1">Purifie et emporte</p></div>
-                        <div class="guide-element"><h3 class="text-[#f6b449] font-display uppercase">Vapeur</h3><p class="text-xs text-gray-300 mt-1">Lâche prise mental</p></div>
-                        <div class="guide-element"><h3 class="text-white font-display uppercase">Terre</h3><p class="text-xs text-gray-300 mt-1">Ancre et restructure</p></div>
-                        <div class="guide-element"><h3 class="text-cyan-200 font-display uppercase">Air</h3><p class="text-xs text-gray-300 mt-1">Ouvre la conscience</p></div>
+                        <div class="guide-element"><h3 class="text-cyan-300 font-editorial uppercase tracking-[0.14em]">Eau</h3><p class="text-xs text-gray-300 mt-1">Purifie et emporte</p></div>
+                        <div class="guide-element"><h3 class="text-[#f6b449] font-editorial uppercase tracking-[0.14em]">Vapeur</h3><p class="text-xs text-gray-300 mt-1">Lâche prise mental</p></div>
+                        <div class="guide-element"><h3 class="text-white font-editorial uppercase tracking-[0.14em]">Terre</h3><p class="text-xs text-gray-300 mt-1">Ancre et restructure</p></div>
+                        <div class="guide-element"><h3 class="text-cyan-200 font-editorial uppercase tracking-[0.14em]">Air</h3><p class="text-xs text-gray-300 mt-1">Ouvre la conscience</p></div>
                     </div>
                 </div>
             </section>
@@ -974,7 +985,7 @@
                 <div id="guide-contact" class="guide-contact-box pl-0 lg:pl-12 space-y-8">
                     <div>
                         <p class="guide-kicker text-[#f6b449]">8. Prendre contact</p>
-                        <h2 class="font-display text-2xl sm:text-3xl uppercase text-white tracking-wider mt-3">Le premier pas vers votre souveraineté.</h2>
+                        <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em] mt-3">Le premier pas vers votre souveraineté.</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
                         <div><p class="text-[#f6b449] uppercase font-bold">Saint-Paul</p><p class="text-gray-300">Île de La Réunion</p></div>
