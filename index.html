@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- Tailwind config AVANT le chargement du CDN -->
     <script>
@@ -1702,27 +1703,47 @@
                     </label>
                     <div class="md:col-span-2 border-t border-red-950/50 pt-4 mt-2">
                         <h5 class="font-display text-xs text-lava-gold uppercase tracking-widest">Images de l'onglet Guide</h5>
-                        <p class="text-[10px] text-gray-500 mt-1">Collez une URL d'image publique. Laissez vide pour revenir au visuel par défaut.</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Choisissez une image depuis votre ordinateur puis cliquez “Téléverser”, ou collez une URL publique. La sauvegarde est partagée en ligne.</p>
                     </div>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Image Hero / Mascotte
                         <input type="url" id="admin-guide-hero-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-guide-hero-file" accept="image/*" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadGuideImage('guideHeroImage','admin-guide-hero-file','admin-guide-hero-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
+                        </div>
                     </label>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Image Qui je suis
                         <input type="url" id="admin-guide-who-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-guide-who-file" accept="image/*" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadGuideImage('guideWhoImage','admin-guide-who-file','admin-guide-who-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
+                        </div>
                     </label>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Image Accompagnement
                         <input type="url" id="admin-guide-consult-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-guide-consult-file" accept="image/*" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadGuideImage('guideConsultImage','admin-guide-consult-file','admin-guide-consult-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
+                        </div>
                     </label>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Image Changement de pilote
                         <input type="url" id="admin-guide-pilot-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-guide-pilot-file" accept="image/*" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadGuideImage('guidePilotImage','admin-guide-pilot-file','admin-guide-pilot-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
+                        </div>
                     </label>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Image Nature
                         <input type="url" id="admin-guide-nature-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-guide-nature-file" accept="image/*" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadGuideImage('guideNatureImage','admin-guide-nature-file','admin-guide-nature-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
+                        </div>
                     </label>
                 </div>
                 <p id="admin-save-status" class="text-[10px] text-emerald-500 mt-3 hidden">Modifications sauvegardées.</p>
@@ -2065,6 +2086,15 @@
         // Variables d'état
         let resultatsCourants = null;
         let capturedLeads = JSON.parse(localStorage.getItem('leads_yann')) || [];
+        const supabaseConfig = {
+            url: "https://oqzoixffraaypvegebjy.supabase.co",
+            key: "sb_publishable_MJLXugkQWgCospkKB-rfEA_zATIOW9Y",
+            bucket: "guide-images",
+            settingsPath: "guide-settings.json"
+        };
+        const supabaseClient = window.supabase
+            ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.key)
+            : null;
 
         const defaultPlatformSettings = {
             brandName: "ETERN'AILE",
@@ -2101,6 +2131,39 @@
             localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
         }
 
+        function remoteSettingsUrl() {
+            return `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${supabaseConfig.settingsPath}`;
+        }
+
+        async function loadRemotePlatformSettings() {
+            try {
+                const response = await fetch(`${remoteSettingsUrl()}?v=${Date.now()}`, { cache: "no-store" });
+                if (!response.ok) return;
+                const remoteSettings = await response.json();
+                platformSettings = {
+                    ...defaultPlatformSettings,
+                    ...platformSettings,
+                    ...remoteSettings
+                };
+                localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
+            } catch (error) {
+                console.warn("Réglages distants indisponibles", error);
+            }
+        }
+
+        async function saveRemotePlatformSettings() {
+            if (!supabaseClient) throw new Error("Supabase n'est pas chargé.");
+            const blob = new Blob([JSON.stringify(platformSettings, null, 2)], { type: "application/json" });
+            const { error } = await supabaseClient.storage
+                .from(supabaseConfig.bucket)
+                .upload(supabaseConfig.settingsPath, blob, {
+                    contentType: "application/json",
+                    cacheControl: "60",
+                    upsert: true
+                });
+            if (error) throw error;
+        }
+
         function setText(id, value) {
             const element = document.getElementById(id);
             if (!element) return;
@@ -2132,6 +2195,68 @@
             setGuideImage('guide-image-consult', platformSettings.guideConsultImage);
             setGuideImage('guide-image-pilot', platformSettings.guidePilotImage);
             setGuideImage('guide-image-nature', platformSettings.guideNatureImage);
+        }
+
+        function showAdminStatus(message, isError = false) {
+            const status = document.getElementById('admin-save-status');
+            if (!status) return;
+            status.innerText = message;
+            status.className = `text-[10px] mt-3 ${isError ? 'text-red-500' : 'text-emerald-500'}`;
+            status.classList.remove('hidden');
+            if (!isError) setTimeout(() => status.classList.add('hidden'), 2600);
+        }
+
+        function slugFileName(fileName) {
+            const safeName = fileName
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-zA-Z0-9._-]+/g, "-")
+                .replace(/-+/g, "-")
+                .replace(/^-|-$/g, "")
+                .toLowerCase();
+            return safeName || `image-${Date.now()}`;
+        }
+
+        async function uploadGuideImage(settingKey, fileInputId, urlInputId) {
+            try {
+                if (!supabaseClient) throw new Error("Supabase n'est pas chargé.");
+                const fileInput = document.getElementById(fileInputId);
+                const urlInput = document.getElementById(urlInputId);
+                const file = fileInput?.files?.[0];
+                if (!file) {
+                    showAdminStatus("Choisissez d'abord une image depuis votre ordinateur.", true);
+                    return;
+                }
+                if (!file.type.startsWith("image/")) {
+                    showAdminStatus("Le fichier choisi doit être une image.", true);
+                    return;
+                }
+
+                showAdminStatus("Téléversement de l'image en cours...");
+                const path = `guide/${settingKey}-${Date.now()}-${slugFileName(file.name)}`;
+                const { error } = await supabaseClient.storage
+                    .from(supabaseConfig.bucket)
+                    .upload(path, file, {
+                        cacheControl: "31536000",
+                        contentType: file.type,
+                        upsert: false
+                    });
+
+                if (error) throw error;
+
+                const { data } = supabaseClient.storage
+                    .from(supabaseConfig.bucket)
+                    .getPublicUrl(path);
+
+                const publicUrl = data.publicUrl;
+                platformSettings[settingKey] = publicUrl;
+                if (urlInput) urlInput.value = publicUrl;
+                applyGuideImages();
+                await savePlatformSettings();
+                showAdminStatus("Image téléversée et publiée en ligne.");
+            } catch (error) {
+                showAdminStatus(`Upload impossible : ${error.message || error}`, true);
+            }
         }
 
         function applyPlatformSettings() {
@@ -2196,7 +2321,7 @@
             });
         }
 
-        function savePlatformSettings() {
+        async function savePlatformSettings() {
             platformSettings = {
                 ...platformSettings,
                 brandName: document.getElementById('admin-brand-name').value.trim() || defaultPlatformSettings.brandName,
@@ -2227,16 +2352,25 @@
             localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
             applyPlatformSettings();
 
-            const status = document.getElementById('admin-save-status');
-            status.classList.remove('hidden');
-            setTimeout(() => status.classList.add('hidden'), 2200);
+            try {
+                await saveRemotePlatformSettings();
+                showAdminStatus("Modifications sauvegardées en ligne.");
+            } catch (error) {
+                showAdminStatus(`Sauvegarde locale OK, mais en ligne impossible : ${error.message || error}`, true);
+            }
         }
 
-        function resetPlatformSettings() {
+        async function resetPlatformSettings() {
             if (!confirm("Réinitialiser les textes et coordonnées par défaut ?")) return;
             platformSettings = { ...defaultPlatformSettings };
             localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
             applyPlatformSettings();
+            try {
+                await saveRemotePlatformSettings();
+                showAdminStatus("Réglages réinitialisés en ligne.");
+            } catch (error) {
+                showAdminStatus(`Réinitialisation locale OK, mais en ligne impossible : ${error.message || error}`, true);
+            }
         }
 
         function exportLeadsCsv() {
@@ -2951,7 +3085,8 @@
         }
 
         // Initialisation correcte au chargement
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadRemotePlatformSettings();
             applyPlatformSettings();
             switchTab('tarot');
         });
