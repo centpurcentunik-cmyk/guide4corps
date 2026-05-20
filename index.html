@@ -455,8 +455,8 @@
             --guide-copper: #9f5724;
             --guide-font-title: "Cormorant Garamond", serif;
             --guide-font-text: Montserrat, sans-serif;
-            --guide-track-title: 0.13em;
-            --guide-track-ui: 0.12em;
+            --guide-track-title: 0.045em;
+            --guide-track-ui: 0.08em;
             position: relative;
             overflow: hidden;
             margin-inline: calc(50% - 50vw);
@@ -529,15 +529,15 @@
         .guide-hero-title {
             font-family: var(--guide-font-title);
             font-size: clamp(3.2rem, 11vw, 7.8rem);
-            line-height: 0.82;
-            letter-spacing: 0.11em;
+            line-height: 0.78;
+            letter-spacing: 0.035em;
             font-weight: 700;
         }
         .guide-titleline {
             font-family: var(--guide-font-title);
             font-size: clamp(1.9rem, 4vw, 2.8rem);
             line-height: 0.95;
-            letter-spacing: 0.22em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #fffaf0;
         }
@@ -546,7 +546,7 @@
             font-style: italic;
             font-size: clamp(1rem, 2vw, 1.28rem);
             line-height: 1.25;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #f4efe5;
         }
@@ -612,20 +612,20 @@
             color: var(--guide-cyan);
             font-family: var(--guide-font-title);
             font-weight: 800;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
         }
         .guide-heading {
             font-family: var(--guide-font-title);
             font-size: clamp(2rem, 5vw, 4.2rem);
-            line-height: 1.02;
+            line-height: 0.88;
             letter-spacing: var(--guide-track-title);
             font-weight: 700;
         }
         .guide-section-title {
             font-family: var(--guide-font-title);
             font-size: clamp(2rem, 4vw, 3rem);
-            line-height: 1.05;
+            line-height: 0.96;
             letter-spacing: var(--guide-track-title);
             text-transform: uppercase;
             color: #fffaf0;
@@ -633,7 +633,7 @@
         }
         .guide-mini-title {
             font-family: var(--guide-font-title);
-            letter-spacing: 0.14em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             font-weight: 700;
         }
@@ -760,17 +760,21 @@
                 padding-top: 2rem;
             }
             .guide-page {
-                --guide-track-title: 0.08em;
-                --guide-track-ui: 0.1em;
+                --guide-track-title: 0.025em;
+                --guide-track-ui: 0.06em;
             }
             .guide-hero-title {
-                letter-spacing: 0.06em;
+                letter-spacing: 0.015em;
+                line-height: 0.78;
             }
             .guide-titleline {
-                letter-spacing: 0.16em;
+                letter-spacing: 0.08em;
             }
             .guide-subtitle {
-                letter-spacing: 0.1em;
+                letter-spacing: 0.06em;
+            }
+            .guide-heading {
+                line-height: 0.9;
             }
         }
     </style>
