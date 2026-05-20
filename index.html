@@ -453,6 +453,10 @@
             --guide-cyan: #19d3e6;
             --guide-gold: #d9902c;
             --guide-copper: #9f5724;
+            --guide-font-title: "Cormorant Garamond", serif;
+            --guide-font-text: Montserrat, sans-serif;
+            --guide-track-title: 0.13em;
+            --guide-track-ui: 0.12em;
             position: relative;
             overflow: hidden;
             margin-inline: calc(50% - 50vw);
@@ -467,7 +471,7 @@
         .guide-page,
         .guide-page button,
         .guide-page a {
-            font-family: Montserrat, sans-serif;
+            font-family: var(--guide-font-text);
         }
         .guide-page::before {
             content: "";
@@ -509,7 +513,7 @@
             font-size: 0.68rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: var(--guide-track-ui);
             transition: color 0.2s ease, text-shadow 0.2s ease;
         }
         .guide-nav a:hover {
@@ -523,11 +527,28 @@
             scrollbar-width: none;
         }
         .guide-hero-title {
-            font-family: "Cormorant Garamond", serif;
+            font-family: var(--guide-font-title);
             font-size: clamp(3.2rem, 11vw, 7.8rem);
             line-height: 0.82;
             letter-spacing: 0.11em;
             font-weight: 700;
+        }
+        .guide-titleline {
+            font-family: var(--guide-font-title);
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            line-height: 0.95;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #fffaf0;
+        }
+        .guide-subtitle {
+            font-family: var(--guide-font-title);
+            font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.28rem);
+            line-height: 1.25;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #f4efe5;
         }
         .guide-hero-title .number {
             color: var(--guide-cyan);
@@ -546,7 +567,7 @@
             font-size: 0.72rem;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: var(--guide-track-ui);
             transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
         .guide-btn-cyan {
@@ -589,21 +610,39 @@
         }
         .guide-kicker {
             color: var(--guide-cyan);
-            font-family: "Cormorant Garamond", serif;
+            font-family: var(--guide-font-title);
             font-weight: 800;
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
         .guide-heading {
-            font-family: "Cormorant Garamond", serif;
+            font-family: var(--guide-font-title);
             font-size: clamp(2rem, 5vw, 4.2rem);
             line-height: 1.02;
-            letter-spacing: 0.12em;
+            letter-spacing: var(--guide-track-title);
+            font-weight: 700;
+        }
+        .guide-section-title {
+            font-family: var(--guide-font-title);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.05;
+            letter-spacing: var(--guide-track-title);
+            text-transform: uppercase;
+            color: #fffaf0;
+            font-weight: 700;
+        }
+        .guide-mini-title {
+            font-family: var(--guide-font-title);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
             font-weight: 700;
         }
         .guide-copy {
             color: rgba(244,239,229,0.78);
             line-height: 1.85;
+            font-family: var(--guide-font-text);
+            font-weight: 400;
+            letter-spacing: 0;
         }
         .guide-visual {
             min-height: 320px;
@@ -636,7 +675,7 @@
         .guide-card h3,
         .guide-testimonial h3 {
             color: #f6b449;
-            font-family: "Cormorant Garamond", serif;
+            font-family: var(--guide-font-title);
             text-transform: uppercase;
             letter-spacing: 0.13em;
             font-weight: 700;
@@ -719,6 +758,19 @@
                 border-left: 0;
                 border-top: 1px solid rgba(217,144,44,0.45);
                 padding-top: 2rem;
+            }
+            .guide-page {
+                --guide-track-title: 0.08em;
+                --guide-track-ui: 0.1em;
+            }
+            .guide-hero-title {
+                letter-spacing: 0.06em;
+            }
+            .guide-titleline {
+                letter-spacing: 0.16em;
+            }
+            .guide-subtitle {
+                letter-spacing: 0.1em;
             }
         }
     </style>
@@ -817,11 +869,11 @@
             <div id="guide-hero" class="guide-layer min-h-[760px] grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 items-center py-16 sm:py-24">
                 <div class="space-y-8 max-w-2xl">
                     <div>
-                        <p class="font-editorial text-3xl sm:text-4xl tracking-[0.28em] uppercase text-white">Guide des</p>
+                        <p class="guide-titleline">Guide des</p>
                         <h1 class="guide-hero-title uppercase">
                             <span class="number">4</span> <span class="word">Corps</span>
                         </h1>
-                        <p class="font-editorial italic uppercase tracking-[0.18em] text-base sm:text-lg text-[#f4efe5] mt-4">Retour à votre état naturel et souverain.</p>
+                        <p class="guide-subtitle mt-4">Retour à votre état naturel et souverain.</p>
                     </div>
                     <div class="guide-copy max-w-2xl space-y-4">
                         <p>Vous avez la sensation de répéter les mêmes schémas ? D'être bloqué dans vos choix, fatigué dans votre corps ou déconnecté de votre sens profond ?</p>
@@ -893,7 +945,7 @@
             <section id="guide-accompagnement" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-2">
                 <div class="p-6 sm:p-10 space-y-6">
                     <p class="guide-kicker text-[#f6b449]">3. L'accompagnement</p>
-                    <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em]">La carte avant le voyage</h2>
+                    <h2 class="guide-section-title">La carte avant le voyage</h2>
                     <p class="guide-copy">
                         Je ne fais rien sans consultation. Avant tout accompagnement, j'ai besoin de comprendre votre histoire pour dresser un diagnostic éthique et vous orienter vers le bon protocole.
                     </p>
@@ -905,7 +957,7 @@
             <section id="guide-pilote" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.82fr_0.36fr_0.82fr] gap-8 items-center">
                 <div class="space-y-6">
                     <p class="guide-kicker text-[#f6b449]">4. Changement de pilote</p>
-                    <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em]">De la survie automatique à la conscience éveillée</h2>
+                    <h2 class="guide-section-title">De la survie automatique à la conscience éveillée</h2>
                     <div class="guide-card border-red-700/50">
                         <h3 class="text-red-300">Pilote de survie</h3>
                         <ul class="guide-copy text-sm mt-4 space-y-1">
@@ -941,10 +993,10 @@
                         La nature réunionnaise existait bien avant les dogmes. En se connectant de manière brute aux cascades, à la vapeur, aux rivières et aux pierres de feu, nous revenons à la réalité originelle de nos forces innées.
                     </p>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="guide-element"><h3 class="text-cyan-300 font-editorial uppercase tracking-[0.14em]">Eau</h3><p class="text-xs text-gray-300 mt-1">Purifie et emporte</p></div>
-                        <div class="guide-element"><h3 class="text-[#f6b449] font-editorial uppercase tracking-[0.14em]">Vapeur</h3><p class="text-xs text-gray-300 mt-1">Lâche prise mental</p></div>
-                        <div class="guide-element"><h3 class="text-white font-editorial uppercase tracking-[0.14em]">Terre</h3><p class="text-xs text-gray-300 mt-1">Ancre et restructure</p></div>
-                        <div class="guide-element"><h3 class="text-cyan-200 font-editorial uppercase tracking-[0.14em]">Air</h3><p class="text-xs text-gray-300 mt-1">Ouvre la conscience</p></div>
+                        <div class="guide-element"><h3 class="guide-mini-title text-cyan-300">Eau</h3><p class="text-xs text-gray-300 mt-1">Purifie et emporte</p></div>
+                        <div class="guide-element"><h3 class="guide-mini-title text-[#f6b449]">Vapeur</h3><p class="text-xs text-gray-300 mt-1">Lâche prise mental</p></div>
+                        <div class="guide-element"><h3 class="guide-mini-title text-white">Terre</h3><p class="text-xs text-gray-300 mt-1">Ancre et restructure</p></div>
+                        <div class="guide-element"><h3 class="guide-mini-title text-cyan-200">Air</h3><p class="text-xs text-gray-300 mt-1">Ouvre la conscience</p></div>
                     </div>
                 </div>
             </section>
@@ -985,7 +1037,7 @@
                 <div id="guide-contact" class="guide-contact-box pl-0 lg:pl-12 space-y-8">
                     <div>
                         <p class="guide-kicker text-[#f6b449]">8. Prendre contact</p>
-                        <h2 class="font-editorial text-3xl sm:text-4xl uppercase text-white tracking-[0.13em] mt-3">Le premier pas vers votre souveraineté.</h2>
+                        <h2 class="guide-section-title mt-3">Le premier pas vers votre souveraineté.</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
                         <div><p class="text-[#f6b449] uppercase font-bold">Saint-Paul</p><p class="text-gray-300">Île de La Réunion</p></div>
