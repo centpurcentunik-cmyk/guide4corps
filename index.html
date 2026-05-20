@@ -894,7 +894,7 @@
                         <div class="guide-badge">⌂ La Réunion</div>
                     </div>
                 </div>
-                <div class="guide-visual min-h-[520px]" data-label="Mascotte arbre/esprit - image remplaçable"></div>
+                <div id="guide-image-hero" class="guide-visual min-h-[520px]" data-label="Mascotte arbre/esprit - image remplaçable"></div>
             </div>
 
             <section id="guide-qui" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.86fr_1.14fr] gap-10 items-stretch">
@@ -912,7 +912,7 @@
                         “Je m'assieds sur le siège passager, mais c'est vous qui tenez le volant.”
                     </blockquote>
                 </div>
-                <div class="guide-visual min-h-[620px]" data-label="Cascade, méditation, racines lumineuses" style="--guide-image:url('images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png')"></div>
+                <div id="guide-image-who" class="guide-visual min-h-[620px]" data-label="Cascade, méditation, racines lumineuses"></div>
             </section>
 
             <section id="guide-corps" class="guide-section guide-layer">
@@ -955,7 +955,7 @@
                     </p>
                     <button onclick="scrollToContact('Je souhaite prendre rendez-vous pour une consultation de diagnostic.')" class="guide-btn-cyan">Prendre RDV</button>
                 </div>
-                <div class="guide-visual min-h-[360px]" data-label="Mains tenant une boussole dans la nature"></div>
+                <div id="guide-image-consult" class="guide-visual min-h-[360px]" data-label="Mains tenant une boussole dans la nature"></div>
             </section>
 
             <section id="guide-pilote" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.82fr_0.36fr_0.82fr] gap-8 items-center">
@@ -974,7 +974,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col items-center gap-5">
-                    <div class="guide-visual w-full min-h-[300px]" data-label="Visage/arbre énergétique"></div>
+                    <div id="guide-image-pilot" class="guide-visual w-full min-h-[300px]" data-label="Visage/arbre énergétique"></div>
                     <div class="guide-switch"></div>
                 </div>
                 <div class="guide-card">
@@ -990,7 +990,7 @@
             </section>
 
             <section id="guide-nature" class="guide-section guide-layer grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-10 items-center">
-                <div class="guide-visual min-h-[360px]" data-label="Forêt, rivière, cascade, pierres de feu"></div>
+                <div id="guide-image-nature" class="guide-visual min-h-[360px]" data-label="Forêt, rivière, cascade, pierres de feu"></div>
                 <div class="space-y-7">
                     <p class="guide-kicker text-[#f6b449]">5. La nature n'est pas un décor, c'est la source.</p>
                     <p class="guide-copy">
@@ -1700,6 +1700,30 @@
                         Phrase de bas de page
                         <input type="text" id="admin-motto" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
                     </label>
+                    <div class="md:col-span-2 border-t border-red-950/50 pt-4 mt-2">
+                        <h5 class="font-display text-xs text-lava-gold uppercase tracking-widest">Images de l'onglet Guide</h5>
+                        <p class="text-[10px] text-gray-500 mt-1">Collez une URL d'image publique. Laissez vide pour revenir au visuel par défaut.</p>
+                    </div>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Image Hero / Mascotte
+                        <input type="url" id="admin-guide-hero-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Image Qui je suis
+                        <input type="url" id="admin-guide-who-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Image Accompagnement
+                        <input type="url" id="admin-guide-consult-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Image Changement de pilote
+                        <input type="url" id="admin-guide-pilot-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Image Nature
+                        <input type="url" id="admin-guide-nature-image" placeholder="https://..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
                 </div>
                 <p id="admin-save-status" class="text-[10px] text-emerald-500 mt-3 hidden">Modifications sauvegardées.</p>
             </div>
@@ -2060,7 +2084,12 @@
             contactEmail: "runinstinct4@gmail.com",
             copyright: "© 2026 ETERN'AILE & CTV974 — Saint-Paul, La Réunion",
             motto: "Le libre arbitre est la seule règle.",
-            adminPassword: "4corps"
+            adminPassword: "4corps",
+            guideHeroImage: "images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg",
+            guideWhoImage: "images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png",
+            guideConsultImage: "images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg",
+            guidePilotImage: "images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg",
+            guideNatureImage: "images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png"
         };
 
         let platformSettings = {
@@ -2084,6 +2113,25 @@
 
         function phoneToTelHref(phone) {
             return `tel:${phone.replace(/[^0-9+]/g, '')}`;
+        }
+
+        function setGuideImage(elementId, imageUrl) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            const cleanUrl = (imageUrl || "").trim();
+            if (!cleanUrl) {
+                element.style.removeProperty('--guide-image');
+                return;
+            }
+            element.style.setProperty('--guide-image', `url("${cleanUrl.replaceAll('"', '%22')}")`);
+        }
+
+        function applyGuideImages() {
+            setGuideImage('guide-image-hero', platformSettings.guideHeroImage);
+            setGuideImage('guide-image-who', platformSettings.guideWhoImage);
+            setGuideImage('guide-image-consult', platformSettings.guideConsultImage);
+            setGuideImage('guide-image-pilot', platformSettings.guidePilotImage);
+            setGuideImage('guide-image-nature', platformSettings.guideNatureImage);
         }
 
         function applyPlatformSettings() {
@@ -2111,6 +2159,7 @@
             const siteLink = document.getElementById('footer-site');
             if (siteLink) siteLink.href = platformSettings.siteUrl;
 
+            applyGuideImages();
             fillSettingsForm();
         }
 
@@ -2133,7 +2182,12 @@
                 'admin-contact-email': 'contactEmail',
                 'admin-password': 'adminPassword',
                 'admin-copyright': 'copyright',
-                'admin-motto': 'motto'
+                'admin-motto': 'motto',
+                'admin-guide-hero-image': 'guideHeroImage',
+                'admin-guide-who-image': 'guideWhoImage',
+                'admin-guide-consult-image': 'guideConsultImage',
+                'admin-guide-pilot-image': 'guidePilotImage',
+                'admin-guide-nature-image': 'guideNatureImage'
             };
 
             Object.entries(mapping).forEach(([id, key]) => {
@@ -2162,7 +2216,12 @@
                 contactEmail: document.getElementById('admin-contact-email').value.trim() || defaultPlatformSettings.contactEmail,
                 adminPassword: document.getElementById('admin-password').value.trim() || defaultPlatformSettings.adminPassword,
                 copyright: document.getElementById('admin-copyright').value.trim() || defaultPlatformSettings.copyright,
-                motto: document.getElementById('admin-motto').value.trim() || defaultPlatformSettings.motto
+                motto: document.getElementById('admin-motto').value.trim() || defaultPlatformSettings.motto,
+                guideHeroImage: document.getElementById('admin-guide-hero-image').value.trim() || defaultPlatformSettings.guideHeroImage,
+                guideWhoImage: document.getElementById('admin-guide-who-image').value.trim() || defaultPlatformSettings.guideWhoImage,
+                guideConsultImage: document.getElementById('admin-guide-consult-image').value.trim() || defaultPlatformSettings.guideConsultImage,
+                guidePilotImage: document.getElementById('admin-guide-pilot-image').value.trim() || defaultPlatformSettings.guidePilotImage,
+                guideNatureImage: document.getElementById('admin-guide-nature-image').value.trim() || defaultPlatformSettings.guideNatureImage
             };
 
             localStorage.setItem('platform_settings_yann', JSON.stringify(platformSettings));
