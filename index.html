@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind config AVANT le chargement du CDN -->
+    <!-- Tailwind CDN puis configuration du thème -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -43,8 +44,6 @@
             }
         }
     </script>
-    <!-- Tailwind CDN chargé APRÈS le config -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         body {
@@ -731,6 +730,437 @@
         .guide-contact-box {
             border-left: 1px solid rgba(217,144,44,0.45);
         }
+
+        /* Haute École des Guides */
+        .school-page {
+            --school-gold: #d4af37;
+            --school-gold-light: #f2cb65;
+            --school-cyan: #29d6e8;
+            --school-ink: #02070d;
+            position: relative;
+            overflow: hidden;
+            margin-inline: calc(50% - 50vw);
+            padding-inline: max(1rem, calc((100vw - 1280px) / 2));
+            color: #f4efe5;
+            background:
+                radial-gradient(circle at 78% 9%, rgba(41, 214, 232, 0.14), transparent 25%),
+                radial-gradient(circle at 22% 30%, rgba(212, 175, 55, 0.12), transparent 26%),
+                linear-gradient(180deg, rgba(1, 8, 15, 0.88), rgba(0, 3, 8, 0.98)),
+                url("images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png") center top / cover fixed no-repeat;
+        }
+        .school-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.6;
+            background-image:
+                radial-gradient(circle, rgba(242,203,101,0.8) 0 1px, transparent 1.8px),
+                radial-gradient(circle, rgba(41,214,232,0.6) 0 1px, transparent 1.7px);
+            background-size: 170px 170px, 240px 240px;
+            background-position: 36px 54px, 108px 144px;
+        }
+        .school-page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(0,4,10,0.84), transparent 35%, rgba(0,4,10,0.72)),
+                linear-gradient(180deg, transparent 0%, rgba(0,2,6,0.96) 100%);
+        }
+        .school-layer {
+            position: relative;
+            z-index: 1;
+        }
+        .school-nav {
+            position: sticky;
+            top: 86px;
+            z-index: 20;
+            margin-inline: calc(50% - 50vw);
+            padding: 0.8rem max(1rem, calc((100vw - 1280px) / 2));
+            overflow-x: auto;
+            scrollbar-width: none;
+            background: rgba(1, 8, 16, 0.86);
+            border-bottom: 1px solid rgba(212,175,55,0.38);
+            backdrop-filter: blur(14px);
+        }
+        .school-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .school-nav a {
+            color: #f4efe5;
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+        .school-nav a:hover {
+            color: var(--school-cyan);
+            text-shadow: 0 0 18px rgba(41,214,232,0.5);
+        }
+        .school-hero {
+            min-height: 720px;
+        }
+        .school-eyebrow,
+        .school-kicker {
+            color: var(--school-cyan);
+            font-family: "Cormorant Garamond", serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+        .school-title {
+            max-width: 850px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(3.5rem, 8vw, 7.4rem);
+            font-weight: 700;
+            line-height: 0.82;
+            letter-spacing: 0.035em;
+            text-transform: uppercase;
+            color: #fffaf0;
+            text-shadow: 0 18px 54px rgba(0,0,0,0.7);
+        }
+        .school-title span {
+            display: block;
+            background: linear-gradient(110deg, #fff0b7, #d99732 52%, #f4d978);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .school-subtitle,
+        .school-section-title {
+            color: #fffaf0;
+            font-family: "Cormorant Garamond", serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.055em;
+        }
+        .school-subtitle {
+            font-size: clamp(1.5rem, 3vw, 2.35rem);
+            line-height: 0.95;
+        }
+        .school-section-title {
+            font-size: clamp(2.2rem, 5vw, 4.1rem);
+            line-height: 0.9;
+        }
+        .school-copy {
+            color: rgba(244,239,229,0.78);
+            font-family: Montserrat, sans-serif;
+            font-weight: 400;
+            line-height: 1.8;
+        }
+        .school-section {
+            padding-block: clamp(3.8rem, 8vw, 7rem);
+            border-top: 1px solid rgba(212,175,55,0.3);
+        }
+        .school-card,
+        .school-panel,
+        .school-step,
+        .school-level {
+            border: 1px solid rgba(212,175,55,0.4);
+            background:
+                radial-gradient(circle at 16% 12%, rgba(41,214,232,0.08), transparent 30%),
+                linear-gradient(145deg, rgba(4,18,29,0.9), rgba(0,4,10,0.92));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 70px rgba(0,0,0,0.32);
+        }
+        .school-card {
+            min-height: 205px;
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .school-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(41,214,232,0.82);
+            box-shadow: 0 24px 62px rgba(0,0,0,0.42), 0 0 25px rgba(41,214,232,0.11);
+        }
+        .school-card h3,
+        .school-level h3 {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .school-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(212,175,55,0.56);
+            border-radius: 50%;
+            color: var(--school-gold-light);
+            background: radial-gradient(circle, rgba(212,175,55,0.15), transparent 68%);
+            box-shadow: 0 0 28px rgba(212,175,55,0.12);
+            font-size: 1.4rem;
+        }
+        .school-crest {
+            position: relative;
+            width: min(72vw, 480px);
+            aspect-ratio: 1;
+            margin-inline: auto;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(212,175,55,0.45);
+            border-radius: 50%;
+            background:
+                radial-gradient(circle, rgba(41,214,232,0.18) 0 5%, transparent 5.5%),
+                radial-gradient(circle, transparent 0 31%, rgba(212,175,55,0.35) 31.4% 31.8%, transparent 32.2%),
+                radial-gradient(circle, transparent 0 48%, rgba(41,214,232,0.22) 48.4% 48.8%, transparent 49.2%),
+                radial-gradient(circle, rgba(0,14,22,0.88), rgba(0,3,8,0.58));
+            box-shadow: 0 0 85px rgba(41,214,232,0.16), inset 0 0 60px rgba(212,175,55,0.09);
+            animation: school-breathe 5s ease-in-out infinite;
+        }
+        .school-crest::before,
+        .school-crest::after {
+            content: "";
+            position: absolute;
+            inset: 12%;
+            border: 1px solid rgba(212,175,55,0.22);
+            border-radius: 50%;
+        }
+        .school-crest::after {
+            inset: 24%;
+            border-color: rgba(41,214,232,0.24);
+        }
+        .school-crest-mark {
+            position: relative;
+            z-index: 2;
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(4.5rem, 12vw, 7.4rem);
+            line-height: 0.8;
+            text-align: center;
+            text-shadow: 0 0 34px rgba(212,175,55,0.5);
+        }
+        .school-crest-mark span {
+            display: block;
+            margin-top: 0.6rem;
+            color: var(--school-cyan);
+            font-family: Montserrat, sans-serif;
+            font-size: 0.63rem;
+            font-weight: 800;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+        }
+        @keyframes school-breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 76px rgba(41,214,232,0.12), inset 0 0 60px rgba(212,175,55,0.09); }
+            50% { transform: scale(1.018); box-shadow: 0 0 100px rgba(41,214,232,0.22), inset 0 0 74px rgba(212,175,55,0.15); }
+        }
+        .school-difference {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(1.8rem, 4vw, 3.4rem);
+            border-radius: 8px;
+        }
+        .school-difference::after {
+            content: "VOUS";
+            position: absolute;
+            right: 1rem;
+            bottom: -2.4rem;
+            color: rgba(41,214,232,0.08);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(6rem, 18vw, 14rem);
+            font-weight: 700;
+            line-height: 0.8;
+        }
+        .school-elements {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 2rem;
+        }
+        .school-element-orbit {
+            position: relative;
+            min-height: 390px;
+            display: grid;
+            place-items: center;
+        }
+        .school-element-orbit::before,
+        .school-element-orbit::after {
+            content: "";
+            position: absolute;
+            width: min(82vw, 360px);
+            aspect-ratio: 1;
+            border: 1px solid rgba(212,175,55,0.28);
+            border-radius: 50%;
+        }
+        .school-element-orbit::after {
+            width: min(60vw, 250px);
+            border-color: rgba(41,214,232,0.22);
+        }
+        .school-element-core {
+            position: relative;
+            z-index: 2;
+            width: 116px;
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(212,175,55,0.6);
+            border-radius: 50%;
+            color: var(--school-gold-light);
+            background: radial-gradient(circle, rgba(212,175,55,0.2), rgba(0,5,12,0.94) 70%);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 0 45px rgba(212,175,55,0.18);
+        }
+        .school-element-btn {
+            position: absolute;
+            z-index: 3;
+            min-width: 92px;
+            padding: 0.75rem 0.8rem;
+            border: 1px solid rgba(212,175,55,0.45);
+            border-radius: 6px;
+            color: #f4efe5;
+            background: rgba(1,10,17,0.88);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .school-element-btn:hover,
+        .school-element-btn.is-active {
+            border-color: var(--school-cyan);
+            color: var(--school-cyan);
+            box-shadow: 0 0 22px rgba(41,214,232,0.18);
+            transform: translateY(-2px);
+        }
+        .school-element-btn:nth-of-type(1) { top: 1rem; left: 50%; transform: translateX(-50%); }
+        .school-element-btn:nth-of-type(2) { top: 28%; right: 0; }
+        .school-element-btn:nth-of-type(3) { right: 12%; bottom: 1.4rem; }
+        .school-element-btn:nth-of-type(4) { left: 12%; bottom: 1.4rem; }
+        .school-element-btn:nth-of-type(5) { top: 28%; left: 0; }
+        .school-element-btn:nth-of-type(1):hover,
+        .school-element-btn:nth-of-type(1).is-active { transform: translateX(-50%) translateY(-2px); }
+        .school-element-detail {
+            min-height: 290px;
+            padding: clamp(1.5rem, 4vw, 2.5rem);
+            border-radius: 8px;
+        }
+        .school-element-detail h3 {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(2.7rem, 6vw, 4.6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .school-timeline {
+            position: relative;
+            max-width: 850px;
+            margin-inline: auto;
+        }
+        .school-timeline::before {
+            content: "";
+            position: absolute;
+            left: 1.35rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 1px;
+            background: linear-gradient(180deg, var(--school-gold), rgba(41,214,232,0.75), rgba(212,175,55,0.25));
+        }
+        .school-step {
+            position: relative;
+            margin-left: 4rem;
+            padding: 1rem 1.3rem;
+            border-radius: 6px;
+        }
+        .school-step + .school-step {
+            margin-top: 1rem;
+        }
+        .school-step-number {
+            position: absolute;
+            left: -3.55rem;
+            top: 0.92rem;
+            width: 2.7rem;
+            height: 2.7rem;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(212,175,55,0.72);
+            border-radius: 50%;
+            color: var(--school-gold-light);
+            background: #03101b;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            box-shadow: 0 0 24px rgba(212,175,55,0.14);
+        }
+        .school-step h3 {
+            color: #f4efe5;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+        }
+        .school-level {
+            position: relative;
+            min-height: 250px;
+            overflow: hidden;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        .school-level-number {
+            color: rgba(41,214,232,0.16);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 7rem;
+            font-weight: 700;
+            line-height: 0.7;
+        }
+        .school-level::after {
+            content: "";
+            position: absolute;
+            right: -2.8rem;
+            bottom: -2.8rem;
+            width: 8rem;
+            height: 8rem;
+            border: 1px solid rgba(212,175,55,0.24);
+            border-radius: 50%;
+        }
+        .school-path {
+            display: grid;
+            gap: 0.85rem;
+            max-width: 760px;
+            margin-inline: auto;
+        }
+        .school-path-step {
+            position: relative;
+            padding: 1rem 1.2rem;
+            border: 1px solid rgba(212,175,55,0.46);
+            border-radius: 6px;
+            color: #fffaf0;
+            background: linear-gradient(90deg, rgba(4,18,29,0.92), rgba(0,5,12,0.82));
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .school-path-step:not(:last-child)::after {
+            content: "↓";
+            position: absolute;
+            left: 50%;
+            bottom: -1.45rem;
+            z-index: 2;
+            color: var(--school-cyan);
+            font-family: Montserrat, sans-serif;
+            font-size: 1.05rem;
+            transform: translateX(-50%);
+        }
+        .school-final {
+            padding-block: clamp(4.5rem, 10vw, 8rem);
+            text-align: center;
+        }
         @media (max-width: 900px) {
             .oracle-home::before {
                 opacity: 0.36;
@@ -775,6 +1205,28 @@
             }
             .guide-heading {
                 line-height: 0.9;
+            }
+            .school-nav {
+                position: relative;
+                top: auto;
+            }
+            .school-title {
+                font-size: clamp(3.2rem, 16vw, 5.6rem);
+                letter-spacing: 0.02em;
+            }
+            .school-element-orbit {
+                min-height: 340px;
+            }
+            .school-element-orbit::before {
+                width: min(88vw, 320px);
+            }
+            .school-element-orbit::after {
+                width: min(62vw, 220px);
+            }
+            .school-element-btn {
+                min-width: 78px;
+                padding: 0.6rem 0.58rem;
+                font-size: 0.58rem;
             }
         }
     </style>
@@ -831,12 +1283,15 @@
             </div>
 
             <!-- Onglets de Navigation -->
-            <div class="flex flex-wrap justify-center gap-7 text-[11px] uppercase font-bold text-gray-500">
+            <div class="flex flex-wrap justify-center gap-5 text-[11px] uppercase font-bold text-gray-500">
                 <button onclick="switchTab('tarot')" id="tab-btn-home" class="lux-nav-btn is-active px-1 py-2 text-lava-gold transition-all duration-300">
                     Accueil
                 </button>
                 <button onclick="switchTab('guide')" id="tab-btn-guide" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     Guide des 4 corps
+                </button>
+                <button onclick="switchTab('school')" id="tab-btn-school" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
+                    🎓 Haute École
                 </button>
                 <button onclick="switchTab('resonance')" id="tab-btn-resonance" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     <span id="tab-label-resonance">Résonance</span>
@@ -1059,6 +1514,220 @@
                     <span>Conditions générales</span>
                 </div>
                 <p>© 2026 Etern'Aile — Tous droits réservés.</p>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ONGLET : HAUTE ÉCOLE DES GUIDES                -->
+        <!-- ============================================== -->
+        <section id="tab-school" class="school-page hidden">
+            <nav class="school-nav school-layer">
+                <div class="flex gap-5 sm:gap-8 whitespace-nowrap">
+                    <a href="#school-hero">L'école</a>
+                    <a href="#school-pour-qui">Pour qui ?</a>
+                    <a href="#school-elements">Les 5 éléments</a>
+                    <a href="#school-code">Le Code</a>
+                    <a href="#school-laboratoire">Le Laboratoire</a>
+                    <a href="#school-niveaux">Les niveaux</a>
+                    <a href="#school-integrer">Intégrer l'école</a>
+                </div>
+            </nav>
+
+            <section id="school-hero" class="school-hero school-layer grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center py-16 sm:py-24">
+                <div class="max-w-3xl space-y-7">
+                    <p class="school-eyebrow">Académie des Capacités Innées</p>
+                    <h1 class="school-title">La Haute École <span>des Guides</span></h1>
+                    <p class="school-subtitle">Apprendre. Développer. Expérimenter. Transmettre.</p>
+                    <div class="school-copy max-w-2xl space-y-4">
+                        <p>Une fois les principaux blocages identifiés et travaillés grâce au Guide des 4 Corps, une nouvelle étape devient possible : développer les capacités que la vie vous a données.</p>
+                        <p>La Haute École des Guides est un espace d'apprentissage, d'expérimentation et de transmission destiné aux personnes souhaitant mieux comprendre leur fonctionnement naturel et développer leurs capacités en conscience.</p>
+                    </div>
+                    <button onclick="scrollToContact('Je souhaite intégrer la Haute École des Guides et connaître les étapes d’admission.')" class="guide-btn-cyan">Je souhaite intégrer l'école</button>
+                </div>
+                <div class="school-crest" aria-label="Emblème de la Haute École des Guides">
+                    <div class="school-crest-mark">✦<span>Académie des capacités innées</span></div>
+                </div>
+            </section>
+
+            <section id="school-pour-qui" class="school-section school-layer">
+                <div class="max-w-3xl space-y-4 mb-10">
+                    <p class="school-kicker">Votre prochaine étape</p>
+                    <h2 class="school-section-title">Cette école est faite pour vous si...</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                    <article class="school-card">
+                        <div class="school-icon">↗</div>
+                        <h3 class="mt-6">La personne en évolution</h3>
+                        <p class="school-copy text-sm mt-4">Vous souhaitez mieux comprendre votre fonctionnement et développer votre potentiel.</p>
+                    </article>
+                    <article class="school-card">
+                        <div class="school-icon">◌</div>
+                        <h3 class="mt-6">La personne hypersensible</h3>
+                        <p class="school-copy text-sm mt-4">Vous ressentez beaucoup de choses mais cherchez davantage de maîtrise et de discernement.</p>
+                    </article>
+                    <article class="school-card">
+                        <div class="school-icon">✦</div>
+                        <h3 class="mt-6">Le thérapeute ou accompagnant</h3>
+                        <p class="school-copy text-sm mt-4">Vous accompagnez déjà des personnes mais souhaitez approfondir votre compréhension.</p>
+                    </article>
+                    <article class="school-card">
+                        <div class="school-icon">⇢</div>
+                        <h3 class="mt-6">Le futur transmetteur</h3>
+                        <p class="school-copy text-sm mt-4">Vous souhaitez un jour transmettre ce que vous avez appris.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="school-section school-layer">
+                <div class="school-panel school-difference grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-8 items-center">
+                    <div>
+                        <p class="school-kicker">Notre différence</p>
+                        <h2 class="school-section-title mt-3">Une école centrée sur le fonctionnement humain</h2>
+                    </div>
+                    <div class="school-copy space-y-4 relative z-10">
+                        <p>La plupart des écoles enseignent des outils.</p>
+                        <p class="text-xl text-[#f2cb65] font-semibold">Nous enseignons d'abord comment VOUS fonctionnez.</p>
+                        <p>Car deux personnes utilisant la même méthode n'obtiendront jamais les mêmes résultats.</p>
+                        <p>Notre objectif est de vous aider à comprendre votre mode d'emploi naturel avant de développer vos capacités.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="school-elements" class="school-section school-layer">
+                <div class="max-w-3xl space-y-4 mb-8">
+                    <p class="school-kicker">Cartographie fondamentale</p>
+                    <h2 class="school-section-title">Les 5 Éléments</h2>
+                    <p class="school-copy">Sélectionnez un élément pour découvrir les capacités qu'il structure. La transmission ancestrale appartient à la Terre.</p>
+                </div>
+                <div class="school-elements lg:grid-cols-[1fr_0.92fr] items-center">
+                    <div class="school-element-orbit" aria-label="Cercle interactif des cinq éléments">
+                        <div class="school-element-core">Votre<br>nature</div>
+                        <button type="button" class="school-element-btn is-active" data-school-element="terre" aria-pressed="true" onclick="selectSchoolElement('terre')">🌍 Terre</button>
+                        <button type="button" class="school-element-btn" data-school-element="eau" aria-pressed="false" onclick="selectSchoolElement('eau')">🌊 Eau</button>
+                        <button type="button" class="school-element-btn" data-school-element="air" aria-pressed="false" onclick="selectSchoolElement('air')">🌬 Air</button>
+                        <button type="button" class="school-element-btn" data-school-element="feu" aria-pressed="false" onclick="selectSchoolElement('feu')">🔥 Feu</button>
+                        <button type="button" class="school-element-btn" data-school-element="foudre" aria-pressed="false" onclick="selectSchoolElement('foudre')">⚡ Foudre</button>
+                    </div>
+                    <div class="school-panel school-element-detail">
+                        <p id="school-element-icon" class="text-3xl">🌍</p>
+                        <h3 id="school-element-title" class="mt-5">Terre</h3>
+                        <p id="school-element-intro" class="school-copy mt-4">L'élément qui structure, stabilise et inscrit l'expérience dans le temps.</p>
+                        <div id="school-element-tags" class="flex flex-wrap gap-2 mt-6">
+                            <span class="guide-badge">Ancrage</span>
+                            <span class="guide-badge">Stabilité</span>
+                            <span class="guide-badge">Construction</span>
+                            <span class="guide-badge">Mémoire</span>
+                            <span class="guide-badge">Transmission ancestrale</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="school-code" class="school-section school-layer">
+                <div class="max-w-3xl mx-auto text-center space-y-4 mb-12">
+                    <p class="school-kicker">Le cycle fondations</p>
+                    <h2 class="school-section-title">Le Code</h2>
+                    <p class="school-copy">Avant la pratique, chaque élève suit un cycle de fondations permettant d'acquérir un langage commun et des bases solides.</p>
+                </div>
+                <div class="school-timeline">
+                    <article class="school-step"><span class="school-step-number">1</span><h3>Les 5 Éléments</h3></article>
+                    <article class="school-step"><span class="school-step-number">2</span><h3>Les Capacités Innées</h3></article>
+                    <article class="school-step"><span class="school-step-number">3</span><h3>Les Archétypes</h3></article>
+                    <article class="school-step"><span class="school-step-number">4</span><h3>Transmission Ancestrale & Mémoire Cellulaire</h3></article>
+                    <article class="school-step"><span class="school-step-number">5</span><h3>Les États de Conscience</h3></article>
+                    <article class="school-step"><span class="school-step-number">6</span><h3>Hygiène & Discernement</h3></article>
+                    <article class="school-step"><span class="school-step-number">7</span><h3>Éthique & Souveraineté</h3></article>
+                </div>
+            </section>
+
+            <section id="school-laboratoire" class="school-section school-layer">
+                <div class="grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-10 items-start">
+                    <div class="space-y-4">
+                        <p class="school-kicker">Le Laboratoire des Guides</p>
+                        <h2 class="school-section-title">La Conduite</h2>
+                        <p class="school-copy">Une fois les fondations validées, les élèves rejoignent le Laboratoire des Guides.</p>
+                        <p class="text-[#f2cb65] font-semibold uppercase tracking-widest text-sm">Réunion mensuelle de 4 heures</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <article class="school-card min-h-0"><div class="school-icon">🔍</div><h3 class="mt-5">Études de cas</h3></article>
+                        <article class="school-card min-h-0"><div class="school-icon">🤝</div><h3 class="mt-5">Travail en binôme</h3></article>
+                        <article class="school-card min-h-0"><div class="school-icon">🧠</div><h3 class="mt-5">Décryptage de situations</h3></article>
+                        <article class="school-card min-h-0"><div class="school-icon">🛠</div><h3 class="mt-5">Exercices pratiques</h3></article>
+                        <article class="school-card min-h-0"><div class="school-icon">💬</div><h3 class="mt-5">Questions / Réponses</h3></article>
+                        <article class="school-card min-h-0"><div class="school-icon">📖</div><h3 class="mt-5">Retours d'expérience</h3></article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="school-niveaux" class="school-section school-layer">
+                <div class="max-w-3xl space-y-4 mb-10">
+                    <p class="school-kicker">Progression en conscience</p>
+                    <h2 class="school-section-title">Le Parcours de l'Élève</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <article class="school-level">
+                        <p class="school-level-number">1</p>
+                        <h3 class="mt-8">Explorer</h3>
+                        <p class="school-copy text-sm mt-4">Comprendre son fonctionnement.</p>
+                    </article>
+                    <article class="school-level">
+                        <p class="school-level-number">2</p>
+                        <h3 class="mt-8">Développer</h3>
+                        <p class="school-copy text-sm mt-4">Mettre ses capacités en pratique.</p>
+                    </article>
+                    <article class="school-level">
+                        <p class="school-level-number">3</p>
+                        <h3 class="mt-8">Transmettre</h3>
+                        <p class="school-copy text-sm mt-4">Pour ceux qui souhaitent accompagner les autres.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="school-section school-layer">
+                <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 items-stretch">
+                    <div class="space-y-5 py-4">
+                        <p class="school-kicker">La tribu</p>
+                        <h2 class="school-section-title">Apprendre ensemble</h2>
+                        <div class="school-copy space-y-3">
+                            <p>L'école n'est pas seulement un enseignement.</p>
+                            <p>C'est un espace où les élèves échangent, expérimentent et grandissent ensemble.</p>
+                            <p>Les anciens accompagnent les nouveaux. Les expériences sont partagées. Les connaissances circulent.</p>
+                        </div>
+                    </div>
+                    <div class="guide-visual min-h-[380px]" style="--guide-image:url('images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png')" data-label="La tribu · apprendre et transmettre ensemble"></div>
+                </div>
+            </section>
+
+            <section id="school-integrer" class="school-section school-layer">
+                <div class="max-w-3xl mx-auto text-center space-y-4 mb-10">
+                    <p class="school-kicker">Admission</p>
+                    <h2 class="school-section-title">Comment intégrer l'école ?</h2>
+                    <p class="school-copy">L'entrée dans l'école se fait uniquement après validation du parcours Guide des 4 Corps.</p>
+                </div>
+                <div class="school-path">
+                    <div class="school-path-step">Guide des 4 Corps</div>
+                    <div class="school-path-step">Parcours Renaissance</div>
+                    <div class="school-path-step">Cycle Fondations</div>
+                    <div class="school-path-step">Haute École des Guides</div>
+                </div>
+            </section>
+
+            <section class="school-final school-layer">
+                <div class="max-w-4xl mx-auto space-y-7">
+                    <p class="school-kicker">Votre souveraineté commence par la compréhension</p>
+                    <h2 class="school-section-title">Devenez l'expert de votre propre mode d'emploi</h2>
+                    <p class="school-copy text-lg">Comprendre. Développer. Expérimenter. Transmettre.</p>
+                    <button onclick="scrollToContact('Je souhaite réserver mon Bilan des 4 Corps pour préparer mon parcours vers la Haute École des Guides.')" class="guide-btn-cyan">Réserver mon Bilan des 4 Corps</button>
+                </div>
+            </section>
+
+            <div class="school-layer py-8 border-t border-[#d4af3755] flex flex-col sm:flex-row gap-4 justify-between text-[11px] text-gray-400">
+                <div class="flex flex-wrap gap-4">
+                    <span>Mentions légales</span>
+                    <span>Confidentialité</span>
+                    <span>Conditions générales</span>
+                </div>
+                <p>© 2026 Etern'Aile — Haute École des Guides.</p>
             </div>
         </section>
 
@@ -1976,8 +2645,11 @@
     <!-- LOGIQUE ENRICHIE DE LA PLATEFORME -->
     <script>
         // Switcher d'onglet
+        let activeTab = 'tarot';
+
         function switchTab(tabId) {
-            const tabs = ['tarot', 'guide', 'resonance'];
+            activeTab = tabId;
+            const tabs = ['tarot', 'guide', 'school', 'resonance'];
             tabs.forEach(t => {
                 const sec = document.getElementById(`tab-${t}`);
                 const btn = t === 'tarot' ? document.getElementById('tab-btn-home') : document.getElementById(`tab-btn-${t}`);
@@ -1997,6 +2669,57 @@
                 }
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const schoolElements = {
+            terre: {
+                icon: "🌍",
+                title: "Terre",
+                intro: "L'élément qui structure, stabilise et inscrit l'expérience dans le temps.",
+                tags: ["Ancrage", "Stabilité", "Construction", "Mémoire", "Transmission ancestrale"]
+            },
+            eau: {
+                icon: "🌊",
+                title: "Eau",
+                intro: "L'élément du ressenti, du mouvement intérieur et de l'adaptation consciente.",
+                tags: ["Émotions", "Intuition", "Adaptation", "Ressenti"]
+            },
+            air: {
+                icon: "🌬",
+                title: "Air",
+                intro: "L'élément qui ouvre la vision, clarifie la pensée et relie les idées.",
+                tags: ["Vision", "Communication", "Compréhension", "Analyse"]
+            },
+            feu: {
+                icon: "🔥",
+                title: "Feu",
+                intro: "L'élément de l'impulsion juste, de la présence active et de la protection.",
+                tags: ["Action", "Volonté", "Leadership", "Protection"]
+            },
+            foudre: {
+                icon: "⚡",
+                title: "Foudre",
+                intro: "L'élément de l'éclair de conscience qui transforme et met en mouvement.",
+                tags: ["Transformation", "Révélation", "Innovation", "Activation"]
+            }
+        };
+
+        function selectSchoolElement(elementId) {
+            const element = schoolElements[elementId];
+            if (!element) return;
+
+            document.querySelectorAll('[data-school-element]').forEach(button => {
+                const isActive = button.dataset.schoolElement === elementId;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+
+            document.getElementById('school-element-icon').innerText = element.icon;
+            document.getElementById('school-element-title').innerText = element.title;
+            document.getElementById('school-element-intro').innerText = element.intro;
+            document.getElementById('school-element-tags').innerHTML = element.tags
+                .map(tag => `<span class="guide-badge">${tag}</span>`)
+                .join('');
         }
 
         // Gematria pythagoricienne pour la Grille d'Inclusion
@@ -3321,9 +4044,10 @@
 
         // Initialisation correcte au chargement
         document.addEventListener('DOMContentLoaded', async () => {
+            switchTab(activeTab);
             await loadRemotePlatformSettings();
             applyPlatformSettings();
-            switchTab('tarot');
+            switchTab(activeTab);
         });
 
         function refreshAdminTable() {
