@@ -1161,6 +1161,64 @@
             padding-block: clamp(4.5rem, 10vw, 8rem);
             text-align: center;
         }
+        .school-manifesto {
+            padding: clamp(1.4rem, 3vw, 2.1rem);
+            border-left: 3px solid var(--school-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .school-manifesto p {
+            color: rgba(255,250,240,0.92);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(1.22rem, 2vw, 1.65rem);
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        .school-promise {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(1.32rem, 2.4vw, 1.9rem);
+            font-weight: 700;
+            line-height: 1.18;
+        }
+        .school-track-block {
+            padding: clamp(1.35rem, 3vw, 2rem);
+            border-top: 2px solid rgba(41,214,232,0.55);
+            border-radius: 8px;
+        }
+        .school-track-label {
+            color: var(--school-cyan);
+            font-family: Montserrat, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .school-phase {
+            padding: 1.35rem;
+            border-left: 2px solid rgba(212,175,55,0.68);
+            background: rgba(0,7,14,0.56);
+        }
+        .school-phase h3 {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.045em;
+            text-transform: uppercase;
+        }
+        .school-quote {
+            padding: clamp(1.5rem, 4vw, 2.8rem);
+            border-top: 1px solid rgba(212,175,55,0.55);
+            border-bottom: 1px solid rgba(212,175,55,0.55);
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(1.7rem, 4vw, 3rem);
+            font-style: italic;
+            font-weight: 700;
+            line-height: 1.08;
+            text-align: center;
+        }
         @media (max-width: 900px) {
             .oracle-home::before {
                 opacity: 0.36;
@@ -1523,211 +1581,189 @@
         <section id="tab-school" class="school-page hidden">
             <nav class="school-nav school-layer">
                 <div class="flex gap-5 sm:gap-8 whitespace-nowrap">
-                    <a href="#school-hero">L'école</a>
-                    <a href="#school-recognize">Votre situation</a>
-                    <a href="#school-benefits">Vos capacités</a>
-                    <a href="#school-steps">Le parcours</a>
-                    <a href="#school-practice">La pratique</a>
-                    <a href="#school-join">Pour qui ?</a>
+                    <a href="#school-hero">Manifeste</a>
+                    <a href="#school-mirror">Pourquoi ?</a>
+                    <a href="#school-foundations">Fondations</a>
+                    <a href="#school-forces">Forces & corps</a>
+                    <a href="#school-trajectory">Trajectoire</a>
+                    <a href="#school-archetypes">Archétypes</a>
+                    <a href="#school-impact">Impact</a>
                 </div>
             </nav>
 
             <section id="school-hero" class="school-hero school-layer grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center py-16 sm:py-24">
                 <div class="max-w-3xl space-y-7">
-                    <p class="school-eyebrow">Une école pour mieux se connaître</p>
+                    <p class="school-eyebrow">Académie des Capacités Innées</p>
                     <h1 class="school-title">La Haute École <span>des Guides</span></h1>
-                    <p class="school-subtitle">Une école pour apprendre à mieux se connaître et développer ses capacités naturelles.</p>
-                    <div class="school-copy max-w-2xl space-y-4">
-                        <p>Après avoir travaillé sur les blocages grâce au Guide des 4 Corps, une nouvelle étape devient possible :</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-[#f2cb65]">
-                            <p>✓ Comprendre son fonctionnement.</p>
-                            <p>✓ Développer ses capacités.</p>
-                            <p>✓ Retrouver confiance en soi.</p>
-                            <p>✓ Utiliser pleinement son potentiel.</p>
-                        </div>
+                    <p class="school-subtitle">École d'évolution personnelle — Guide des 4 Corps</p>
+                    <div class="school-panel school-manifesto">
+                        <p>« La Haute École des Guides n'a pas pour vocation de former uniquement des guides. Sa vocation première est d'aider chaque élève à comprendre son propre mode d'emploi afin de développer pleinement ses capacités naturelles et devenir souverain dans sa vie. »</p>
                     </div>
-                    <a href="#school-recognize" class="guide-btn-cyan inline-block">Je découvre l'école</a>
+                    <p class="school-promise">« Nous ne cherchons pas à faire de vous quelqu'un d'autre. Nous vous aidons à comprendre comment vous fonctionnez afin d'utiliser pleinement ce que vous êtes déjà. »</p>
+                    <a href="#school-mirror" class="guide-btn-cyan inline-block">Découvrir le parcours</a>
                 </div>
                 <div class="school-crest" aria-label="Emblème de la Haute École des Guides">
-                    <div class="school-crest-mark">✦<span>Comprendre · développer · maîtriser</span></div>
+                    <div class="school-crest-mark">✦<span>Académie des capacités innées</span></div>
                 </div>
             </section>
 
-            <section id="school-recognize" class="school-section school-layer">
-                <div class="max-w-3xl space-y-4 mb-10">
-                    <p class="school-kicker">Votre situation aujourd'hui</p>
-                    <h2 class="school-section-title">Vous reconnaissez-vous ?</h2>
+            <section id="school-mirror" class="school-section school-layer">
+                <div class="grid grid-cols-1 lg:grid-cols-[0.78fr_1.22fr] gap-10 items-start">
+                    <div class="space-y-4">
+                        <p class="school-kicker">L'effet miroir</p>
+                        <h2 class="school-section-title">Pourquoi cette école existe ?</h2>
+                    </div>
+                    <div class="school-copy space-y-4">
+                        <p>Beaucoup de personnes vivent avec leurs émotions, leurs intuitions, leurs réactions et leurs capacités naturelles sans jamais avoir appris à les comprendre.</p>
+                        <p>• Certaines tournent en rond.</p>
+                        <p>• D'autres répètent les mêmes schémas.</p>
+                        <p>• D'autres encore ressentent des choses qu'elles ne savent pas expliquer.</p>
+                        <p class="text-[#f2cb65] font-semibold">La Haute École des Guides a été créée pour permettre à chacun de découvrir son propre mode d'emploi et d'apprendre à utiliser pleinement son potentiel dans sa vie quotidienne.</p>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <article class="school-card">
-                        <div class="school-icon">⟳</div>
-                        <p class="school-copy mt-6">J'ai l'impression de tourner en rond malgré mes efforts.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">∞</div>
-                        <p class="school-copy mt-6">Je répète souvent les mêmes schémas dans ma vie.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">◌</div>
-                        <p class="school-copy mt-6">Je ressens beaucoup de choses sans toujours les comprendre.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">◇</div>
-                        <p class="school-copy mt-6">Je manque parfois de confiance dans mes choix.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">✦</div>
-                        <p class="school-copy mt-6">Je sens que j'ai du potentiel mais je ne sais pas comment l'utiliser.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">⌖</div>
-                        <p class="school-copy mt-6">Je cherche à mieux me connaître.</p>
-                    </article>
+                <div class="mt-12 space-y-5">
+                    <h3 class="school-subtitle">Cette école est faite pour vous si :</h3>
+                    <div class="school-panel rounded-lg p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="school-copy">✓ Vous avez l'impression de répéter les mêmes schémas.</p>
+                        <p class="school-copy">✓ Vous souhaitez mieux comprendre votre fonctionnement.</p>
+                        <p class="school-copy">✓ Vous ressentez beaucoup de choses sans toujours les comprendre.</p>
+                        <p class="school-copy">✓ Vous souhaitez développer vos capacités naturelles.</p>
+                        <p class="school-copy">✓ Vous êtes thérapeute et souhaitez approfondir votre compréhension.</p>
+                        <p class="school-copy">✓ Vous cherchez davantage de clarté, d'autonomie et de maîtrise dans votre vie.</p>
+                    </div>
                 </div>
-                <p class="school-copy max-w-3xl mt-8 text-lg">Si vous vous reconnaissez dans plusieurs de ces situations, cette école a été conçue pour vous.</p>
             </section>
 
-            <section class="school-section school-layer">
+            <section id="school-foundations" class="school-section school-layer">
                 <div class="school-panel school-difference grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-8 items-center">
                     <div>
-                        <p class="school-kicker">Retrouver son mode d'emploi</p>
-                        <h2 class="school-section-title mt-3">Pourquoi cette école existe ?</h2>
+                        <p class="school-kicker">Les fondations</p>
+                        <h2 class="school-section-title mt-3">Le Changement de Paradigme</h2>
                     </div>
                     <div class="school-copy space-y-4 relative z-10">
-                        <p>Beaucoup de personnes cherchent à changer leur vie.</p>
-                        <p class="text-xl text-[#f2cb65] font-semibold">Mais personne ne leur a appris à comprendre leur propre fonctionnement.</p>
-                        <p>La Haute École des Guides a été créée pour vous aider à découvrir votre mode d'emploi naturel.</p>
-                        <p>Car lorsque l'on comprend mieux comment on fonctionne, il devient plus facile de prendre des décisions, de développer ses forces et d'avancer avec plus de confiance.</p>
+                        <p>L'erreur de la majorité des structures de formation est de vouloir enseigner des compétences techniques à des personnes qui traversent des situations de crise ou de surcharge, ou d'imposer une posture professionnelle de thérapeute à des élèves qui cherchent simplement à comprendre leurs propres perceptions.</p>
+                        <p>Nous rompons définitivement avec ce modèle académique rigide. Nous observons et respectons la réalité empirique de notre Tribu : <strong class="text-[#f2cb65]">80% à 90% des élèves</strong> ne s'inscrivent pas pour obtenir un diplôme commercial ou s'installer à leur compte. Ils viennent pour cesser de subir leur hypersensibilité, maîtriser leurs blocages et décoder les règles de leur propre structure.</p>
+                        <p>Le cursus est donc scindé en paliers hermétiques, garantissant que l'enseignement théorique ne commence que lorsque la structure nerveuse et psychologique de l'individu est parfaitement restaurée et stabilisée.</p>
                     </div>
                 </div>
             </section>
 
-            <section id="school-benefits" class="school-section school-layer">
+            <section id="school-forces" class="school-section school-layer">
                 <div class="max-w-3xl space-y-4 mb-8">
-                    <p class="school-kicker">Vos forces naturelles</p>
-                    <h2 class="school-section-title">Ce que vous allez développer</h2>
-                    <p class="school-copy">Cinq familles de capacités vous aident à mieux comprendre vos réactions et à développer vos forces au quotidien.</p>
+                    <p class="school-kicker">Les piliers sémantiques</p>
+                    <h2 class="school-section-title">Les 5 Forces de l'École</h2>
+                    <p class="school-copy">Le socle vibratoire et énergétique de l'Académie repose sur la maîtrise de cinq forces fondamentales qui dictent la dynamique de notre évolution :</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
-                    <article class="school-card">
-                        <div class="school-icon">🌍</div>
-                        <h3 class="mt-6">Terre</h3>
-                        <p class="school-copy text-sm mt-4">Stabilité · Ancrage · Construction</p>
-                        <p class="text-xs text-[#f2cb65] mt-4 leading-relaxed">Compréhension de ses racines et de son héritage.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">🌊</div>
-                        <h3 class="mt-6">Eau</h3>
-                        <p class="school-copy text-sm mt-4">Émotions · Intuition · Adaptation</p>
-                        <p class="text-xs text-[#f2cb65] mt-4 leading-relaxed">Compréhension de ses ressentis.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">🌬</div>
-                        <h3 class="mt-6">Air</h3>
-                        <p class="school-copy text-sm mt-4">Communication · Vision · Compréhension</p>
-                        <p class="text-xs text-[#f2cb65] mt-4 leading-relaxed">Analyse des situations.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">🔥</div>
-                        <h3 class="mt-6">Feu</h3>
-                        <p class="school-copy text-sm mt-4">Action · Confiance · Courage</p>
-                        <p class="text-xs text-[#f2cb65] mt-4 leading-relaxed">Passage à l'action.</p>
-                    </article>
-                    <article class="school-card">
-                        <div class="school-icon">⚡</div>
-                        <h3 class="mt-6">Foudre</h3>
-                        <p class="school-copy text-sm mt-4">Transformation · Évolution · Innovation</p>
-                        <p class="text-xs text-[#f2cb65] mt-4 leading-relaxed">Capacité à changer.</p>
-                    </article>
+                    <article class="school-card"><div class="school-icon">🌍</div><h3 class="mt-6">Terre</h3><p class="school-copy text-sm mt-4">Ancrage — Construction — Mémoire — Héritage</p></article>
+                    <article class="school-card"><div class="school-icon">🌊</div><h3 class="mt-6">Eau</h3><p class="school-copy text-sm mt-4">Émotions — Ressenti — Intuition</p></article>
+                    <article class="school-card"><div class="school-icon">🌬</div><h3 class="mt-6">Air</h3><p class="school-copy text-sm mt-4">Vision — Communication — Compréhension</p></article>
+                    <article class="school-card"><div class="school-icon">🔥</div><h3 class="mt-6">Feu</h3><p class="school-copy text-sm mt-4">Action — Courage — Leadership</p></article>
+                    <article class="school-card"><div class="school-icon">⚡</div><h3 class="mt-6">Foudre</h3><p class="school-copy text-sm mt-4">Transformation — Évolution — Révélation</p></article>
+                </div>
+                <div class="mt-16 max-w-4xl space-y-4">
+                    <p class="school-kicker">Progression systémique ascendante</p>
+                    <h2 class="school-section-title">L'Ordre Immuable des 4 Corps</h2>
+                    <p class="school-copy">Tout diagnostic, tout nettoyage et tout enseignement s'effectuent selon une progression systémique ascendante. L'alignement exige le respect strict de cet ordre :</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+                    <article class="school-card"><div class="school-icon">1</div><h3 class="mt-6">Le Corps Émotionnel</h3><p class="school-copy text-sm mt-4">Le siège de l'eau, des charges mémorielles et des réflexes de survie. C'est la porte d'entrée obligatoire. Tant que le système de défense émotionnel sature, aucune clarté n'est accessible.</p></article>
+                    <article class="school-card"><div class="school-icon">2</div><h3 class="mt-6">Le Corps Physique</h3><p class="school-copy text-sm mt-4">Le véhicule dense dans la matière. Le traducteur biologique de la compréhension des éléments dans le corps. C'est le lieu d'ancrage de la transformation et de la lecture somatique.</p></article>
+                    <article class="school-card"><div class="school-icon">3</div><h3 class="mt-6">Le Corps Mental</h3><p class="school-copy text-sm mt-4">L'ordinateur central, la matrice des pensées. C'est l'espace d'identification des archétypes psychologiques et des croyances limites. On y installe l'Observateur Neutre.</p></article>
+                    <article class="school-card"><div class="school-icon">4</div><h3 class="mt-6">Le Corps Spirituel</h3><p class="school-copy text-sm mt-4">L'alignement global, la boussole et le lien avec l'invisible. Il englobe la mémoire familiale, l'héritage transgénérationnel et le déploiement des capacités subtiles innées.</p></article>
                 </div>
             </section>
 
-            <section id="school-steps" class="school-section school-layer">
-                <div class="max-w-3xl mx-auto text-center space-y-4 mb-12">
-                    <p class="school-kicker">Une progression structurée</p>
-                    <h2 class="school-section-title">Comment fonctionne l'école ?</h2>
+            <section id="school-trajectory" class="school-section school-layer">
+                <div class="max-w-4xl space-y-4 mb-12">
+                    <p class="school-kicker">L'itinéraire en 6 phases</p>
+                    <h2 class="school-section-title">La Trajectoire</h2>
                 </div>
-                <div class="school-timeline">
-                    <article class="school-step"><span class="school-step-number">1</span><h3>Cycle Fondations</h3><p class="school-copy text-sm mt-2">Apprendre les bases.</p></article>
-                    <article class="school-step"><span class="school-step-number">2</span><h3>Académie des Capacités Innées</h3><p class="school-copy text-sm mt-2">Développer ses compétences.</p></article>
-                    <article class="school-step"><span class="school-step-number">3</span><h3>Laboratoire des Guides</h3><p class="school-copy text-sm mt-2">Mettre en pratique.</p></article>
-                    <article class="school-step"><span class="school-step-number">4</span><h3>Transmission</h3><p class="school-copy text-sm mt-2">Pour ceux qui souhaitent aller plus loin.</p></article>
-                </div>
-            </section>
 
-            <section class="school-section school-layer">
-                <div class="grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-10 items-start">
-                    <div class="space-y-4">
-                        <p class="school-kicker">Des compétences concrètes</p>
-                        <h2 class="school-section-title">Ce que vous allez apprendre</h2>
+                <div class="space-y-10">
+                    <div class="school-panel school-track-block">
+                        <p class="school-track-label">Bloc A · Le Parcours Renaissance · Posture Thérapeute</p>
+                        <p class="school-copy mt-3 italic">L'objectif est la stabilisation d'urgence et la reconstruction de la ligne de base.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6">
+                            <article class="school-phase"><h3>Phase 1 : Le Secours & Le Bilan Initial</h3><p class="school-copy text-sm mt-3"><strong>En pratique :</strong> Si vous entrez en situation de crise ou de surcharge majeure (burn-out, effondrement financier, deuil, rupture). À ce stade, vous n'êtes pas prêt à étudier. Le processus commence par un Bilan des 4 Corps chirurgical suivi de l'intégration immédiate dans le Parcours Renaissance pour stopper la surcharge.</p></article>
+                            <article class="school-phase"><h3>Phase 2 : La Reconstruction</h3><p class="school-copy text-sm mt-3"><strong>En pratique :</strong> Les charges principales diminuent, l'angoisse reflue et le système nerveux retrouve sa ligne de base. C'est le moment précis où s'éveille la question fondamentale : <em>« Pourquoi je fonctionne ainsi ? »</em>. C'est ici que l'École commence.</p></article>
+                        </div>
                     </div>
-                    <div class="school-panel rounded-lg p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <p class="school-copy">✓ Comprendre votre fonctionnement</p>
-                        <p class="school-copy">✓ Identifier vos forces naturelles</p>
-                        <p class="school-copy">✓ Développer votre intuition</p>
-                        <p class="school-copy">✓ Mieux gérer vos émotions</p>
-                        <p class="school-copy">✓ Améliorer votre communication</p>
-                        <p class="school-copy">✓ Renforcer votre confiance</p>
-                        <p class="school-copy">✓ Développer votre discernement</p>
-                        <p class="school-copy">✓ Comprendre votre héritage</p>
-                        <p class="school-copy sm:col-span-2">✓ Utiliser vos capacités avec plus de maîtrise</p>
-                    </div>
-                </div>
-            </section>
 
-            <section id="school-practice" class="school-section school-layer">
-                <div class="grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-10 items-start">
-                    <div class="space-y-4">
-                        <p class="school-kicker">Le laboratoire des guides</p>
-                        <h2 class="school-section-title">Apprendre par la pratique</h2>
-                        <p class="school-copy">Chaque mois, les élèves se réunissent pendant 4 heures afin d'appliquer les enseignements.</p>
+                    <div class="school-panel school-track-block">
+                        <p class="school-track-label">Bloc B · L'École du Mode d'Emploi · Posture Mentor / Enseignant</p>
+                        <p class="school-copy mt-3 italic">L'objectif est l'acquisition du langage commun et la mutation des savoirs en compétences.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6">
+                            <article class="school-phase">
+                                <h3>Phase 3 : Le Code · Cycle Fondations</h3>
+                                <p class="school-copy text-sm mt-3"><strong>En pratique :</strong> Vous étudiez l'alphabet de votre structure (Éléments, Archétypes, mécanismes inconscients de défense, mémoire familiale). L'objectif est de comprendre la mécanique de ce qui est déjà opérationnel en soi.</p>
+                                <div class="mt-5 space-y-2 text-sm text-[#f2cb65]">
+                                    <p class="font-bold">🎁 Ce que vous allez gagner :</p>
+                                    <p>✓ Je comprends mieux mes réactions.</p>
+                                    <p>✓ J'identifie mes forces naturelles.</p>
+                                    <p>✓ Je comprends mes mécanismes de défense.</p>
+                                    <p>✓ Je développe davantage de discernement.</p>
+                                </div>
+                            </article>
+                            <article class="school-phase"><h3>Phase 4 : L'Expérimentation · Le Laboratoire</h3><p class="school-copy text-sm mt-3"><strong>En pratique :</strong> La théorie est passée au scanner du terrain. À travers des études de cas réels et anonymisés au sein de la Tribu, des séances de questions-réponses brutes et des exercices intensifs mensuels, vous intégrez vos connaissances sous forme de réflexes biologiques et mentaux.</p></article>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <article class="school-card min-h-0"><div class="school-icon">🔍</div><h3 class="mt-5">Études de cas</h3></article>
-                        <article class="school-card min-h-0"><div class="school-icon">🛠</div><h3 class="mt-5">Exercices pratiques</h3></article>
-                        <article class="school-card min-h-0"><div class="school-icon">🤝</div><h3 class="mt-5">Travail en binôme</h3></article>
-                        <article class="school-card min-h-0"><div class="school-icon">💬</div><h3 class="mt-5">Questions / Réponses</h3></article>
-                        <article class="school-card min-h-0"><div class="school-icon">📖</div><h3 class="mt-5">Retours d'expérience</h3></article>
-                        <article class="school-card min-h-0"><div class="school-icon">◎</div><h3 class="mt-5">Débriefing collectif</h3></article>
+
+                    <div class="school-panel school-track-block">
+                        <p class="school-track-label">Bloc C · Le Sommet · Posture de Guide des Guides</p>
+                        <p class="school-copy mt-3 italic">L'objectif est l'autonomie souveraine ou le passage de flambeau.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6">
+                            <article class="school-phase"><h3>Phase 5 : La Maîtrise & L'Autonomie</h3><p class="school-copy text-sm mt-3"><strong>En pratique :</strong> Vous changez radicalement de focalisation. Vous ne cherchez plus à résoudre un problème, vous apprenez à utiliser vos forces et vos vulnérabilités passées comme un levier de puissance. Vous devenez souverain et pleinement responsable de l'alignement de vos 4 corps.</p></article>
+                            <article class="school-phase"><h3>Phase 6 : La Transmission</h3><p class="school-copy text-sm mt-3"><strong>En pratique :</strong> Cette phase ne concerne qu'une minorité d'élèves (10% à 20%). Elle est strictement réservée à ceux qui ressentent un véritable appel viscéral à accompagner les autres. Elle enseigne l'art de tenir l'espace pour un collectif et de scanner une structure sans se faire happer.</p></article>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section class="school-section school-layer">
-                <div class="max-w-3xl space-y-4 mb-10">
-                    <p class="school-kicker">Votre évolution</p>
-                    <h2 class="school-section-title">Quels résultats pouvez-vous espérer ?</h2>
-                    <p class="school-copy">Après plusieurs mois dans l'école :</p>
+            <section id="school-archetypes" class="school-section school-layer">
+                <div class="max-w-4xl space-y-4 mb-10">
+                    <p class="school-kicker">L'identité profonde</p>
+                    <h2 class="school-section-title">Les 5 Archétypes de la Tribu</h2>
+                    <p class="school-copy">Chaque membre de l'école résonne avec une ou plusieurs structures psychologiques dominantes. Apprendre à les identifier permet de maîtriser son canal d'action :</p>
                 </div>
-                <div class="school-panel rounded-lg p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <p class="school-copy">✓ Une meilleure connaissance de soi</p>
-                    <p class="school-copy">✓ Davantage de confiance</p>
-                    <p class="school-copy">✓ Une meilleure compréhension de ses réactions</p>
-                    <p class="school-copy">✓ Plus de clarté dans ses choix</p>
-                    <p class="school-copy">✓ Une intuition mieux maîtrisée</p>
-                    <p class="school-copy">✓ Une meilleure capacité d'adaptation</p>
-                    <p class="school-copy">✓ Plus d'autonomie</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+                    <article class="school-card"><div class="school-icon">⚔</div><h3 class="mt-6">Le Guerrier</h3><p class="school-copy text-sm mt-4">L'ancrage matériel brutal et la force d'exécution. Il protège le cadre, maintient la discipline physique et transmute l'inertie ou la peur en mouvement d'impact rectiligne.</p></article>
+                    <article class="school-card"><div class="school-icon">◉</div><h3 class="mt-6">Le Médium</h3><p class="school-copy text-sm mt-4">Le capteur haute fréquence de l'information subtile. Il navigue de manière innée dans les espaces invisibles, ressent les structures vibratoires ambiantes et décode les non-dits d'un système.</p></article>
+                    <article class="school-card"><div class="school-icon">☽</div><h3 class="mt-6">La Sorcière</h3><p class="school-copy text-sm mt-4">La gardienne de la transmutation émotionnelle et instinctive. Profondément reliée à la mémoire cellulaire et à l'intelligence de l'Eau, elle plonge dans l'ombre pour libérer les mémoires bloquées.</p></article>
+                    <article class="school-card"><div class="school-icon">✧</div><h3 class="mt-6">Le Transmutateur</h3><p class="school-copy text-sm mt-4">L'alchimiste de l'esprit et de la structure cognitive. Expert du Corps Mental, il repère instantanément les croyances mères obsolètes et brise les schémas répétitifs hérités du clan familial.</p></article>
+                    <article class="school-card"><div class="school-icon">⌘</div><h3 class="mt-6">Le Guide Architecte</h3><p class="school-copy text-sm mt-4">Le maître de la synthèse et de l'alignement géométrique des 4 corps. Il sait agencer les forces, tenir fermement l'espace pour un collectif et orchestrer le retour à la pleine souveraineté.</p></article>
                 </div>
             </section>
 
-            <section id="school-join" class="school-section school-layer">
-                <div class="max-w-3xl space-y-4 mb-10">
-                    <p class="school-kicker">Un parcours adapté à votre intention</p>
-                    <h2 class="school-section-title">Qui peut rejoindre l'école ?</h2>
+            <section id="school-impact" class="school-section school-layer">
+                <div class="max-w-4xl space-y-4 mb-10">
+                    <p class="school-kicker">Le livrable final & l'impact</p>
+                    <h2 class="school-section-title">Ce que vous allez développer</h2>
+                    <p class="school-copy">Au fil du parcours, vous pourrez concrètement :</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-                    <article class="school-card"><div class="school-icon">↗</div><h3 class="mt-6">Évoluer</h3><p class="school-copy text-sm mt-4">La personne qui souhaite évoluer.</p></article>
-                    <article class="school-card"><div class="school-icon">◌</div><h3 class="mt-6">Mieux ressentir</h3><p class="school-copy text-sm mt-4">La personne hypersensible.</p></article>
-                    <article class="school-card"><div class="school-icon">✦</div><h3 class="mt-6">Approfondir</h3><p class="school-copy text-sm mt-4">Le thérapeute ou accompagnant.</p></article>
-                    <article class="school-card"><div class="school-icon">⇢</div><h3 class="mt-6">Transmettre</h3><p class="school-copy text-sm mt-4">La personne qui souhaite transmettre.</p></article>
+                <div class="school-panel rounded-lg p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <p class="school-copy">✓ Mieux comprendre votre fonctionnement et trouver votre place.</p>
+                    <p class="school-copy">✓ Renforcer votre stabilité émotionnelle et votre confiance.</p>
+                    <p class="school-copy">✓ Utiliser pleinement votre intuition et vos capacités naturelles.</p>
+                    <p class="school-copy">✓ Comprendre votre héritage familial et sortir des schémas répétitifs.</p>
+                    <p class="school-copy md:col-span-2">✓ Développer une autonomie totale et une maîtrise au quotidien.</p>
+                </div>
+
+                <div class="mt-16 max-w-4xl space-y-4 mb-8">
+                    <p class="school-kicker">Les supports du parcours</p>
+                    <h2 class="school-section-title">L'Infrastructure Opérationnelle</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <article class="school-card"><div class="school-icon">⌂</div><h3 class="mt-6">Le Hub Bubble.io</h3><p class="school-copy text-sm mt-4">L'application centrale pour gérer vos bilans des 4 corps, vos carnets de bord, et débloquer vos étapes supérieures.</p></article>
+                    <article class="school-card"><div class="school-icon">◎</div><h3 class="mt-6">L'Espace Circle.so</h3><p class="school-copy text-sm mt-4">Le QG de la Tribu qui abrite le Manuel de formation (fiches d'impact et capsules audio) et les partages d'études de cas du Laboratoire.</p></article>
+                    <article class="school-card"><div class="school-icon">✦</div><h3 class="mt-6">Les Kits d'Auto-Guérison</h3><p class="school-copy text-sm mt-4">Des supports physiques pour ancrer immédiatement le travail énergétique et somatique directement dans votre quotidien.</p></article>
                 </div>
             </section>
 
             <section class="school-final school-layer">
                 <div class="max-w-4xl mx-auto space-y-7">
-                    <p class="school-kicker">Votre prochaine étape</p>
-                    <h2 class="school-section-title">Devenez l'expert de votre propre mode d'emploi.</h2>
-                    <p class="school-copy text-lg">La Haute École des Guides est un espace d'apprentissage destiné aux personnes qui souhaitent comprendre leur fonctionnement, développer leurs capacités naturelles et avancer avec davantage de conscience dans leur vie.</p>
+                    <p class="school-kicker">Le mot de la fin</p>
+                    <blockquote class="school-quote">« Vous ne sortez pas d'ici diplômé de ma vérité. Vous en sortez souverain de la vôtre. »</blockquote>
                     <button onclick="scrollToContact('Je souhaite réserver mon Bilan des 4 Corps pour préparer mon parcours vers la Haute École des Guides.')" class="guide-btn-cyan">Réserver mon Bilan des 4 Corps</button>
                 </div>
             </section>
