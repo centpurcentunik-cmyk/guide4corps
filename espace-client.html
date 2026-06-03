@@ -672,6 +672,14 @@
                 <span id="status-pill" class="status-pill">Statut : Gratuit</span>
                 <p class="lead" style="font-size:12px;">Base locale persistante via localStorage. Prête pour Supabase ou Google Sheets plus tard.</p>
             </div>
+            <div class="status-card">
+                <p class="eyebrow">Connexion client</p>
+                <label>Email client
+                    <input id="client-email-login" type="email" placeholder="client@email.com">
+                </label>
+                <button class="btn btn-primary section" type="button" onclick="loadClientFromSupabase()">Charger mon suivi</button>
+                <p id="supabase-status" class="lead" style="font-size:12px;"></p>
+            </div>
         </aside>
 
         <main class="main">
@@ -788,6 +796,7 @@
                 <div class="metrics">
                     <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
                     <button class="btn btn-green" type="button" onclick="unlockPremium()">Déverrouiller Premium</button>
+                    <button class="btn btn-primary" type="button" onclick="saveTrackingToSupabase()">Enregistrer le suivi</button>
                     <button class="btn btn-primary" type="button" onclick="syncAdminForms(); saveData(); renderAll(); notify('Espace client mis à jour.')">Mettre à jour</button>
                     <button class="btn btn-danger" type="button" onclick="closeAdminModal()">Fermer</button>
                 </div>
@@ -804,6 +813,9 @@
                         </label>
                         <label>Nom du client
                             <input id="admin-name" type="text">
+                        </label>
+                        <label>Email du client
+                            <input id="admin-email" type="email" placeholder="client@email.com">
                         </label>
                         <label>Bilan Histoire
                             <textarea id="admin-bilan-history"></textarea>
@@ -860,12 +872,22 @@
 
     <div id="toast" class="toast"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ============================================================
-        // CONFIGURATION : stockage local et accès admin
+        // CONFIGURATION : Supabase, stockage local et accès admin
         // ============================================================
         const STORAGE_KEY = "eternaile_client_space_v2";
         const ADMIN_PASSWORD = "admin123";
+        const SUPABASE_URL = "https://oqzoixffraaypvegebjy.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_MJLXugkQWgCospkKB-rfEA_zATIOW9Y";
+        const SUPABASE_TABLES = {
+            users: "users",
+            suivi: "suivi_soin",
+            ancetres: "ancetres"
+        };
+
+        let supabaseClient = null;
 
         // ============================================================
         // DONNÉES OFFICIELLES : questions et parcours de soins
@@ -994,6 +1016,7 @@
                 status: "Gratuit",
                 profile: {
                     name: "Client ETERNAILE",
+                    email: "",
                     bilanHistory: "Débrief premium à compléter par Yann.",
                     bilanHeart: "Débrief premium à compléter par Yann."
                 },
@@ -1007,7 +1030,8 @@
                 cares: OFFICIAL_CARES.map(care => ({
                     id: care.id,
                     validated: false,
-                    consequence: ""
+                    consequence: "",
+                    guideMessage: ""
                 })),
                 ancestors: [],
                 journal: [],
@@ -1029,6 +1053,22 @@
             notify("Données sauvegardées.");
         }
 
+        function getSupabaseClient() {
+            if (supabaseClient) return supabaseClient;
+            if (!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) {
+                throw new Error("Supabase n'est pas encore chargé ou configuré.");
+            }
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return supabaseClient;
+        }
+
+        function setSupabaseStatus(message, isError = false) {
+            const status = document.getElementById("supabase-status");
+            if (!status) return;
+            status.textContent = message;
+            status.style.color = isError ? "var(--red)" : "var(--green)";
+        }
+
         function normalizeData(data) {
             const base = createDefaultData();
             const savedCares = Array.isArray(data.cares) ? data.cares : [];
@@ -1041,7 +1081,8 @@
                     return {
                         id: care.id,
                         validated: saved.validated === true,
-                        consequence: saved.consequence || ""
+                        consequence: saved.consequence || "",
+                        guideMessage: saved.guideMessage || saved.guide_message || ""
                     };
                 }),
                 ancestors: Array.isArray(data.ancestors) ? data.ancestors : [],
@@ -1070,6 +1111,8 @@
             const pill = document.getElementById("status-pill");
             pill.textContent = `Statut : ${clientData.status}`;
             pill.classList.toggle("premium", clientData.status === "Premium");
+            const login = document.getElementById("client-email-login");
+            if (login && clientData.profile.email) login.value = clientData.profile.email;
         }
 
         function renderProfile() {
@@ -1169,6 +1212,7 @@
                     <h3 class="section">${escapeHtml(care.title)}</h3>
                     <p>${escapeHtml(care.text)}</p>
                     ${isValidated && state.consequence ? `<p><strong>Conséquence réelle :</strong> ${escapeHtml(state.consequence)}</p>` : ""}
+                    ${isValidated ? `<div class="card card-inner" style="margin-top:14px;background:rgba(0,163,224,0.08);border-color:rgba(0,163,224,0.28);"><p class="eyebrow">Message personnalisé du Guide</p><p class="lead">${escapeHtml(state.guideMessage || "Rituel validé, intégration en cours...")}</p></div>` : ""}
                     <div class="resource-row">
                         <button class="resource-btn" ${isValidated ? "" : "disabled"} onclick="notify('MP3 prêt à connecter.')">Écouter le MP3</button>
                         <button class="resource-btn" ${isValidated ? "" : "disabled"} onclick="notify('Tuto image prêt à connecter.')">Voir le Tuto Image</button>
@@ -1301,6 +1345,7 @@
         function renderAdmin() {
             document.getElementById("admin-status").value = clientData.status;
             document.getElementById("admin-name").value = clientData.profile.name;
+            document.getElementById("admin-email").value = clientData.profile.email || "";
             document.getElementById("admin-bilan-history").value = clientData.profile.bilanHistory;
             document.getElementById("admin-bilan-heart").value = clientData.profile.bilanHeart;
             renderAdminCares();
@@ -1324,8 +1369,151 @@
         function syncAdminForms() {
             clientData.status = document.getElementById("admin-status").value === "Premium" ? "Premium" : "Gratuit";
             clientData.profile.name = document.getElementById("admin-name").value.trim() || "Client ETERNAILE";
+            clientData.profile.email = document.getElementById("admin-email").value.trim().toLowerCase();
             clientData.profile.bilanHistory = document.getElementById("admin-bilan-history").value.trim();
             clientData.profile.bilanHeart = document.getElementById("admin-bilan-heart").value.trim();
+        }
+
+        async function loadClientFromSupabase() {
+            const email = document.getElementById("client-email-login").value.trim().toLowerCase();
+            if (!email.includes("@")) {
+                setSupabaseStatus("Entrez un email client valide.", true);
+                return;
+            }
+            try {
+                const supabase = getSupabaseClient();
+                const { data: user, error: userError } = await supabase
+                    .from(SUPABASE_TABLES.users)
+                    .select("*")
+                    .eq("email", email)
+                    .maybeSingle();
+
+                if (userError) throw userError;
+                if (!user) {
+                    setSupabaseStatus("Aucun client trouvé pour cet email.", true);
+                    return;
+                }
+
+                const [{ data: soins, error: soinsError }, { data: ancetres, error: ancetresError }] = await Promise.all([
+                    supabase.from(SUPABASE_TABLES.suivi).select("*").eq("user_id", user.id),
+                    supabase.from(SUPABASE_TABLES.ancetres).select("*").eq("user_id", user.id).order("created_at", { ascending: true })
+                ]);
+
+                if (soinsError) throw soinsError;
+                if (ancetresError) throw ancetresError;
+
+                clientData = normalizeData({
+                    status: user.status || "Gratuit",
+                    profile: {
+                        name: user.name || "Client ETERNAILE",
+                        email: user.email || email,
+                        bilanHistory: user.bilan_history || "",
+                        bilanHeart: user.bilan_heart || ""
+                    },
+                    diagnostic: user.diagnostic || clientData.diagnostic,
+                    cares: OFFICIAL_CARES.map(care => {
+                        const row = (soins || []).find(item => item.soin_id === care.id) || {};
+                        return {
+                            id: care.id,
+                            validated: row.validated === true,
+                            consequence: row.consequence || "",
+                            guideMessage: row.guide_message || ""
+                        };
+                    }),
+                    ancestors: (ancetres || []).map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        element: item.element,
+                        positive: item.positive,
+                        risk: item.risk,
+                        key: item.navigation_key
+                    })),
+                    journal: clientData.journal,
+                    messages: clientData.messages
+                });
+                saveData();
+                renderAll();
+                setSupabaseStatus("Suivi client chargé depuis Supabase.");
+            } catch (error) {
+                console.error(error);
+                setSupabaseStatus(`Chargement Supabase impossible : ${error.message || error}`, true);
+            }
+        }
+
+        async function saveTrackingToSupabase() {
+            try {
+                syncAdminForms();
+                if (!clientData.profile.email || !clientData.profile.email.includes("@")) {
+                    notify("Email client obligatoire pour enregistrer dans Supabase.");
+                    return;
+                }
+
+                const supabase = getSupabaseClient();
+                const userPayload = {
+                    email: clientData.profile.email,
+                    name: clientData.profile.name,
+                    status: clientData.status,
+                    bilan_history: clientData.profile.bilanHistory,
+                    bilan_heart: clientData.profile.bilanHeart,
+                    diagnostic: clientData.diagnostic,
+                    updated_at: new Date().toISOString()
+                };
+
+                const { data: user, error: userError } = await supabase
+                    .from(SUPABASE_TABLES.users)
+                    .upsert(userPayload, { onConflict: "email" })
+                    .select()
+                    .single();
+
+                if (userError) throw userError;
+
+                const soinsPayload = clientData.cares.map(care => ({
+                    user_id: user.id,
+                    soin_id: care.id,
+                    validated: care.validated === true,
+                    consequence: care.consequence || "",
+                    guide_message: care.guideMessage || "",
+                    updated_at: new Date().toISOString()
+                }));
+
+                const { error: soinsError } = await supabase
+                    .from(SUPABASE_TABLES.suivi)
+                    .upsert(soinsPayload, { onConflict: "user_id,soin_id" });
+
+                if (soinsError) throw soinsError;
+
+                await saveAncestorsToSupabase(user.id);
+                saveData();
+                renderAll();
+                setSupabaseStatus("Suivi enregistré dans Supabase.");
+                notify("Suivi Supabase enregistré.");
+            } catch (error) {
+                console.error(error);
+                setSupabaseStatus(`Sauvegarde Supabase impossible : ${error.message || error}`, true);
+                notify("Sauvegarde Supabase impossible.");
+            }
+        }
+
+        async function saveAncestorsToSupabase(userId) {
+            const supabase = getSupabaseClient();
+            const { error: deleteError } = await supabase
+                .from(SUPABASE_TABLES.ancetres)
+                .delete()
+                .eq("user_id", userId);
+            if (deleteError) throw deleteError;
+
+            if (!clientData.ancestors.length) return;
+
+            const payload = clientData.ancestors.map(ancestor => ({
+                user_id: userId,
+                name: ancestor.name,
+                element: ancestor.element,
+                positive: ancestor.positive,
+                risk: ancestor.risk,
+                navigation_key: ancestor.key
+            }));
+            const { error } = await supabase.from(SUPABASE_TABLES.ancetres).insert(payload);
+            if (error) throw error;
         }
 
         function renderAdminCares() {
@@ -1347,6 +1535,9 @@
                                             <p class="lead">${escapeHtml(care.text)}</p>
                                             <label>Conséquence réelle de la libération
                                                 <textarea onchange="updateCare('${care.id}', 'consequence', this.value)">${escapeHtml(state.consequence)}</textarea>
+                                            </label>
+                                            <label>Message personnalisé du Guide
+                                                <textarea onchange="updateCare('${care.id}', 'guideMessage', this.value)" placeholder="Message unique à laisser au client après ce rituel...">${escapeHtml(state.guideMessage || "")}</textarea>
                                             </label>
                                         </div>
                                     </div>
