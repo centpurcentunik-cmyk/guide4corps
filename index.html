@@ -2114,7 +2114,28 @@
         <!-- ONGLET : ESPACE FORMATION - PLATEFORME PEDAGO  -->
         <!-- ============================================== -->
         <section id="tab-learning" class="learning-shell hidden">
-            <div class="learning-layer space-y-10">
+            <div id="learning-access-gate" class="learning-layer max-w-3xl mx-auto py-16">
+                <div class="learning-panel space-y-6 text-center">
+                    <p class="school-kicker">Accès réservé</p>
+                    <h1 class="school-section-title">Espace Formation verrouillé</h1>
+                    <p class="school-copy max-w-2xl mx-auto">Cet espace est réservé aux personnes déjà accompagnées, validées et autorisées à entrer dans l'Académie. Entrez le code d'accès transmis personnellement par Yann.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_0.72fr] gap-3 max-w-2xl mx-auto text-left">
+                        <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                            Email élève
+                            <input type="email" id="learning-access-email" placeholder="votre@email.com" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-3 text-sm">
+                        </label>
+                        <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                            Code d'accès
+                            <input type="password" id="learning-access-code" placeholder="Code privé" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-3 text-sm">
+                        </label>
+                    </div>
+                    <button type="button" onclick="unlockLearningAccess()" class="guide-btn-cyan">Entrer dans l'espace formation</button>
+                    <p id="learning-access-error" class="text-red-400 text-xs hidden"></p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.12em]">Accès accordé uniquement après paiement, validation du parcours et accord du Guide.</p>
+                </div>
+            </div>
+
+            <div id="learning-content" class="learning-layer space-y-10 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 items-end">
                     <div class="space-y-5">
                         <p class="school-kicker">Plateforme pédagogique</p>
@@ -2154,7 +2175,10 @@
                     <aside class="learning-panel space-y-4">
                         <div class="flex items-center justify-between gap-4">
                             <h2 class="school-subtitle text-2xl">Catalogue</h2>
-                            <button type="button" onclick="resetLearningProgress()" class="guide-btn-outline text-[10px] px-4 py-2">Réinitialiser</button>
+                            <div class="flex flex-wrap gap-2 justify-end">
+                                <button type="button" onclick="resetLearningProgress()" class="guide-btn-outline text-[10px] px-4 py-2">Réinitialiser</button>
+                                <button type="button" onclick="lockLearningAccess()" class="guide-btn-outline text-[10px] px-4 py-2">Verrouiller</button>
+                            </div>
                         </div>
                         <div id="learning-course-list" class="space-y-3"></div>
                     </aside>
@@ -2840,6 +2864,10 @@
                         Mot de passe admin
                         <input type="text" id="admin-password" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
                     </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Code accès formation
+                        <input type="text" id="admin-learning-access-code" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
                         Copyright
                         <input type="text" id="admin-copyright" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
@@ -3169,6 +3197,7 @@
                     }
                 }
             });
+            if (tabId === "learning") renderLearningAccessState();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -3268,6 +3297,7 @@
         }
 
         const LEARNING_STORAGE_KEY = "etern_aile_learning_progress";
+        const LEARNING_ACCESS_KEY = "etern_aile_learning_access";
         let activeLearningCourseId = "bilan-4-corps";
         const DEFAULT_LEARNING_COURSES = [
             {
@@ -3331,6 +3361,66 @@
             }
         }
 
+        function getLearningAccess() {
+            try {
+                return JSON.parse(localStorage.getItem(LEARNING_ACCESS_KEY)) || null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function hasLearningAccess() {
+            const access = getLearningAccess();
+            return !!access && access.code === platformSettings.learningAccessCode;
+        }
+
+        function renderLearningAccessState() {
+            const gate = document.getElementById("learning-access-gate");
+            const content = document.getElementById("learning-content");
+            if (!gate || !content) return;
+            if (hasLearningAccess()) {
+                gate.classList.add("hidden");
+                content.classList.remove("hidden");
+                renderLearningPlatform();
+            } else {
+                content.classList.add("hidden");
+                gate.classList.remove("hidden");
+            }
+        }
+
+        function unlockLearningAccess() {
+            const email = document.getElementById("learning-access-email")?.value.trim() || "";
+            const code = document.getElementById("learning-access-code")?.value.trim() || "";
+            const error = document.getElementById("learning-access-error");
+            if (!email.includes("@")) {
+                if (error) {
+                    error.textContent = "Entrez l'email de l'élève autorisé.";
+                    error.classList.remove("hidden");
+                }
+                return;
+            }
+            if (code !== platformSettings.learningAccessCode) {
+                if (error) {
+                    error.textContent = "Code incorrect. Cet espace est réservé aux élèves validés.";
+                    error.classList.remove("hidden");
+                }
+                return;
+            }
+            localStorage.setItem(LEARNING_ACCESS_KEY, JSON.stringify({
+                email,
+                code,
+                unlockedAt: new Date().toISOString()
+            }));
+            if (error) error.classList.add("hidden");
+            renderLearningAccessState();
+        }
+
+        function lockLearningAccess() {
+            localStorage.removeItem(LEARNING_ACCESS_KEY);
+            renderLearningAccessState();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
         function saveLearningProgress(progress) {
             localStorage.setItem(LEARNING_STORAGE_KEY, JSON.stringify(progress));
         }
@@ -3344,6 +3434,7 @@
         }
 
         function renderLearningPlatform() {
+            if (!hasLearningAccess()) return;
             const progress = getLearningProgress();
             const courses = getUnlockedLearningCourses(progress);
             const completedCount = learningCourses.filter(course => progress[course.id]).length;
@@ -3669,6 +3760,7 @@
             copyright: "© 2026 ETERN'AILE & CTV974 — Saint-Paul, La Réunion",
             motto: "Le libre arbitre est la seule règle.",
             adminPassword: "4corps",
+            learningAccessCode: "formation974",
             guideHeroSubtitle: "Retour à votre état naturel et souverain.",
             guideHeroIntro1: "Vous avez la sensation de répéter les mêmes schémas ? D'être bloqué dans vos choix, fatigué dans votre corps ou déconnecté de votre sens profond ?",
             guideHeroIntro2: "Un blocage n'est jamais isolé. J'accompagne les hommes et les femmes qui stagnent dans leurs 4 corps (Émotionnel, Physique, Mental, Spirituel) à court-circuiter leur mode survie. Grâce aux états de conscience modifiés et à la puissance brute des éléments, vous n'attendez plus qu'on vous guérisse : vous activez votre auto-guérison.",
@@ -4083,6 +4175,7 @@
                 'admin-site-label': 'siteLabel',
                 'admin-contact-email': 'contactEmail',
                 'admin-password': 'adminPassword',
+                'admin-learning-access-code': 'learningAccessCode',
                 'admin-copyright': 'copyright',
                 'admin-motto': 'motto',
                 'admin-guide-hero-subtitle': 'guideHeroSubtitle',
@@ -4143,6 +4236,7 @@
                 siteLabel: document.getElementById('admin-site-label').value.trim() || defaultPlatformSettings.siteLabel,
                 contactEmail: document.getElementById('admin-contact-email').value.trim() || defaultPlatformSettings.contactEmail,
                 adminPassword: document.getElementById('admin-password').value.trim() || defaultPlatformSettings.adminPassword,
+                learningAccessCode: document.getElementById('admin-learning-access-code').value.trim() || defaultPlatformSettings.learningAccessCode,
                 copyright: document.getElementById('admin-copyright').value.trim() || defaultPlatformSettings.copyright,
                 motto: document.getElementById('admin-motto').value.trim() || defaultPlatformSettings.motto,
                 guideHeroSubtitle: document.getElementById('admin-guide-hero-subtitle').value.trim() || defaultPlatformSettings.guideHeroSubtitle,
@@ -4920,7 +5014,7 @@
             applyPlatformSettings();
             renderAcademyPlatformDemo('stable');
             await loadRemoteLearningCatalog();
-            renderLearningPlatform();
+            renderLearningAccessState();
             populateLearningAdminForm();
             switchTab(activeTab);
         });
