@@ -476,6 +476,7 @@
             content: "";
             position: absolute;
             inset: 0;
+            z-index: 1;
             pointer-events: none;
             opacity: 0.55;
             background-image:
@@ -488,14 +489,26 @@
             content: "";
             position: absolute;
             inset: 0;
+            z-index: 2;
             pointer-events: none;
             background:
                 linear-gradient(90deg, rgba(0,0,0,0.72), transparent 34%, rgba(0,0,0,0.62)),
                 linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.96) 100%);
         }
+        .guide-bg-video {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0.56;
+            filter: saturate(0.92) contrast(1.08) brightness(0.7);
+            pointer-events: none;
+        }
         .guide-layer {
             position: relative;
-            z-index: 1;
+            z-index: 3;
         }
         .guide-nav {
             position: sticky;
@@ -1233,6 +1246,7 @@
             text-align: center;
         }
         @media (prefers-reduced-motion: reduce) {
+            .guide-bg-video,
             .school-bg-video {
                 display: none;
             }
@@ -1388,6 +1402,9 @@
         <!-- ONGLET : GUIDE DES 4 CORPS - SITE VITRINE      -->
         <!-- ============================================== -->
         <section id="tab-guide" class="guide-page hidden">
+            <video class="guide-bg-video" autoplay muted loop playsinline preload="metadata" poster="images/Gemini_Generated_Image_t1zp9xt1zp9xt1zp.jpg" aria-hidden="true">
+                <source src="videos/guide-background.mp4" type="video/mp4">
+            </video>
             <nav class="guide-nav guide-layer">
                 <div class="flex gap-5 sm:gap-8 whitespace-nowrap">
                     <a href="#guide-hero">Accueil</a>
