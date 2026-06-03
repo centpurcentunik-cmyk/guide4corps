@@ -753,6 +753,7 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
+            z-index: 1;
             opacity: 0.6;
             background-image:
                 radial-gradient(circle, rgba(242,203,101,0.8) 0 1px, transparent 1.8px),
@@ -765,13 +766,25 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
+            z-index: 2;
             background:
                 linear-gradient(90deg, rgba(0,4,10,0.84), transparent 35%, rgba(0,4,10,0.72)),
                 linear-gradient(180deg, transparent 0%, rgba(0,2,6,0.96) 100%);
         }
+        .school-bg-video {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0.58;
+            filter: saturate(0.92) contrast(1.08) brightness(0.72);
+            pointer-events: none;
+        }
         .school-layer {
             position: relative;
-            z-index: 1;
+            z-index: 3;
         }
         .school-nav {
             position: sticky;
@@ -1219,6 +1232,11 @@
             line-height: 1.08;
             text-align: center;
         }
+        @media (prefers-reduced-motion: reduce) {
+            .school-bg-video {
+                display: none;
+            }
+        }
         @media (max-width: 900px) {
             .oracle-home::before {
                 opacity: 0.36;
@@ -1579,6 +1597,9 @@
         <!-- ONGLET : HAUTE ÉCOLE DES GUIDES                -->
         <!-- ============================================== -->
         <section id="tab-school" class="school-page hidden">
+            <video class="school-bg-video" autoplay muted loop playsinline preload="metadata" poster="images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png" aria-hidden="true">
+                <source src="videos/haute-ecole-background.mp4" type="video/mp4">
+            </video>
             <nav class="school-nav school-layer">
                 <div class="flex gap-5 sm:gap-8 whitespace-nowrap">
                     <a href="#school-hero">Manifeste</a>
