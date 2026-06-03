@@ -3053,6 +3053,7 @@
                     <div class="md:col-span-2 border-t border-red-950/50 pt-4 mt-2">
                         <h5 class="font-display text-xs text-lava-gold uppercase tracking-widest">Clients & Élèves</h5>
                         <p class="text-[10px] text-gray-500 mt-1">Créez une fiche client, suivez son parcours, puis transformez-la en élève validé quand vous l'estimez prêt.</p>
+                        <p class="text-[10px] text-amber-300 mt-2">Mode actuel : sauvegarde locale sur votre appareil. Les données clients ne sont pas envoyées dans le stockage public. La synchronisation privée arrivera avec Supabase Auth.</p>
                     </div>
                     <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
                         Nom du client
@@ -3331,6 +3332,7 @@
 
         const LEARNING_STORAGE_KEY = "etern_aile_learning_progress";
         const LEARNING_ACCESS_KEY = "etern_aile_learning_access";
+        const ACADEMY_PEOPLE_STORAGE_KEY = "etern_aile_academy_people";
         let activeLearningCourseId = "bilan-4-corps";
         const DEFAULT_LEARNING_COURSES = [
             {
@@ -3385,7 +3387,7 @@
             }
         ];
         let learningCourses = JSON.parse(JSON.stringify(DEFAULT_LEARNING_COURSES));
-        let academyPeople = [];
+        let academyPeople = JSON.parse(localStorage.getItem(ACADEMY_PEOPLE_STORAGE_KEY) || "[]");
 
         function getLearningProgress() {
             try {
@@ -3975,26 +3977,11 @@
         }
 
         async function saveRemoteAcademyPeople() {
-            const payload = {
-                updatedAt: new Date().toISOString(),
-                people: academyPeople
-            };
-            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-            const response = await fetch(`${supabaseConfig.url}/storage/v1/object/${supabaseConfig.bucket}/${supabaseConfig.peoplePath}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${supabaseConfig.key}`,
-                    "apikey": supabaseConfig.key,
-                    "Content-Type": "application/json",
-                    "Cache-Control": "60",
-                    "x-upsert": "true"
-                },
-                body: blob
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || "Sauvegarde du registre clients/élèves refusée.");
-            }
+            throw new Error("Le registre clients/élèves doit être stocké en base privée Supabase Auth, pas dans un bucket public.");
+        }
+
+        function saveAcademyPeopleLocal() {
+            localStorage.setItem(ACADEMY_PEOPLE_STORAGE_KEY, JSON.stringify(academyPeople));
         }
 
         async function loadRemotePlatformSettings() {
@@ -4265,15 +4252,10 @@
         }
 
         async function persistPeopleAndRefresh(message = "Registre mis à jour en ligne.") {
-            try {
-                await saveRemoteAcademyPeople();
-                renderPeopleAdminList();
-                renderLearningAccessState();
-                showAdminStatus(message);
-            } catch (error) {
-                renderPeopleAdminList();
-                showAdminStatus(`Mise à jour locale OK, mais sauvegarde en ligne impossible : ${error.message || error}`, true);
-            }
+            saveAcademyPeopleLocal();
+            renderPeopleAdminList();
+            renderLearningAccessState();
+            showAdminStatus(`${message} Sauvegarde locale sécurisée sur cet appareil. La synchronisation privée en ligne se fera avec Supabase Auth.`);
         }
 
         async function createAcademyPerson() {
@@ -5318,7 +5300,6 @@
             applyPlatformSettings();
             renderAcademyPlatformDemo('stable');
             await loadRemoteLearningCatalog();
-            await loadRemoteAcademyPeople();
             renderLearningAccessState();
             populateLearningAdminForm();
             switchTab(activeTab);
