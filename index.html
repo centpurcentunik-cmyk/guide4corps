@@ -2200,6 +2200,83 @@
                             <div id="learning-client-rituals" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
                         </div>
                     </div>
+                    <div id="client-profile-page" class="space-y-6 hidden">
+                        <section class="learning-panel bg-black/20">
+                            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                                <div>
+                                    <p class="school-kicker">Mon Espace Personnel</p>
+                                    <h2 id="client-profile-name" class="school-section-title mt-2">Fiche Client</h2>
+                                    <p class="school-copy mt-2">Votre accompagnement, votre suivi, votre évolution.</p>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 min-w-[320px]">
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Bilan initial</p><strong id="client-profile-bilan-date" class="block mt-2 text-sm text-[#f2cb65]">À définir</strong></div>
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Statut</p><strong id="client-profile-status" class="block mt-2 text-sm text-[#29d6e8]">En cours</strong></div>
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Guide référent</p><strong class="block mt-2 text-sm text-white">Yann</strong></div>
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Prochain RDV</p><strong id="client-profile-next-rdv" class="block mt-2 text-sm text-white">À définir</strong></div>
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Dernier RDV</p><strong id="client-profile-last-rdv" class="block mt-2 text-sm text-white">À définir</strong></div>
+                                    <div class="learning-stat p-3"><p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Code personnel</p><strong id="client-profile-code" class="block mt-2 text-sm text-[#f2cb65]">-</strong></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Mon Bilan</h2>
+                            <div id="client-profile-bodies" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Mes Canaux</h2>
+                            <div id="client-profile-channels" class="grid grid-cols-1 md:grid-cols-5 gap-3 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Ce qui me bloque</h2>
+                            <div id="client-profile-blockages" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Parcours personnalisé</h2>
+                            <div id="client-profile-timeline" class="grid grid-cols-1 md:grid-cols-6 gap-3 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Mon évolution</h2>
+                            <div id="client-profile-session-notes" class="space-y-3 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Journal du client</h2>
+                            <div id="client-profile-journal-list" class="space-y-3 mt-5"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
+                                <textarea id="client-journal-feeling" rows="3" placeholder="Comment je me sens aujourd'hui..." class="bg-basalt border border-basalt-border rounded p-3 text-xs resize-none"></textarea>
+                                <textarea id="client-journal-change" rows="3" placeholder="Ce qui a changé, ce qui reste difficile, questions pour Yann..." class="bg-basalt border border-basalt-border rounded p-3 text-xs resize-none"></textarea>
+                            </div>
+                            <button type="button" onclick="addClientJournalEntry()" class="guide-btn-outline text-[10px] px-4 py-2 mt-3">Enregistrer mon journal</button>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Mes ressources</h2>
+                            <div id="client-profile-resources" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Messagerie privée</h2>
+                            <div id="client-profile-messages" class="space-y-3 mt-5"></div>
+                            <textarea id="client-private-message" rows="3" placeholder="Écrire un message privé à Yann..." class="mt-5 w-full bg-basalt border border-basalt-border rounded p-3 text-xs resize-none"></textarea>
+                            <button type="button" onclick="addClientPrivateMessage()" class="guide-btn-cyan text-[10px] px-4 py-2 mt-3">Envoyer mon message</button>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle">Mes rendez-vous</h2>
+                            <div id="client-profile-appointments" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5"></div>
+                        </section>
+
+                        <section id="client-profile-complete" class="learning-panel border-or/50 hidden">
+                            <h2 class="school-subtitle">Votre accompagnement est terminé.</h2>
+                            <p class="school-copy mt-3">Vous avez retrouvé une stabilité suffisante pour avancer avec plus de clarté et d'autonomie.</p>
+                            <button id="client-profile-academy-cta" type="button" onclick="switchTab('school')" class="guide-btn-cyan mt-5 hidden">Découvrir l'Académie des Capacités Innées</button>
+                        </section>
+                    </div>
                     <div id="learning-training-notice" class="border border-or/30 rounded p-5 bg-black/30 hidden">
                         <p class="school-kicker">Formation élève</p>
                         <h2 class="school-subtitle mt-2">Accès formation non ouvert</h2>
@@ -3396,6 +3473,37 @@
             { id: "magnetisme", label: "👐 Magnétisme" },
             { id: "maison", label: "🏠 Purification de Maison" }
         ];
+        const CLIENT_PROFILE_STEPS = [
+            "Bilan des 4 Corps",
+            "Décodage du blocage",
+            "Accompagnement personnalisé",
+            "Rééquilibrage",
+            "Stabilisation",
+            "Fin de parcours"
+        ];
+        const CLIENT_BODY_SECTIONS = [
+            { id: "physique", title: "Corps Physique", labels: ["Observations de Yann", "Signaux repérés", "Niveau estimé"] },
+            { id: "emotionnel", title: "Corps Émotionnel", labels: ["Observations", "Blessures repérées", "Émotions dominantes"] },
+            { id: "mental", title: "Corps Mental", labels: ["Croyances", "Peurs", "Schémas répétitifs"] },
+            { id: "spirituel", title: "Corps Spirituel", labels: ["Perte de sens", "Ressentis", "Besoin de direction"] }
+        ];
+        const CLIENT_CHANNELS = [
+            { id: "terre", title: "🌍 Canal Terre" },
+            { id: "eau", title: "🌊 Canal Eau" },
+            { id: "air", title: "🌬 Canal Air" },
+            { id: "feu", title: "🔥 Canal Feu" },
+            { id: "foudre", title: "⚡ Canal Foudre" }
+        ];
+        const CLIENT_BLOCKAGE_FIELDS = [
+            ["principal", "Blocage principal"],
+            ["secondaires", "Blocages secondaires"],
+            ["blessures", "Blessures observées"],
+            ["schemas", "Schémas répétitifs"],
+            ["boucles", "Boucles de vie"],
+            ["heritages", "Héritages familiaux"],
+            ["freins", "Freins inconscients"]
+        ];
+        const CLIENT_STEP_STATUSES = ["À faire", "En cours", "Terminé", "À revoir"];
         let activeLearningCourseId = "bilan-4-corps";
         const DEFAULT_LEARNING_COURSES = [
             {
@@ -3585,6 +3693,7 @@
             if (bar) bar.style.width = `${percent}%`;
             renderLearningStudentCard(currentPerson, courses, percent);
             renderClientFollowup(currentPerson);
+            renderClientProfilePage(currentPerson);
             renderTrainingVisibility(currentPerson);
 
             const list = document.getElementById("learning-course-list");
@@ -3677,6 +3786,217 @@
                     return `<div class="learning-resource ${done ? "border-cyan-400/40" : "border-basalt-border"}"><strong>${done ? "✓ " : ""}${escapeHtml(ritual.label)}</strong><p class="school-copy text-xs mt-1">${done ? "Réalisé" : "À définir avec Yann"}</p></div>`;
                 }).join("");
             }
+        }
+
+        function renderClientProfilePage(person) {
+            const page = document.getElementById("client-profile-page");
+            if (!page) return;
+            if (!person) {
+                page.classList.add("hidden");
+                return;
+            }
+            page.classList.remove("hidden");
+
+            const profile = normalizeClientProfile(person.clientProfile);
+            person.clientProfile = profile;
+            const formatValue = value => value || "À définir";
+
+            setText("client-profile-name", person.name || "Fiche Client");
+            setText("client-profile-bilan-date", formatValue(profile.bilanDate));
+            setText("client-profile-status", profile.accompagnementStatus || "En cours");
+            setText("client-profile-next-rdv", formatValue(profile.nextAppointment));
+            setText("client-profile-last-rdv", formatValue(profile.lastAppointment));
+            setText("client-profile-code", person.accessCode || "-");
+
+            const bodies = document.getElementById("client-profile-bodies");
+            if (bodies) {
+                bodies.innerHTML = CLIENT_BODY_SECTIONS.map(section => {
+                    const item = profile.bodies[section.id] || {};
+                    const values = [item.observations, item.signals, item.level];
+                    return `
+                        <article class="learning-resource">
+                            <strong>${escapeHtml(section.title)}</strong>
+                            ${section.labels.map((label, index) => `<p class="school-copy text-xs mt-2"><span class="text-[#f2cb65]">${escapeHtml(label)} :</span> ${escapeHtml(values[index] || "À compléter.")}</p>`).join("")}
+                        </article>
+                    `;
+                }).join("");
+            }
+
+            const channels = document.getElementById("client-profile-channels");
+            if (channels) {
+                channels.innerHTML = CLIENT_CHANNELS.map(channel => {
+                    const item = profile.channels[channel.id] || {};
+                    return `
+                        <article class="learning-resource">
+                            <strong>${escapeHtml(channel.title)}</strong>
+                            <p class="school-copy text-xs mt-2"><span class="text-[#29d6e8]">État :</span> ${escapeHtml(item.state || "À observer")}</p>
+                            <p class="school-copy text-xs mt-2"><span class="text-[#29d6e8]">Dominant / perturbé :</span> ${escapeHtml(item.dominant || "Non défini")}</p>
+                            <p class="school-copy text-xs mt-2">${escapeHtml(item.observations || "À compléter.")}</p>
+                            <p class="school-copy text-xs mt-2"><span class="text-[#f2cb65]">Recommandation :</span> ${escapeHtml(item.recommendations || "À préciser.")}</p>
+                        </article>
+                    `;
+                }).join("");
+            }
+
+            const blockages = document.getElementById("client-profile-blockages");
+            if (blockages) {
+                blockages.innerHTML = CLIENT_BLOCKAGE_FIELDS.map(([key, label]) => `
+                    <div class="learning-resource">
+                        <strong>${escapeHtml(label)}</strong>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(profile.blockages[key] || "À compléter.")}</p>
+                    </div>
+                `).join("");
+            }
+
+            const timeline = document.getElementById("client-profile-timeline");
+            if (timeline) {
+                timeline.innerHTML = profile.journey.map(step => `
+                    <div class="learning-resource ${step.status === "Terminé" ? "border-cyan-400/40" : step.status === "En cours" ? "border-or/50" : "border-basalt-border"}">
+                        <strong>${escapeHtml(step.label)}</strong>
+                        <p class="academy-chip mt-3">${escapeHtml(step.status)}</p>
+                    </div>
+                `).join("");
+            }
+
+            const sessionNotes = document.getElementById("client-profile-session-notes");
+            if (sessionNotes) {
+                const mergedNotes = [
+                    ...(profile.sessionNotes || []),
+                    ...(person.notes || []).map(note => ({
+                        date: note.at?.slice(0, 10) || "",
+                        type: "Note de suivi",
+                        observations: note.text,
+                        evolution: "",
+                        recommendations: "",
+                        nextStep: ""
+                    }))
+                ];
+                sessionNotes.innerHTML = mergedNotes.length
+                    ? mergedNotes.map(note => `
+                        <article class="learning-resource">
+                            <strong>${escapeHtml(note.date || "Date non renseignée")} · ${escapeHtml(note.type || "Séance")}</strong>
+                            <p class="school-copy text-xs mt-2">${escapeHtml(note.observations || "Observation non renseignée.")}</p>
+                            ${note.evolution ? `<p class="school-copy text-xs mt-2"><span class="text-[#29d6e8]">Évolution :</span> ${escapeHtml(note.evolution)}</p>` : ""}
+                            ${note.recommendations ? `<p class="school-copy text-xs mt-2"><span class="text-[#f2cb65]">Recommandation :</span> ${escapeHtml(note.recommendations)}</p>` : ""}
+                            ${note.nextStep ? `<p class="school-copy text-xs mt-2"><span class="text-[#f2cb65]">Prochaine étape :</span> ${escapeHtml(note.nextStep)}</p>` : ""}
+                        </article>
+                    `).join("")
+                    : `<p class="school-copy text-sm">Aucune note de suivi visible pour le moment.</p>`;
+            }
+
+            renderClientJournal(profile);
+            renderClientResources(profile);
+            renderClientMessages(profile);
+            renderClientAppointments(profile);
+
+            const complete = document.getElementById("client-profile-complete");
+            const academyCta = document.getElementById("client-profile-academy-cta");
+            complete?.classList.toggle("hidden", profile.accompagnementStatus !== "Terminé");
+            academyCta?.classList.toggle("hidden", !profile.proposeAcademy);
+        }
+
+        function renderClientJournal(profile) {
+            const list = document.getElementById("client-profile-journal-list");
+            if (!list) return;
+            list.innerHTML = profile.journalEntries.length
+                ? profile.journalEntries.map(entry => `
+                    <article class="learning-resource">
+                        <strong>${escapeHtml(entry.date || "Aujourd'hui")}</strong>
+                        <p class="school-copy text-xs mt-2"><span class="text-[#29d6e8]">Ressenti :</span> ${escapeHtml(entry.feeling || "")}</p>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(entry.change || "")}</p>
+                        ${entry.reply ? `<p class="school-copy text-xs mt-3 border-t border-red-950/40 pt-3"><span class="text-[#f2cb65]">Réponse de Yann :</span> ${escapeHtml(entry.reply)}</p>` : ""}
+                    </article>
+                `).join("")
+                : `<p class="school-copy text-sm">Votre journal est encore vide.</p>`;
+        }
+
+        function renderClientResources(profile) {
+            const list = document.getElementById("client-profile-resources");
+            if (!list) return;
+            list.innerHTML = profile.resources.length
+                ? profile.resources.map(resource => `
+                    <article class="learning-resource">
+                        <strong>${escapeHtml(resource.title || "Ressource")}</strong>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(resource.type || "Support")} · ${escapeHtml(resource.date || "Date non renseignée")}</p>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(resource.description || "")}</p>
+                        ${resource.href ? `<a class="learning-download mt-3 inline-block" href="${escapeHtml(resource.href)}" target="_blank" rel="noopener">Ouvrir</a>` : ""}
+                    </article>
+                `).join("")
+                : `<p class="school-copy text-sm">Aucune ressource personnalisée déposée pour le moment.</p>`;
+        }
+
+        function renderClientMessages(profile) {
+            const list = document.getElementById("client-profile-messages");
+            if (!list) return;
+            list.innerHTML = profile.messages.length
+                ? profile.messages.map(message => `
+                    <article class="learning-resource ${message.from === "Yann" ? "border-or/40" : "border-cyan-400/30"}">
+                        <strong>${escapeHtml(message.from || "Client")} · ${escapeHtml(message.date || "Aujourd'hui")}</strong>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(message.text || "")}</p>
+                    </article>
+                `).join("")
+                : `<p class="school-copy text-sm">Aucun message pour le moment.</p>`;
+        }
+
+        function renderClientAppointments(profile) {
+            const list = document.getElementById("client-profile-appointments");
+            if (!list) return;
+            list.innerHTML = profile.appointments.length
+                ? profile.appointments.map(appointment => `
+                    <article class="learning-resource">
+                        <strong>${escapeHtml(appointment.date || "Date à définir")}</strong>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(appointment.type || "Rendez-vous")} · ${escapeHtml(appointment.status || "À venir")}</p>
+                        <p class="school-copy text-xs mt-2">${escapeHtml(appointment.notes || "")}</p>
+                    </article>
+                `).join("")
+                : `<p class="school-copy text-sm">Aucun rendez-vous affiché pour le moment.</p>`;
+        }
+
+        function saveCurrentPersonalPerson(person) {
+            const index = academyPeople.findIndex(item => item.id === person.id);
+            if (index === -1) return;
+            person.updatedAt = new Date().toISOString();
+            academyPeople[index] = person;
+            saveAcademyPeopleLocal();
+            renderLearningAccessState();
+        }
+
+        function addClientJournalEntry() {
+            const person = getCurrentLearningPerson();
+            if (!person) return;
+            const feeling = document.getElementById("client-journal-feeling")?.value.trim() || "";
+            const change = document.getElementById("client-journal-change")?.value.trim() || "";
+            if (!feeling && !change) return;
+            person.clientProfile = normalizeClientProfile(person.clientProfile);
+            person.clientProfile.journalEntries.unshift({
+                id: `journal-${Date.now()}`,
+                date: new Date().toISOString().slice(0, 10),
+                feeling,
+                change,
+                reply: ""
+            });
+            const feelingInput = document.getElementById("client-journal-feeling");
+            const changeInput = document.getElementById("client-journal-change");
+            if (feelingInput) feelingInput.value = "";
+            if (changeInput) changeInput.value = "";
+            saveCurrentPersonalPerson(person);
+        }
+
+        function addClientPrivateMessage() {
+            const person = getCurrentLearningPerson();
+            const input = document.getElementById("client-private-message");
+            const text = input?.value.trim() || "";
+            if (!person || !text) return;
+            person.clientProfile = normalizeClientProfile(person.clientProfile);
+            person.clientProfile.messages.push({
+                id: `message-${Date.now()}`,
+                from: person.name || "Client",
+                date: new Date().toISOString().slice(0, 10),
+                text,
+                unreadForAdmin: true
+            });
+            input.value = "";
+            saveCurrentPersonalPerson(person);
         }
 
         function renderTrainingVisibility(person) {
@@ -4094,6 +4414,7 @@
                 niveauAcademie: Number.isFinite(person.niveauAcademie) ? person.niveauAcademie : 0,
                 allowedCourseIds: Array.isArray(person.allowedCourseIds) ? person.allowedCourseIds : [],
                 completedRitualIds: Array.isArray(person.completedRitualIds) ? person.completedRitualIds : [],
+                clientProfile: normalizeClientProfile(person.clientProfile),
                 notes: Array.isArray(person.notes) ? person.notes : [],
                 createdAt: person.createdAt || new Date().toISOString(),
                 updatedAt: person.updatedAt || new Date().toISOString()
@@ -4300,6 +4621,82 @@
             return extension.length <= 5 ? extension : "FICHIER";
         }
 
+        function defaultClientProfile() {
+            const defaultBody = {
+                observations: "À compléter avec Yann.",
+                signals: "À observer.",
+                level: "Moyen"
+            };
+            const defaultChannel = {
+                state: "À observer",
+                dominant: "Non défini",
+                observations: "À compléter.",
+                recommendations: "À préciser selon le suivi."
+            };
+
+            return {
+                bilanDate: "",
+                accompagnementStatus: "En cours",
+                nextAppointment: "",
+                lastAppointment: "",
+                guide: "Yann",
+                proposeAcademy: false,
+                bodies: {
+                    physique: { ...defaultBody },
+                    emotionnel: { ...defaultBody },
+                    mental: { ...defaultBody },
+                    spirituel: { ...defaultBody }
+                },
+                channels: {
+                    terre: { ...defaultChannel },
+                    eau: { ...defaultChannel },
+                    air: { ...defaultChannel },
+                    feu: { ...defaultChannel },
+                    foudre: { ...defaultChannel }
+                },
+                blockages: {
+                    principal: "À identifier.",
+                    secondaires: "À préciser.",
+                    blessures: "À observer.",
+                    schemas: "À décoder.",
+                    boucles: "À repérer.",
+                    heritages: "À explorer.",
+                    freins: "À mettre en lumière."
+                },
+                journey: CLIENT_PROFILE_STEPS.map((label, index) => ({
+                    label,
+                    status: index === 0 ? "En cours" : "À faire"
+                })),
+                sessionNotes: [],
+                journalEntries: [],
+                resources: [],
+                messages: [],
+                appointments: []
+            };
+        }
+
+        function normalizeClientProfile(profile = {}) {
+            const base = defaultClientProfile();
+            return {
+                ...base,
+                ...profile,
+                bodies: { ...base.bodies, ...(profile.bodies || {}) },
+                channels: { ...base.channels, ...(profile.channels || {}) },
+                blockages: { ...base.blockages, ...(profile.blockages || {}) },
+                journey: Array.isArray(profile.journey) && profile.journey.length
+                    ? profile.journey.map((step, index) => ({
+                        label: step.label || CLIENT_PROFILE_STEPS[index] || "Étape",
+                        status: CLIENT_STEP_STATUSES.includes(step.status) ? step.status : "À faire"
+                    }))
+                    : base.journey,
+                sessionNotes: Array.isArray(profile.sessionNotes) ? profile.sessionNotes : [],
+                journalEntries: Array.isArray(profile.journalEntries) ? profile.journalEntries : [],
+                resources: Array.isArray(profile.resources) ? profile.resources : [],
+                messages: Array.isArray(profile.messages) ? profile.messages : [],
+                appointments: Array.isArray(profile.appointments) ? profile.appointments : []
+            };
+        }
+
         function populateLearningAdminForm() {
             const courseSelect = document.getElementById("admin-learning-course");
             if (courseSelect) {
@@ -4350,7 +4747,11 @@
             }
             container.innerHTML = academyPeople.map(person => {
                 const latestNote = person.notes?.[person.notes.length - 1];
+                const profile = normalizeClientProfile(person.clientProfile);
                 const currentStep = Math.max(0, Math.min(Number(person.phaseActuelle) || 0, CLIENT_JOURNEY_STEPS.length - 1));
+                const statusOptions = ["En cours", "En pause", "Terminé"].map(status => `
+                    <option value="${status}" ${profile.accompagnementStatus === status ? "selected" : ""}>${status}</option>
+                `).join("");
                 const journeyOptions = CLIENT_JOURNEY_STEPS.map((step, index) => `
                     <option value="${index}" ${currentStep === index ? "selected" : ""}>${escapeHtml(step)}</option>
                 `).join("");
@@ -4366,6 +4767,26 @@
                         <span>${escapeHtml(course.title)}</span>
                     </label>
                 `).join("");
+                const journalAdmin = profile.journalEntries.length
+                    ? profile.journalEntries.slice(0, 3).map(entry => `
+                        <div class="border border-basalt-border rounded p-2 bg-black/20">
+                            <p class="text-[10px] text-gray-400">${escapeHtml(entry.date || "")} · Journal client</p>
+                            <p class="text-xs text-gray-300 mt-1">${escapeHtml(entry.feeling || entry.change || "")}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 mt-2">
+                                <input id="journal-reply-${person.id}-${entry.id}" type="text" value="${escapeHtml(entry.reply || "")}" placeholder="Réponse de Yann..." class="bg-basalt border border-basalt-border rounded p-2 text-xs">
+                                <button onclick="replyToClientJournal('${person.id}', '${entry.id}')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Répondre</button>
+                            </div>
+                        </div>
+                    `).join("")
+                    : `<p class="text-[10px] text-gray-500">Aucune entrée journal.</p>`;
+                const messageAdmin = profile.messages.length
+                    ? profile.messages.slice(-3).map(message => `
+                        <div class="border border-basalt-border rounded p-2 bg-black/20">
+                            <p class="text-[10px] text-gray-400">${escapeHtml(message.date || "")} · ${escapeHtml(message.from || "Client")}</p>
+                            <p class="text-xs text-gray-300 mt-1">${escapeHtml(message.text || "")}</p>
+                        </div>
+                    `).join("")
+                    : `<p class="text-[10px] text-gray-500">Aucun message privé.</p>`;
                 return `
                     <article class="border border-red-950/50 rounded p-4 bg-black/30 space-y-3">
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
@@ -4388,9 +4809,43 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${ritualChecks}</div>
                         </div>
                         <div class="border-t border-red-950/40 pt-3">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Fiche client détaillée</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <label class="text-[10px] text-gray-400 uppercase tracking-wider">Statut accompagnement
+                                    <select onchange="updateClientProfileField('${person.id}', 'accompagnementStatus', this.value)" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs text-gray-200">${statusOptions}</select>
+                                </label>
+                                <label class="text-[10px] text-gray-400 uppercase tracking-wider">Date bilan initial
+                                    <input type="date" value="${escapeHtml(profile.bilanDate || "")}" onchange="updateClientProfileField('${person.id}', 'bilanDate', this.value)" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs text-gray-200">
+                                </label>
+                                <label class="text-[10px] text-gray-400 uppercase tracking-wider">Dernier rendez-vous
+                                    <input type="date" value="${escapeHtml(profile.lastAppointment || "")}" onchange="updateClientProfileField('${person.id}', 'lastAppointment', this.value)" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs text-gray-200">
+                                </label>
+                                <label class="text-[10px] text-gray-400 uppercase tracking-wider">Prochain rendez-vous
+                                    <input type="date" value="${escapeHtml(profile.nextAppointment || "")}" onchange="updateClientProfileField('${person.id}', 'nextAppointment', this.value)" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs text-gray-200">
+                                </label>
+                                <label class="flex items-center gap-2 text-[10px] text-gray-400 uppercase tracking-wider sm:col-span-2">
+                                    <input type="checkbox" ${profile.proposeAcademy ? "checked" : ""} onchange="updateClientProfileField('${person.id}', 'proposeAcademy', this.checked)">
+                                    <span>Proposer l'Académie en fin de parcours</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="border-t border-red-950/40 pt-3">
                             <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Formation élève ouverte à cette personne</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${courseChecks}</div>
                         </div>
+                        <details class="border-t border-red-950/40 pt-3">
+                            <summary class="text-[10px] text-gray-500 uppercase tracking-widest font-bold cursor-pointer">Journal & messagerie privée</summary>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3">
+                                <div class="space-y-2">${journalAdmin}</div>
+                                <div class="space-y-2">
+                                    ${messageAdmin}
+                                    <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                                        <input id="private-reply-${person.id}" type="text" placeholder="Répondre au client..." class="bg-basalt border border-basalt-border rounded p-2 text-xs">
+                                        <button onclick="replyToClientMessage('${person.id}')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Envoyer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
                         <div class="border-t border-red-950/40 pt-3">
                             <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Dernière note</p>
                             <p class="text-xs text-gray-300 mt-1">${latestNote ? escapeHtml(latestNote.text) : "Aucune note de suivi."}</p>
@@ -4440,6 +4895,7 @@
                 niveauAcademie: status === "student" ? 1 : 0,
                 allowedCourseIds: status === "student" ? [learningCourses[0]?.id].filter(Boolean) : [],
                 completedRitualIds: [],
+                clientProfile: defaultClientProfile(),
                 notes: note ? [{ at: now, text: note }] : [],
                 createdAt: now,
                 updatedAt: now
@@ -4506,6 +4962,49 @@
                 { at: person.updatedAt, text: checked ? `Rituel réalisé : ${ritual?.label || ritualId}.` : `Rituel retiré du suivi : ${ritual?.label || ritualId}.` }
             ];
             await persistPeopleAndRefresh("Rituel client mis à jour.");
+        }
+
+        async function updateClientProfileField(personId, field, value) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            person.clientProfile = normalizeClientProfile(person.clientProfile);
+            person.clientProfile[field] = value;
+            person.updatedAt = new Date().toISOString();
+            await persistPeopleAndRefresh("Fiche client détaillée mise à jour.");
+        }
+
+        async function replyToClientJournal(personId, entryId) {
+            const person = academyPeople.find(item => item.id === personId);
+            const input = document.getElementById(`journal-reply-${personId}-${entryId}`);
+            const reply = input?.value.trim() || "";
+            if (!person) return;
+            person.clientProfile = normalizeClientProfile(person.clientProfile);
+            const entry = person.clientProfile.journalEntries.find(item => item.id === entryId);
+            if (!entry) return;
+            entry.reply = reply;
+            person.updatedAt = new Date().toISOString();
+            await persistPeopleAndRefresh("Réponse au journal enregistrée.");
+        }
+
+        async function replyToClientMessage(personId) {
+            const person = academyPeople.find(item => item.id === personId);
+            const input = document.getElementById(`private-reply-${personId}`);
+            const text = input?.value.trim() || "";
+            if (!person || !text) {
+                showAdminStatus("Écrivez une réponse avant d'envoyer.", true);
+                return;
+            }
+            person.clientProfile = normalizeClientProfile(person.clientProfile);
+            person.clientProfile.messages.push({
+                id: `message-${Date.now()}`,
+                from: "Yann",
+                date: new Date().toISOString().slice(0, 10),
+                text,
+                unreadForClient: true
+            });
+            input.value = "";
+            person.updatedAt = new Date().toISOString();
+            await persistPeopleAndRefresh("Message privé envoyé au client.");
         }
 
         async function togglePersonCourseAccess(personId, courseId, checked) {
