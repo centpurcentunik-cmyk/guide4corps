@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETERNAILE — Espace Client</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07080a;
+            --panel: #101216;
+            --panel-2: #151820;
+            --line: rgba(255,255,255,0.1);
+            --text: #f5f7fb;
+            --muted: #9aa3b2;
+            --gold: #d6a84f;
+            --green: #32d583;
+            --blue: #38bdf8;
+            --red: #fb7185;
+            --violet: #a78bfa;
+            --orange: #fb923c;
+            --radius: 14px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 18% 0%, rgba(56,189,248,0.11), transparent 28rem),
+                radial-gradient(circle at 88% 12%, rgba(214,168,79,0.12), transparent 26rem),
+                linear-gradient(180deg, #07080a, #050608 42%, #080a0d);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        button, input, textarea, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .shell {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 22px;
+            border-right: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(12,15,20,0.98), rgba(5,7,10,0.98));
+            overflow-y: auto;
+        }
+
+        .brand-mark {
+            width: 72px;
+            height: 72px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(214,168,79,0.65);
+            border-radius: 50%;
+            color: var(--gold);
+            font-size: 34px;
+            background: rgba(214,168,79,0.08);
+        }
+
+        .brand-title {
+            margin: 16px 0 2px;
+            font-family: Cinzel, serif;
+            font-size: 24px;
+            letter-spacing: 0.08em;
+            line-height: 1;
+        }
+
+        .brand-subtitle {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: grid;
+            gap: 8px;
+            margin-top: 28px;
+        }
+
+        .nav button,
+        .nav a {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 13px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--muted);
+            background: transparent;
+            text-align: left;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+            transition: 0.2s ease;
+        }
+
+        .nav button:hover,
+        .nav button.active,
+        .nav a:hover {
+            color: var(--text);
+            border-color: rgba(214,168,79,0.32);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .sidebar-card {
+            margin-top: 24px;
+            padding: 16px;
+            border: 1px solid rgba(214,168,79,0.28);
+            border-radius: var(--radius);
+            background: rgba(214,168,79,0.06);
+        }
+
+        .sidebar-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .main {
+            min-width: 0;
+            padding: clamp(22px, 4vw, 46px);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+        }
+
+        h1 {
+            font-family: Cinzel, serif;
+            font-size: clamp(34px, 5vw, 74px);
+            line-height: 0.95;
+            letter-spacing: 0.03em;
+        }
+
+        h2 {
+            font-family: Cinzel, serif;
+            font-size: clamp(22px, 2.4vw, 34px);
+            letter-spacing: 0.03em;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .lead {
+            max-width: 780px;
+            margin: 12px 0 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+            box-shadow: 0 20px 70px rgba(0,0,0,0.25);
+        }
+
+        .card-inner {
+            padding: 20px;
+        }
+
+        .section {
+            margin-top: 24px;
+        }
+
+        .profile-card {
+            display: grid;
+            grid-template-columns: 104px minmax(0, 1fr) auto;
+            gap: 20px;
+            align-items: center;
+            padding: 22px;
+        }
+
+        .avatar {
+            width: 104px;
+            aspect-ratio: 1;
+            border-radius: 18px;
+            background:
+                linear-gradient(145deg, rgba(50,213,131,0.2), rgba(214,168,79,0.22)),
+                radial-gradient(circle at 45% 28%, rgba(255,255,255,0.26), transparent 34%),
+                #171b22;
+            border: 1px solid rgba(214,168,79,0.35);
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat {
+            min-width: 130px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.22);
+        }
+
+        .stat small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 8px;
+            color: var(--text);
+            font-size: 22px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 10px;
+            color: var(--text);
+            background: rgba(255,255,255,0.06);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(214,168,79,0.55);
+        }
+
+        .btn-primary {
+            border-color: rgba(50,213,131,0.55);
+            background: linear-gradient(135deg, rgba(50,213,131,0.92), rgba(56,189,248,0.76));
+            color: #04100a;
+        }
+
+        .btn-danger {
+            border-color: rgba(251,113,133,0.5);
+            color: #fecdd3;
+        }
+
+        label {
+            display: grid;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--text);
+            background: rgba(0,0,0,0.28);
+            padding: 12px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 118px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: rgba(56,189,248,0.65);
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.12);
+        }
+
+        .care-block-title {
+            margin: 0 0 14px;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .care-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 210px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.035);
+        }
+
+        .care-card.validated {
+            border-color: rgba(50,213,131,0.55);
+            box-shadow: inset 0 0 0 1px rgba(50,213,131,0.12), 0 18px 60px rgba(50,213,131,0.08);
+        }
+
+        .care-card.locked {
+            opacity: 0.54;
+            filter: grayscale(0.75);
+        }
+
+        .care-card h3 {
+            padding-right: 76px;
+        }
+
+        .care-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            background: rgba(0,0,0,0.24);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .badge.validated {
+            color: #bbf7d0;
+            border-color: rgba(50,213,131,0.5);
+            background: rgba(50,213,131,0.12);
+        }
+
+        .resources {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .resource-btn {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 10px;
+            color: var(--text);
+            background: rgba(255,255,255,0.05);
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .resource-btn[disabled] {
+            cursor: not-allowed;
+            opacity: 0.42;
+        }
+
+        .ancestor-card {
+            position: relative;
+            padding: 18px;
+            border: 1px solid rgba(214,168,79,0.3);
+            border-radius: var(--radius);
+            background:
+                linear-gradient(145deg, rgba(214,168,79,0.08), rgba(255,255,255,0.025)),
+                repeating-linear-gradient(135deg, transparent 0 22px, rgba(255,255,255,0.025) 22px 23px);
+        }
+
+        .ancestor-card::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .ancestor-element {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .switch-row {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .toggle {
+            width: 46px;
+            height: 26px;
+            position: relative;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            appearance: none;
+            margin: 0;
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--muted);
+            transition: 0.2s ease;
+        }
+
+        .toggle:checked {
+            border-color: rgba(50,213,131,0.55);
+            background: rgba(50,213,131,0.2);
+        }
+
+        .toggle:checked::after {
+            left: 23px;
+            background: var(--green);
+        }
+
+        .empty {
+            padding: 22px;
+            border: 1px dashed var(--line);
+            border-radius: var(--radius);
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .toast {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 50;
+            display: none;
+            max-width: 320px;
+            padding: 14px 16px;
+            border: 1px solid rgba(50,213,131,0.4);
+            border-radius: 12px;
+            color: #bbf7d0;
+            background: rgba(6,24,16,0.96);
+            box-shadow: 0 20px 70px rgba(0,0,0,0.4);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @media (max-width: 980px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                height: auto;
+            }
+            .nav {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .profile-card {
+                grid-template-columns: 1fr;
+            }
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand-mark">✦</div>
+            <div class="brand-title">ETERNAILE</div>
+            <div class="brand-subtitle">Guide des 4 Corps</div>
+
+            <nav class="nav" aria-label="Navigation espace client">
+                <button type="button" class="active" data-view-button="client" onclick="switchView('client')">◈ Vue client</button>
+                <button type="button" data-view-button="admin" onclick="requestAdminAccess()">▣ Admin</button>
+                <a href="index.html">← Retour site</a>
+                <button type="button" onclick="exportData()">⇩ Export JSON</button>
+            </nav>
+
+            <div class="sidebar-card">
+                <p>Base locale dynamique : les données sont stockées dans votre navigateur via localStorage. Le module est prêt à être relié ensuite à Supabase ou Google Sheets.</p>
+            </div>
+        </aside>
+
+        <main class="main">
+            <section id="client-view" class="view active">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Espace client dynamique</p>
+                        <h1>Ma fiche client</h1>
+                        <p class="lead">Bilan, soins validés, cartes ancêtres, journal de bord et ligne directe avec Yann.</p>
+                    </div>
+                    <button type="button" class="btn" onclick="clientData = loadData(); renderAll();">↻ Actualiser</button>
+                </div>
+
+                <section class="card profile-card">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <div>
+                        <p class="eyebrow">Profil client</p>
+                        <h2 id="client-name-display">Client</h2>
+                        <p class="lead" id="client-history-display"></p>
+                    </div>
+                    <div class="stats">
+                        <div class="stat"><small>Soins validés</small><strong id="validated-count">0</strong></div>
+                        <div class="stat"><small>Ancêtres</small><strong id="ancestor-count">0</strong></div>
+                        <div class="stat"><small>Journal</small><strong id="journal-count">0</strong></div>
+                    </div>
+                </section>
+
+                <section class="section grid grid-2">
+                    <article class="card card-inner">
+                        <p class="eyebrow">Bilan histoire</p>
+                        <p class="lead" id="client-history-full"></p>
+                    </article>
+                    <article class="card card-inner">
+                        <p class="eyebrow">Bilan cicatrices du cœur</p>
+                        <p class="lead" id="client-heart-display"></p>
+                    </article>
+                </section>
+
+                <section class="section">
+                    <div class="topbar">
+                        <div>
+                            <p class="eyebrow">Parcours de soins</p>
+                            <h2>Activation des libérations</h2>
+                        </div>
+                    </div>
+                    <div id="client-care-list" class="grid"></div>
+                </section>
+
+                <section class="section">
+                    <p class="eyebrow">Gestion de la Tribu</p>
+                    <h2>Cartes ancêtres</h2>
+                    <div id="client-ancestors" class="grid grid-3 section"></div>
+                </section>
+
+                <section class="section grid grid-2">
+                    <article class="card card-inner">
+                        <p class="eyebrow">Journal de bord</p>
+                        <h2>Écrire une entrée</h2>
+                        <div class="grid section">
+                            <label>Type de corps
+                                <select id="journal-body-type">
+                                    <option>Émotionnel</option>
+                                    <option>Physique</option>
+                                    <option>Mental</option>
+                                    <option>Spirituel</option>
+                                </select>
+                            </label>
+                            <label>Entrée du jour
+                                <textarea id="journal-text" placeholder="Ce que je ressens, ce qui change, ce qui reste difficile..."></textarea>
+                            </label>
+                            <button type="button" class="btn btn-primary" onclick="addJournalEntry()">Ajouter au journal</button>
+                        </div>
+                    </article>
+                    <article class="card card-inner">
+                        <p class="eyebrow">Ligne directe</p>
+                        <h2>Message privé</h2>
+                        <div class="grid section">
+                            <label>Message à Yann
+                                <textarea id="direct-message-text" placeholder="Écrire un message direct..."></textarea>
+                            </label>
+                            <button type="button" class="btn btn-primary" onclick="addDirectMessage()">Envoyer</button>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="section grid grid-2">
+                    <article class="card card-inner">
+                        <p class="eyebrow">Historique journal</p>
+                        <div id="journal-list" class="grid section"></div>
+                    </article>
+                    <article class="card card-inner">
+                        <p class="eyebrow">Historique messages</p>
+                        <div id="message-list" class="grid section"></div>
+                    </article>
+                </section>
+            </section>
+
+            <section id="admin-view" class="view">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Interface admin</p>
+                        <h1>Pilotage client</h1>
+                        <p class="lead">Ajouter, modifier, supprimer, valider et exporter les données de l'espace client.</p>
+                    </div>
+                    <div class="stats">
+                        <button type="button" class="btn" onclick="exportData()">Exporter JSON</button>
+                        <button type="button" class="btn btn-primary" onclick="syncAdminProfile(); saveData(); renderAll(); notify('Espace client mis à jour.')">Mettre à jour l'espace client</button>
+                    </div>
+                </div>
+
+                <section class="card card-inner">
+                    <p class="eyebrow">Profil client</p>
+                    <div class="grid grid-3 section">
+                        <label>Nom du client
+                            <input id="admin-client-name" type="text">
+                        </label>
+                        <label class="grid-span">Bilan Histoire
+                            <textarea id="admin-bilan-history"></textarea>
+                        </label>
+                        <label class="grid-span">Bilan Cicatrices du Cœur
+                            <textarea id="admin-bilan-heart"></textarea>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="section card card-inner">
+                    <p class="eyebrow">Parcours de soins</p>
+                    <h2>Switchs ON/OFF + conséquences personnalisées</h2>
+                    <div id="admin-care-list" class="grid section"></div>
+                </section>
+
+                <section class="section grid grid-2">
+                    <article class="card card-inner">
+                        <p class="eyebrow">Gestion de la Tribu / Ancêtres</p>
+                        <h2>Ajouter une carte</h2>
+                        <div class="grid section">
+                            <label>Nom / Identité
+                                <input id="ancestor-name" type="text" placeholder="Ex : Grand-mère maternelle">
+                            </label>
+                            <label>Élément associé
+                                <select id="ancestor-element">
+                                    <option>Terre</option>
+                                    <option>Eau</option>
+                                    <option>Feu</option>
+                                    <option>Vent</option>
+                                    <option>Ciel Étoilé</option>
+                                </select>
+                            </label>
+                            <label>Héritage positif
+                                <textarea id="ancestor-positive"></textarea>
+                            </label>
+                            <label>Défi / risque de somatisation
+                                <textarea id="ancestor-risk"></textarea>
+                            </label>
+                            <label>Clé de navigation intérieure
+                                <textarea id="ancestor-key"></textarea>
+                            </label>
+                            <button type="button" class="btn btn-primary" onclick="addAncestor()">Ajouter cet Ancêtre</button>
+                        </div>
+                    </article>
+                    <article class="card card-inner">
+                        <p class="eyebrow">Ancêtres enregistrés</p>
+                        <div id="admin-ancestors" class="grid section"></div>
+                    </article>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const STORAGE_KEY = "eternaile_client_space_v1";
+        const ADMIN_PASSWORD = "admin123";
+
+        const OFFICIAL_CARES = [
+            {
+                block: "Bloc A : Expulsion du négatif / purification",
+                id: "karmique",
+                title: "Rituel KARMIQUE",
+                subtitle: "Nettoyage karmique / identification du négatif / rendre visible l'invisible / autoguérison / Expulsion des entités négatives / désenvoûtement."
+            },
+            {
+                block: "Bloc A : Expulsion du négatif / purification",
+                id: "marche-therapeutique",
+                title: "Marche THÉRAPEUTIQUE",
+                subtitle: "Comprendre que nous vivons dans une boucle. Créé par 100% Maman & 100% papa que notre passé crée notre future. Comment sortir de cette boucle et surtout ne plus entrer."
+            },
+            {
+                block: "Bloc A : Expulsion du négatif / purification",
+                id: "renaissance",
+                title: "Rituel RENAISSANCE",
+                subtitle: "Laisser mourir la partie de nous que nous voulons plus pour créer ce que nous voulons dans le moment présent."
+            },
+            {
+                block: "Bloc B : Changement pilote / transe",
+                id: "bain-7-plantes",
+                title: "Bain des 7 PLANTES",
+                subtitle: "Réalignement des chakras qui permet de laisser partir les ancêtres/Esprits/Guide qui ont eu leurs réparations."
+            },
+            {
+                block: "Bloc B : Changement pilote / transe",
+                id: "histoire-ancetre",
+                title: "Histoire de L'ANCÊTRE",
+                subtitle: "Met une identité sur nos ancêtres, connaître son histoire et ses capacités. Choisir l'esprit de cœur."
+            },
+            {
+                block: "Bloc B : Changement pilote / transe",
+                id: "bain-vapeur",
+                title: "Bain de VAPEUR",
+                subtitle: "Un rituel purificateur qui utilise la chaleur intense pour stimuler la vision et la perspicacité. Détoxifier le corps en stimulant la circulation sanguine et en vous faisant transpirer ce qui a besoin d'être dégagé."
+            },
+            {
+                block: "Bloc B : Changement pilote / transe",
+                id: "bain-riviere",
+                title: "Bain de RIVIÈRE",
+                subtitle: "Se libérer, se débarrasser de ses entraves. Le bain de purification qui utilise l'élément eau et l'élément air (extraits de parfums) pour purifier et changer le taux vibratoire de l'aura."
+            },
+            {
+                block: "Bloc B : Changement pilote / transe",
+                id: "assermentation",
+                title: "Rituel ASSERMENTATION",
+                subtitle: "Permet de créer une hiérarchie dans le corps / faire un contrat avec l'esprit de cœur."
+            },
+            {
+                block: "Bloc C : Pour les cocos durs (structure mentale et cellulaire)",
+                id: "deprogrammation-corps",
+                title: "#1 DÉPROGRAMMATION DU CORPS (Le Conscient)",
+                subtitle: "Calmer le mental c'est donc aussi soulager le corps pour le libérer des tensions qui s'y sont accumulées. Mais par habitude, on finit par ne même plus les ressentir."
+            },
+            {
+                block: "Bloc C : Pour les cocos durs (structure mentale et cellulaire)",
+                id: "reprogrammation-corps",
+                title: "#2 REPROGRAMMATION DU CORPS (L'Inconscient)",
+                subtitle: "Les tensions physiques qui sont présentes en permanence dans notre quotidien génèrent à leur tour des sensations et émotions qui consomment une plus ou moins grande partie de notre précieuse énergie."
+            },
+            {
+                block: "Bloc C : Pour les cocos durs (structure mentale et cellulaire)",
+                id: "reprogrammation-esprit",
+                title: "#3 REPROGRAMMATION DE L'ESPRIT (Le Superconscient)",
+                subtitle: "Remplacer des sensations/émotions de douleur par du bien être, reprogrammation de notre mental et notre mémoire cellulaire pour retrouver son état naturel ; bien être, calme, santé et sérénité. Reconnecter à notre véritable nature et avec nos gardiens."
+            },
+            {
+                block: "Bloc D : Soins ciblés & libérations",
+                id: "traduction-langage",
+                title: "Traduction de LANGAGE",
+                subtitle: "Le don des langues, ou glossolalie est un phénomène spirituel, mystique ou paranormal, c'est le moyen de communication et de protection de l'esprit en vers l'humain."
+            },
+            {
+                block: "Bloc D : Soins ciblés & libérations",
+                id: "coupure-lien",
+                title: "Coupure de LIEN / EMPRISE",
+                subtitle: "Le processus qui suit vise à effectuer une coupure énergétique avec une personne ou à un négatif karmique. Il ne coupe que les liens pernicieux ou les liens de dépendance qui nous relient à cette personne. Il s'agit ici du genre de lien qui minent notre énergie."
+            },
+            {
+                block: "Bloc D : Soins ciblés & libérations",
+                id: "magnetisme",
+                title: "Séances de Magnétisme (Options : HUMAIN / ANCESTRAL / DIVIN)",
+                subtitle: "Destiné au personne qui ont subi un gros choc émotionnel d'où la conséquence et le décalage entre son corps physique et son corps psychique."
+            }
+        ];
+
+        let clientData = loadData();
+
+        function createDefaultData() {
+            return {
+                profile: {
+                    name: "Jean-Pierre L.",
+                    bilanHistory: "Bilan Histoire à compléter depuis l'interface admin.",
+                    bilanHeart: "Bilan Cicatrices du Cœur à compléter depuis l'interface admin."
+                },
+                cares: OFFICIAL_CARES.map(care => ({
+                    id: care.id,
+                    validated: false,
+                    consequence: ""
+                })),
+                ancestors: [],
+                journal: [],
+                messages: []
+            };
+        }
+
+        function loadData() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                return normalizeData(saved || createDefaultData());
+            } catch (error) {
+                return createDefaultData();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(clientData));
+            notify("Données sauvegardées localement.");
+        }
+
+        function normalizeData(data) {
+            const base = createDefaultData();
+            const savedCares = Array.isArray(data.cares) ? data.cares : [];
+            return {
+                profile: { ...base.profile, ...(data.profile || {}) },
+                cares: OFFICIAL_CARES.map(care => {
+                    const saved = savedCares.find(item => item.id === care.id) || {};
+                    return {
+                        id: care.id,
+                        validated: saved.validated === true,
+                        consequence: saved.consequence || ""
+                    };
+                }),
+                ancestors: Array.isArray(data.ancestors) ? data.ancestors : [],
+                journal: Array.isArray(data.journal) ? data.journal : [],
+                messages: Array.isArray(data.messages) ? data.messages : []
+            };
+        }
+
+        function switchView(view) {
+            document.querySelectorAll(".view").forEach(item => item.classList.remove("active"));
+            document.getElementById(`${view}-view`)?.classList.add("active");
+            document.querySelectorAll("[data-view-button]").forEach(button => {
+                button.classList.toggle("active", button.dataset.viewButton === view);
+            });
+            renderAll();
+        }
+
+        function requestAdminAccess() {
+            const stored = sessionStorage.getItem("eternaile_admin_ok") === "true";
+            if (!stored) {
+                const password = prompt("Mot de passe admin :");
+                if (password !== ADMIN_PASSWORD) {
+                    notify("Accès admin refusé.");
+                    return;
+                }
+                sessionStorage.setItem("eternaile_admin_ok", "true");
+            }
+            switchView("admin");
+        }
+
+        function renderAll() {
+            renderClientProfile();
+            renderClientCares();
+            renderClientAncestors();
+            renderJournal();
+            renderMessages();
+            renderAdminProfile();
+            renderAdminCares();
+            renderAdminAncestors();
+        }
+
+        function renderClientProfile() {
+            document.getElementById("client-name-display").textContent = clientData.profile.name;
+            document.getElementById("client-history-display").textContent = clientData.profile.bilanHistory.slice(0, 180);
+            document.getElementById("client-history-full").textContent = clientData.profile.bilanHistory;
+            document.getElementById("client-heart-display").textContent = clientData.profile.bilanHeart;
+            document.getElementById("validated-count").textContent = clientData.cares.filter(care => care.validated).length;
+            document.getElementById("ancestor-count").textContent = clientData.ancestors.length;
+            document.getElementById("journal-count").textContent = clientData.journal.length;
+        }
+
+        function renderClientCares() {
+            const container = document.getElementById("client-care-list");
+            const blocks = [...new Set(OFFICIAL_CARES.map(care => care.block))];
+            container.innerHTML = blocks.map(block => {
+                const cares = OFFICIAL_CARES.filter(care => care.block === block);
+                return `
+                    <section class="card card-inner">
+                        <p class="care-block-title">${escapeHtml(block)}</p>
+                        <div class="grid grid-3">
+                            ${cares.map(care => renderCareCard(care)).join("")}
+                        </div>
+                    </section>
+                `;
+            }).join("");
+        }
+
+        function renderCareCard(care) {
+            const state = getCareState(care.id);
+            const validated = state.validated;
+            return `
+                <article class="care-card ${validated ? "validated" : "locked"}">
+                    <span class="badge ${validated ? "validated" : ""}">${validated ? "Validé" : "En attente"}</span>
+                    <h3>${escapeHtml(care.title)}</h3>
+                    <p>${escapeHtml(care.subtitle)}</p>
+                    ${validated && state.consequence ? `<p><strong>Conséquence réelle :</strong> ${escapeHtml(state.consequence)}</p>` : ""}
+                    <div class="resources">
+                        <button class="resource-btn" ${validated ? "" : "disabled"}>MP3</button>
+                        <button class="resource-btn" ${validated ? "" : "disabled"}>Tuto image</button>
+                        <button class="resource-btn" ${validated ? "" : "disabled"}>PDF</button>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderClientAncestors() {
+            const container = document.getElementById("client-ancestors");
+            const ancestorCare = getCareState("histoire-ancetre");
+            if (!ancestorCare.validated) {
+                container.innerHTML = `<div class="empty">La grille des cartes ancêtres se débloque après validation du soin “Histoire de L'ANCÊTRE”.</div>`;
+                return;
+            }
+            if (!clientData.ancestors.length) {
+                container.innerHTML = `<div class="empty">Aucune carte ancêtre enregistrée pour le moment.</div>`;
+                return;
+            }
+            container.innerHTML = clientData.ancestors.map(ancestor => `
+                <article class="ancestor-card">
+                    <div class="ancestor-element">${escapeHtml(ancestor.element)}</div>
+                    <h3>${escapeHtml(ancestor.name)}</h3>
+                    <p><strong>Héritage positif :</strong> ${escapeHtml(ancestor.positive)}</p>
+                    <p><strong>Défi :</strong> ${escapeHtml(ancestor.risk)}</p>
+                    <p><strong>Clé :</strong> ${escapeHtml(ancestor.key)}</p>
+                </article>
+            `).join("");
+        }
+
+        function renderJournal() {
+            const list = document.getElementById("journal-list");
+            if (!clientData.journal.length) {
+                list.innerHTML = `<div class="empty">Aucune entrée journal.</div>`;
+                return;
+            }
+            list.innerHTML = clientData.journal.map(entry => `
+                <article class="card card-inner">
+                    <span class="badge">${escapeHtml(entry.bodyType)}</span>
+                    <p>${escapeHtml(entry.text)}</p>
+                    <small>${escapeHtml(entry.date)}</small>
+                </article>
+            `).join("");
+        }
+
+        function renderMessages() {
+            const list = document.getElementById("message-list");
+            if (!clientData.messages.length) {
+                list.innerHTML = `<div class="empty">Aucun message envoyé.</div>`;
+                return;
+            }
+            list.innerHTML = clientData.messages.map(message => `
+                <article class="card card-inner">
+                    <span class="badge">${escapeHtml(message.from)}</span>
+                    <p>${escapeHtml(message.text)}</p>
+                    <small>${escapeHtml(message.date)}</small>
+                </article>
+            `).join("");
+        }
+
+        function renderAdminProfile() {
+            document.getElementById("admin-client-name").value = clientData.profile.name;
+            document.getElementById("admin-bilan-history").value = clientData.profile.bilanHistory;
+            document.getElementById("admin-bilan-heart").value = clientData.profile.bilanHeart;
+        }
+
+        function renderAdminCares() {
+            const container = document.getElementById("admin-care-list");
+            const blocks = [...new Set(OFFICIAL_CARES.map(care => care.block))];
+            container.innerHTML = blocks.map(block => {
+                const cares = OFFICIAL_CARES.filter(care => care.block === block);
+                return `
+                    <section class="card card-inner">
+                        <p class="care-block-title">${escapeHtml(block)}</p>
+                        <div class="grid">
+                            ${cares.map(care => {
+                                const state = getCareState(care.id);
+                                return `
+                                    <div class="switch-row">
+                                        <input type="checkbox" class="toggle" ${state.validated ? "checked" : ""} onchange="updateCare('${care.id}', 'validated', this.checked)">
+                                        <div>
+                                            <h3>${escapeHtml(care.title)}</h3>
+                                            <p class="lead">${escapeHtml(care.subtitle)}</p>
+                                            <label>Conséquence réelle de la libération
+                                                <textarea onchange="updateCare('${care.id}', 'consequence', this.value)">${escapeHtml(state.consequence)}</textarea>
+                                            </label>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join("")}
+                        </div>
+                    </section>
+                `;
+            }).join("");
+        }
+
+        function renderAdminAncestors() {
+            const container = document.getElementById("admin-ancestors");
+            if (!clientData.ancestors.length) {
+                container.innerHTML = `<div class="empty">Aucun ancêtre enregistré.</div>`;
+                return;
+            }
+            container.innerHTML = clientData.ancestors.map(ancestor => `
+                <article class="ancestor-card">
+                    <div class="ancestor-element">${escapeHtml(ancestor.element)}</div>
+                    <h3>${escapeHtml(ancestor.name)}</h3>
+                    <p>${escapeHtml(ancestor.positive)}</p>
+                    <button type="button" class="btn btn-danger" onclick="deleteAncestor('${ancestor.id}')">Supprimer</button>
+                </article>
+            `).join("");
+        }
+
+        function updateCare(id, field, value) {
+            const care = clientData.cares.find(item => item.id === id);
+            if (!care) return;
+            care[field] = value;
+            saveData();
+            renderAll();
+        }
+
+        function syncAdminProfile() {
+            clientData.profile.name = document.getElementById("admin-client-name").value.trim() || "Client";
+            clientData.profile.bilanHistory = document.getElementById("admin-bilan-history").value.trim();
+            clientData.profile.bilanHeart = document.getElementById("admin-bilan-heart").value.trim();
+        }
+
+        function addAncestor() {
+            const ancestor = {
+                id: `ancestor-${Date.now()}`,
+                name: document.getElementById("ancestor-name").value.trim(),
+                element: document.getElementById("ancestor-element").value,
+                positive: document.getElementById("ancestor-positive").value.trim(),
+                risk: document.getElementById("ancestor-risk").value.trim(),
+                key: document.getElementById("ancestor-key").value.trim()
+            };
+            if (!ancestor.name) {
+                notify("Nom de l'ancêtre obligatoire.");
+                return;
+            }
+            clientData.ancestors.push(ancestor);
+            ["ancestor-name", "ancestor-positive", "ancestor-risk", "ancestor-key"].forEach(id => document.getElementById(id).value = "");
+            saveData();
+            renderAll();
+        }
+
+        function deleteAncestor(id) {
+            clientData.ancestors = clientData.ancestors.filter(ancestor => ancestor.id !== id);
+            saveData();
+            renderAll();
+        }
+
+        function addJournalEntry() {
+            const text = document.getElementById("journal-text").value.trim();
+            if (!text) return;
+            clientData.journal.unshift({
+                id: `journal-${Date.now()}`,
+                bodyType: document.getElementById("journal-body-type").value,
+                text,
+                date: new Date().toLocaleString("fr-FR")
+            });
+            document.getElementById("journal-text").value = "";
+            saveData();
+            renderAll();
+        }
+
+        function addDirectMessage() {
+            const text = document.getElementById("direct-message-text").value.trim();
+            if (!text) return;
+            clientData.messages.push({
+                id: `message-${Date.now()}`,
+                from: clientData.profile.name || "Client",
+                text,
+                date: new Date().toLocaleString("fr-FR")
+            });
+            document.getElementById("direct-message-text").value = "";
+            saveData();
+            renderAll();
+        }
+
+        function getCareState(id) {
+            return clientData.cares.find(care => care.id === id) || { validated: false, consequence: "" };
+        }
+
+        function exportData() {
+            syncAdminProfile();
+            saveData();
+            const exportPayload = {
+                schema: STORAGE_KEY,
+                exportedAt: new Date().toISOString(),
+                data: clientData
+            };
+            const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `eternaile-espace-client-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+            notify("Export JSON généré.");
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function notify(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            window.clearTimeout(notify.timer);
+            notify.timer = window.setTimeout(() => toast.classList.remove("show"), 2400);
+        }
+
+        document.getElementById("admin-client-name")?.addEventListener("input", syncAdminProfile);
+        document.getElementById("admin-bilan-history")?.addEventListener("input", syncAdminProfile);
+        document.getElementById("admin-bilan-heart")?.addEventListener("input", syncAdminProfile);
+
+        renderAll();
+    </script>
+</body>
+</html>
