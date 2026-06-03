@@ -884,7 +884,9 @@
         .school-card,
         .school-panel,
         .school-step,
-        .school-level {
+        .school-level,
+        .academy-module,
+        .academy-level-btn {
             border: 1px solid rgba(212,175,55,0.4);
             background:
                 radial-gradient(circle at 16% 12%, rgba(41,214,232,0.08), transparent 30%),
@@ -1232,6 +1234,80 @@
             line-height: 1;
             letter-spacing: 0.045em;
             text-transform: uppercase;
+        }
+        .academy-module {
+            border-radius: 8px;
+            padding: clamp(1.25rem, 3vw, 2rem);
+        }
+        .academy-module h3,
+        .academy-level-btn strong {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-weight: 700;
+            letter-spacing: 0.055em;
+            text-transform: uppercase;
+        }
+        .academy-module h3 {
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+        .academy-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid rgba(41,214,232,0.35);
+            border-radius: 999px;
+            padding: 0.42rem 0.72rem;
+            color: rgba(244,239,229,0.86);
+            background: rgba(0,10,18,0.62);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .academy-level-btn {
+            min-height: 128px;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: left;
+            transition: border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+        }
+        .academy-level-btn strong {
+            display: block;
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+        .academy-level-btn span {
+            display: block;
+            margin-top: 0.55rem;
+            color: rgba(244,239,229,0.72);
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+        .academy-level-btn.is-locked {
+            opacity: 0.42;
+            filter: grayscale(0.65);
+        }
+        .academy-level-btn:not(.is-locked):hover {
+            border-color: rgba(41,214,232,0.85);
+            transform: translateY(-3px);
+        }
+        .academy-route-card {
+            position: relative;
+            padding: 1rem 1.1rem 1rem 1.4rem;
+            border-left: 2px solid rgba(41,214,232,0.65);
+            background: rgba(0,8,16,0.52);
+        }
+        .academy-route-card::before {
+            content: "";
+            position: absolute;
+            left: -0.45rem;
+            top: 1.2rem;
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 50%;
+            background: var(--school-cyan);
+            box-shadow: 0 0 16px rgba(41,214,232,0.65);
         }
         .school-quote {
             padding: clamp(1.5rem, 4vw, 2.8rem);
@@ -1626,6 +1702,7 @@
                     <a href="#school-trajectory">Trajectoire</a>
                     <a href="#school-archetypes">Archétypes</a>
                     <a href="#school-impact">Impact</a>
+                    <a href="#school-platform">Plateforme</a>
                 </div>
             </nav>
 
@@ -1765,7 +1842,7 @@
                     <p class="school-copy">Chaque membre de l'école résonne avec une ou plusieurs structures psychologiques dominantes. Apprendre à les identifier permet de maîtriser son canal d'action :</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
-                    <article class="school-card"><div class="school-icon">⚔</div><h3 class="mt-6">Le Guerrier</h3><p class="school-copy text-sm mt-4">L'ancrage matériel brutal et la force d'exécution. Il protège le cadre, maintient la discipline physique et transmute l'inertie ou la peur en mouvement d'impact rectiligne.</p></article>
+                    <article class="school-card"><div class="school-icon">⚔</div><h3 class="mt-6">Le Guerrier de l'Ombre</h3><p class="school-copy text-sm mt-4">L'ancrage matériel brutal et la force d'exécution. Il protège le cadre, maintient la discipline physique et transmute l'inertie ou la peur en mouvement d'impact rectiligne.</p></article>
                     <article class="school-card"><div class="school-icon">◉</div><h3 class="mt-6">Le Médium</h3><p class="school-copy text-sm mt-4">Le capteur haute fréquence de l'information subtile. Il navigue de manière innée dans les espaces invisibles, ressent les structures vibratoires ambiantes et décode les non-dits d'un système.</p></article>
                     <article class="school-card"><div class="school-icon">☽</div><h3 class="mt-6">La Sorcière</h3><p class="school-copy text-sm mt-4">La gardienne de la transmutation émotionnelle et instinctive. Profondément reliée à la mémoire cellulaire et à l'intelligence de l'Eau, elle plonge dans l'ombre pour libérer les mémoires bloquées.</p></article>
                     <article class="school-card"><div class="school-icon">✧</div><h3 class="mt-6">Le Transmutateur</h3><p class="school-copy text-sm mt-4">L'alchimiste de l'esprit et de la structure cognitive. Expert du Corps Mental, il repère instantanément les croyances mères obsolètes et brise les schémas répétitifs hérités du clan familial.</p></article>
@@ -1795,6 +1872,81 @@
                     <article class="school-card"><div class="school-icon">⌂</div><h3 class="mt-6">Le Hub Bubble.io</h3><p class="school-copy text-sm mt-4">L'application centrale pour gérer vos bilans des 4 corps, vos carnets de bord, et débloquer vos étapes supérieures.</p></article>
                     <article class="school-card"><div class="school-icon">◎</div><h3 class="mt-6">L'Espace Circle.so</h3><p class="school-copy text-sm mt-4">Le QG de la Tribu qui abrite le Manuel de formation (fiches d'impact et capsules audio) et les partages d'études de cas du Laboratoire.</p></article>
                     <article class="school-card"><div class="school-icon">✦</div><h3 class="mt-6">Les Kits d'Auto-Guérison</h3><p class="school-copy text-sm mt-4">Des supports physiques pour ancrer immédiatement le travail énergétique et somatique directement dans votre quotidien.</p></article>
+                </div>
+            </section>
+
+            <section id="school-platform" class="school-section school-layer">
+                <div class="max-w-4xl space-y-4 mb-10">
+                    <p class="school-kicker">Cahier des charges technique</p>
+                    <h2 class="school-section-title">Architecture de la Plateforme Académie</h2>
+                    <p class="school-copy">Cette structure sert de colonne vertébrale pour le futur espace élève : aucune phase supérieure ne s'ouvre sans validation de l'étape précédente.</p>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-[0.78fr_1.22fr] gap-6">
+                    <div class="space-y-6">
+                        <article class="academy-module">
+                            <h3>Règles absolues</h3>
+                            <div class="flex flex-wrap gap-2 mt-5">
+                                <span class="academy-chip">1. Émotionnel</span>
+                                <span class="academy-chip">2. Physique</span>
+                                <span class="academy-chip">3. Mental</span>
+                                <span class="academy-chip">4. Spirituel</span>
+                            </div>
+                            <p class="school-copy text-sm mt-5">L'ordre des 4 Corps reste immuable dans les bilans, les nettoyages, les contenus et les validations.</p>
+                        </article>
+                        <article class="academy-module">
+                            <h3>Modèle User</h3>
+                            <div class="school-copy text-sm mt-5 space-y-2">
+                                <p><strong class="text-[#f2cb65]">email</strong> · Text</p>
+                                <p><strong class="text-[#f2cb65]">phase_actuelle</strong> · 0 Bilan, 1 Renaissance, 2 Académie, 3 Labo, 4 HEG</p>
+                                <p><strong class="text-[#f2cb65]">niveau_academie</strong> · 1 à 10, actif en Phase 2</p>
+                                <p><strong class="text-[#f2cb65]">bilan_complete</strong> · Yes/No</p>
+                                <p><strong class="text-[#f2cb65]">dossier_personnel</strong> · Liste de réponses de l'élève</p>
+                                <p><strong class="text-[#f2cb65]">scores</strong> · Émotionnel, Physique, Mental, Spirituel</p>
+                                <p><strong class="text-[#f2cb65]">statut_structure</strong> · Critique ou Stable</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="academy-module">
+                        <div class="flex flex-col sm:flex-row gap-5 sm:items-end sm:justify-between">
+                            <div>
+                                <h3>Routage & verrouillage</h3>
+                                <p class="school-copy text-sm mt-3">Le bilan décide de la trajectoire. La progression Académie reste linéaire et protégée.</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="renderAcademyPlatformDemo('critical')" class="guide-btn-outline text-[10px] px-4 py-2">Simulation critique</button>
+                                <button type="button" onclick="renderAcademyPlatformDemo('stable')" class="guide-btn-cyan text-[10px] px-4 py-2">Simulation stable</button>
+                            </div>
+                        </div>
+                        <div id="academy-route-output" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-7"></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 academy-module">
+                    <div class="flex flex-col lg:flex-row gap-5 lg:items-end lg:justify-between">
+                        <div>
+                            <h3>Académie · 10 niveaux</h3>
+                            <p class="school-copy text-sm mt-3">Exemple d'affichage conditionnel : les niveaux au-dessus du niveau actif restent grisés, verrouillés et inactifs.</p>
+                        </div>
+                        <p id="academy-level-status" class="academy-chip"></p>
+                    </div>
+                    <div id="academy-level-board" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-7"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-8">
+                    <article class="academy-module">
+                        <h3>Vue 0 · Diagnostic</h3>
+                        <p class="school-copy text-sm mt-4">Tant que <strong>bilan_complete = No</strong>, toutes les autres sections élèves restent masquées.</p>
+                    </article>
+                    <article class="academy-module">
+                        <h3>Vue 1 · Renaissance</h3>
+                        <p class="school-copy text-sm mt-4">Le Guide valide manuellement la stabilité avant tout accès à l'Académie.</p>
+                    </article>
+                    <article class="academy-module">
+                        <h3>Protection Air</h3>
+                        <p class="school-copy text-sm mt-4">Le module <strong>Glossolalie & FMC</strong> reste protégé par le protocole <strong>Ancrage et Discernement</strong>.</p>
+                    </article>
                 </div>
             </section>
 
@@ -2754,6 +2906,101 @@
                 }
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const ACADEMY_BODY_ORDER = ["Émotionnel", "Physique", "Mental", "Spirituel"];
+        const ACADEMY_BODY_SCORE_KEYS = ["score_emotionnel", "score_physique", "score_mental", "score_spirituel"];
+        const ACADEMY_CHANNELS = ["Terre", "Eau", "Air", "Feu", "Foudre"];
+        const ACADEMY_ARCHETYPES = ["Guerrier de l'Ombre", "Médium", "Sorcière", "Transmutateur", "Guide Architecte"];
+        const ACADEMY_SCHEMA = {
+            email: "Text",
+            phase_actuelle: "Number: 0 Bilan, 1 Renaissance, 2 Académie, 3 Labo, 4 HEG",
+            niveau_academie: "Number: 1 à 10, actif uniquement si phase_actuelle = 2",
+            bilan_complete: "Yes/No",
+            dossier_personnel: "List of Texts",
+            score_emotionnel: "Number",
+            score_physique: "Number",
+            score_mental: "Number",
+            score_spirituel: "Number",
+            statut_structure: "Text: Critique ou Stable"
+        };
+        const ACADEMY_LEVELS = [
+            { id: 1, title: "Terre", blocks: "Mission · Capacités · Outils · Dangers · Validation" },
+            { id: 2, title: "Eau", blocks: "Mission · Capacités · Outils · Dangers · Validation" },
+            { id: 3, title: "Feu", blocks: "Mission · Capacités · Outils · Dangers · Validation" },
+            { id: 4, title: "Air", blocks: "Glossolalie & FMC · Protocole Ancrage et Discernement" },
+            { id: 5, title: "Foudre", blocks: "Transformation · Révélation · Activation" },
+            { id: 6, title: "Archétypes", blocks: "Guerrier de l'Ombre · Médium · Sorcière · Transmutateur · Guide Architecte" },
+            { id: 7, title: "Transmission ancestrale", blocks: "Mémoire cellulaire · Héritage · Terre" },
+            { id: 8, title: "États de conscience", blocks: "Sécurité · Observation · Intégration" },
+            { id: 9, title: "Hygiène & discernement", blocks: "Cadre · Protection · Responsabilité" },
+            { id: 10, title: "Mode d'emploi personnel", blocks: "Dossier final · Autonomie · Accès Laboratoire" }
+        ];
+
+        function routeAcademyUserAfterBilan(user) {
+            const orderedScores = ACADEMY_BODY_SCORE_KEYS.map(key => user[key] || 0);
+            const hasOverload = orderedScores.some(score => score >= 70);
+            if (hasOverload || user.statut_structure === "Critique") {
+                return { ...user, bilan_complete: true, phase_actuelle: 1, niveau_academie: 0, destination: "Parcours Renaissance" };
+            }
+            return { ...user, bilan_complete: true, phase_actuelle: 2, niveau_academie: 1, destination: "Académie · Niveau 1" };
+        }
+
+        function canAccessAcademyPhase(user, requestedPhase) {
+            if (!user.bilan_complete && requestedPhase > 0) return false;
+            if (requestedPhase === 3) return user.phase_actuelle >= 3 && user.niveau_academie >= 10;
+            if (requestedPhase === 4) return user.phase_actuelle >= 4;
+            return user.phase_actuelle >= requestedPhase;
+        }
+
+        function canAccessAcademyLevel(user, levelNumber) {
+            return user.phase_actuelle === 2 && user.niveau_academie >= levelNumber;
+        }
+
+        function validateAcademyLevel(user, studentAnswer) {
+            const nextDossier = [...(user.dossier_personnel || []), studentAnswer];
+            const nextLevel = Math.min((user.niveau_academie || 1) + 1, 10);
+            const nextPhase = nextLevel >= 10 ? 3 : 2;
+            return { ...user, dossier_personnel: nextDossier, niveau_academie: nextLevel, phase_actuelle: nextPhase };
+        }
+
+        function renderAcademyPlatformDemo(mode = "stable") {
+            const baseUser = mode === "critical"
+                ? { email: "eleve@example.com", phase_actuelle: 0, niveau_academie: 0, bilan_complete: false, dossier_personnel: [], score_emotionnel: 82, score_physique: 58, score_mental: 74, score_spirituel: 46, statut_structure: "Critique" }
+                : { email: "eleve@example.com", phase_actuelle: 0, niveau_academie: 0, bilan_complete: false, dossier_personnel: [], score_emotionnel: 28, score_physique: 32, score_mental: 41, score_spirituel: 35, statut_structure: "Stable" };
+            const routedUser = routeAcademyUserAfterBilan(baseUser);
+            const demoUser = routedUser.phase_actuelle === 2 ? { ...routedUser, niveau_academie: 4 } : routedUser;
+
+            const routeOutput = document.getElementById("academy-route-output");
+            if (routeOutput) {
+                routeOutput.innerHTML = [
+                    { title: "Déclencheur", body: "Soumission du questionnaire de diagnostic des 4 Corps." },
+                    { title: "Décision", body: `${routedUser.statut_structure} → ${routedUser.destination}` },
+                    { title: "Gating", body: canAccessAcademyPhase(routedUser, 3) ? "Laboratoire accessible." : "Laboratoire verrouillé tant que le Code n'est pas validé." },
+                    { title: "Sécurité", body: `Canaux : ${ACADEMY_CHANNELS.join(", ")}. Archétypes : ${ACADEMY_ARCHETYPES.join(", ")}.` }
+                ].map(item => `
+                    <div class="academy-route-card">
+                        <h4 class="text-[#f2cb65] font-bold uppercase tracking-[0.12em] text-xs">${item.title}</h4>
+                        <p class="school-copy text-sm mt-2">${item.body}</p>
+                    </div>
+                `).join("");
+            }
+
+            const status = document.getElementById("academy-level-status");
+            if (status) status.textContent = demoUser.phase_actuelle === 2 ? `Niveau actif : ${demoUser.niveau_academie}` : "Académie verrouillée";
+
+            const board = document.getElementById("academy-level-board");
+            if (board) {
+                board.innerHTML = ACADEMY_LEVELS.map(level => {
+                    const locked = !canAccessAcademyLevel(demoUser, level.id);
+                    return `
+                        <button type="button" class="academy-level-btn ${locked ? "is-locked" : ""}" ${locked ? "disabled" : ""} aria-disabled="${locked}">
+                            <strong>${locked ? "🔒 " : "✓ "}Niveau ${level.id} · ${level.title}</strong>
+                            <span>${level.blocks}</span>
+                        </button>
+                    `;
+                }).join("");
+            }
         }
 
         // Gematria pythagoricienne pour la Grille d'Inclusion
@@ -4081,6 +4328,7 @@
             switchTab(activeTab);
             await loadRemotePlatformSettings();
             applyPlatformSettings();
+            renderAcademyPlatformDemo('stable');
             switchTab(activeTab);
         });
 
