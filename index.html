@@ -3000,6 +3000,28 @@
                             <button onclick="uploadGuideImage('guideNatureImage','admin-guide-nature-file','admin-guide-nature-image')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Téléverser</button>
                         </div>
                     </label>
+                    <div class="md:col-span-2 border-t border-red-950/50 pt-4 mt-2">
+                        <h5 class="font-display text-xs text-lava-gold uppercase tracking-widest">Supports de l'Espace Formation</h5>
+                        <p class="text-[10px] text-gray-500 mt-1">Importez un fichier depuis votre ordinateur. Il sera stocké sur Supabase et ajouté au cours choisi.</p>
+                    </div>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Cours concerné
+                        <select id="admin-learning-course" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs"></select>
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Nom affiché du support
+                        <input type="text" id="admin-learning-resource-title" placeholder="Ex : Méditation guidée niveau 1" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Fichier à importer
+                        <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                            <input type="file" id="admin-learning-resource-file" class="w-full text-[10px] text-gray-400">
+                            <button onclick="uploadLearningResource()" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Importer le support</button>
+                        </div>
+                    </label>
+                    <div class="md:col-span-2">
+                        <div id="admin-learning-resource-list" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                    </div>
                 </div>
                 <p id="admin-save-status" class="text-[10px] text-emerald-500 mt-3 hidden">Modifications sauvegardées.</p>
             </div>
@@ -3247,7 +3269,7 @@
 
         const LEARNING_STORAGE_KEY = "etern_aile_learning_progress";
         let activeLearningCourseId = "bilan-4-corps";
-        const learningCourses = [
+        const DEFAULT_LEARNING_COURSES = [
             {
                 id: "bilan-4-corps",
                 phase: "Phase 0",
@@ -3299,6 +3321,7 @@
                 ]
             }
         ];
+        let learningCourses = JSON.parse(JSON.stringify(DEFAULT_LEARNING_COURSES));
 
         function getLearningProgress() {
             try {
@@ -3623,7 +3646,8 @@
             url: "https://oqzoixffraaypvegebjy.supabase.co",
             key: "sb_publishable_MJLXugkQWgCospkKB-rfEA_zATIOW9Y",
             bucket: "guide-images",
-            settingsPath: "guide-settings.json"
+            settingsPath: "guide-settings.json",
+            learningCatalogPath: "academy/learning-catalog.json"
         };
 
         const defaultPlatformSettings = {
@@ -3689,6 +3713,58 @@
 
         function remoteSettingsUrl() {
             return `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${supabaseConfig.settingsPath}`;
+        }
+
+        function remoteLearningCatalogUrl() {
+            return `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${supabaseConfig.learningCatalogPath}`;
+        }
+
+        function normalizeLearningCatalog(catalog) {
+            const source = Array.isArray(catalog?.courses) ? catalog.courses : Array.isArray(catalog) ? catalog : [];
+            if (!source.length) return JSON.parse(JSON.stringify(DEFAULT_LEARNING_COURSES));
+            return source.map((course, index) => ({
+                id: course.id || `cours-${index + 1}`,
+                phase: course.phase || `Module ${index + 1}`,
+                title: course.title || "Cours sans titre",
+                duration: course.duration || "À définir",
+                description: course.description || "Description à compléter.",
+                videoSrc: course.videoSrc || "",
+                resources: Array.isArray(course.resources) ? course.resources : []
+            }));
+        }
+
+        async function loadRemoteLearningCatalog() {
+            try {
+                const response = await fetch(`${remoteLearningCatalogUrl()}?v=${Date.now()}`, { cache: "no-store" });
+                if (!response.ok) return;
+                const remoteCatalog = await response.json();
+                learningCourses = normalizeLearningCatalog(remoteCatalog);
+            } catch (error) {
+                console.warn("Catalogue formation distant indisponible", error);
+            }
+        }
+
+        async function saveRemoteLearningCatalog() {
+            const catalog = {
+                updatedAt: new Date().toISOString(),
+                courses: learningCourses
+            };
+            const blob = new Blob([JSON.stringify(catalog, null, 2)], { type: "application/json" });
+            const response = await fetch(`${supabaseConfig.url}/storage/v1/object/${supabaseConfig.bucket}/${supabaseConfig.learningCatalogPath}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${supabaseConfig.key}`,
+                    "apikey": supabaseConfig.key,
+                    "Content-Type": "application/json",
+                    "Cache-Control": "60",
+                    "x-upsert": "true"
+                },
+                body: blob
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "Sauvegarde du catalogue Formation refusée.");
+            }
         }
 
         async function loadRemotePlatformSettings() {
@@ -3867,6 +3943,97 @@
             }
         }
 
+        function getFileTypeLabel(fileName = "") {
+            const extension = fileName.split(".").pop()?.toUpperCase() || "FICHIER";
+            return extension.length <= 5 ? extension : "FICHIER";
+        }
+
+        function populateLearningAdminForm() {
+            const courseSelect = document.getElementById("admin-learning-course");
+            if (courseSelect) {
+                const currentValue = courseSelect.value || activeLearningCourseId;
+                courseSelect.innerHTML = learningCourses.map(course => `
+                    <option value="${escapeHtml(course.id)}">${escapeHtml(course.phase)} · ${escapeHtml(course.title)}</option>
+                `).join("");
+                if (learningCourses.some(course => course.id === currentValue)) courseSelect.value = currentValue;
+            }
+            renderLearningAdminResourceList();
+        }
+
+        function renderLearningAdminResourceList() {
+            const container = document.getElementById("admin-learning-resource-list");
+            if (!container) return;
+            const items = learningCourses.flatMap(course => (course.resources || []).map(resource => ({ course, resource })));
+            if (!items.length) {
+                container.innerHTML = `<p class="text-[10px] text-gray-500">Aucun support importé pour le moment.</p>`;
+                return;
+            }
+            container.innerHTML = items.map(({ course, resource }) => `
+                <div class="border border-red-950/50 rounded p-3 bg-black/30">
+                    <p class="text-[10px] text-lava-gold uppercase tracking-widest font-bold">${escapeHtml(course.title)}</p>
+                    <p class="text-xs text-white mt-1">${escapeHtml(resource.title)}</p>
+                    <a href="${escapeHtml(resource.href)}" target="_blank" rel="noopener" class="text-[10px] text-gray-400 hover:text-white">Ouvrir le fichier</a>
+                </div>
+            `).join("");
+        }
+
+        async function uploadLearningResource() {
+            try {
+                const courseId = document.getElementById("admin-learning-course")?.value;
+                const titleInput = document.getElementById("admin-learning-resource-title");
+                const fileInput = document.getElementById("admin-learning-resource-file");
+                const file = fileInput?.files?.[0];
+                const course = learningCourses.find(item => item.id === courseId);
+
+                if (!course) {
+                    showAdminStatus("Choisissez un cours pour recevoir ce support.", true);
+                    return;
+                }
+                if (!file) {
+                    showAdminStatus("Choisissez un fichier depuis votre ordinateur.", true);
+                    return;
+                }
+
+                const displayTitle = titleInput?.value.trim() || file.name.replace(/\.[^.]+$/, "");
+                showAdminStatus("Import du support en cours...");
+                const path = `academy/resources/${course.id}-${Date.now()}-${slugFileName(file.name)}`;
+                const response = await fetch(`${supabaseConfig.url}/storage/v1/object/${supabaseConfig.bucket}/${path}`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${supabaseConfig.key}`,
+                        "apikey": supabaseConfig.key,
+                        "Content-Type": file.type || "application/octet-stream",
+                        "Cache-Control": "31536000"
+                    },
+                    body: file
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || "Upload Supabase refusé.");
+                }
+
+                const publicUrl = `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${path}`;
+                course.resources = [
+                    ...(course.resources || []),
+                    {
+                        title: displayTitle,
+                        type: getFileTypeLabel(file.name),
+                        href: publicUrl
+                    }
+                ];
+
+                await saveRemoteLearningCatalog();
+                titleInput.value = "";
+                fileInput.value = "";
+                populateLearningAdminForm();
+                renderLearningPlatform();
+                showAdminStatus("Support importé, ajouté au cours et publié en ligne.");
+            } catch (error) {
+                showAdminStatus(`Import impossible : ${error.message || error}`, true);
+            }
+        }
+
         function applyPlatformSettings() {
             setText('brand-name-header', platformSettings.brandName);
             setText('brand-name-footer', platformSettings.brandName);
@@ -3895,6 +4062,7 @@
             applyGuideTexts();
             applyGuideImages();
             fillSettingsForm();
+            populateLearningAdminForm();
         }
 
         function fillSettingsForm() {
@@ -4751,7 +4919,9 @@
             await loadRemotePlatformSettings();
             applyPlatformSettings();
             renderAcademyPlatformDemo('stable');
+            await loadRemoteLearningCatalog();
             renderLearningPlatform();
+            populateLearningAdminForm();
             switchTab(activeTab);
         });
 
