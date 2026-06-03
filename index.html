@@ -1599,7 +1599,7 @@
                     🎓 Haute École
                 </button>
                 <button onclick="switchTab('learning')" id="tab-btn-learning" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
-                    Espace Formation
+                    Espace Personnel
                 </button>
                 <button onclick="switchTab('resonance')" id="tab-btn-resonance" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     <span id="tab-label-resonance">Résonance</span>
@@ -2111,17 +2111,17 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- ONGLET : ESPACE FORMATION - PLATEFORME PEDAGO  -->
+        <!-- ONGLET : ESPACE PERSONNEL - SUIVI + FORMATION  -->
         <!-- ============================================== -->
         <section id="tab-learning" class="learning-shell hidden">
             <div id="learning-access-gate" class="learning-layer max-w-3xl mx-auto py-16">
                 <div class="learning-panel space-y-6 text-center">
                     <p class="school-kicker">Accès réservé</p>
-                    <h1 class="school-section-title">Espace Formation verrouillé</h1>
-                    <p class="school-copy max-w-2xl mx-auto">Cet espace est réservé aux personnes déjà accompagnées, validées et autorisées à entrer dans l'Académie. Entrez votre email et votre code élève personnel transmis par Yann.</p>
+                    <h1 class="school-section-title">Espace Personnel verrouillé</h1>
+                    <p class="school-copy max-w-2xl mx-auto">Cet espace est réservé aux clients accompagnés et aux élèves validés. Entrez l'email de votre fiche et le code personnel transmis par Yann.</p>
                     <div class="grid grid-cols-1 md:grid-cols-[1fr_0.72fr] gap-3 max-w-2xl mx-auto text-left">
                         <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
-                            Email élève
+                            Email client / élève
                             <input type="email" id="learning-access-email" placeholder="votre@email.com" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-3 text-sm">
                         </label>
                         <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
@@ -2129,18 +2129,18 @@
                             <input type="password" id="learning-access-code" placeholder="Code privé" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-3 text-sm">
                         </label>
                     </div>
-                    <button type="button" onclick="unlockLearningAccess()" class="guide-btn-cyan">Entrer dans l'espace formation</button>
+                    <button type="button" onclick="unlockLearningAccess()" class="guide-btn-cyan">Entrer dans mon espace</button>
                     <p id="learning-access-error" class="text-red-400 text-xs hidden"></p>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.12em]">Accès accordé uniquement après paiement, validation admin et ouverture des modules par le Guide.</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.12em]">Accès accordé uniquement après validation admin et ouverture personnelle par le Guide.</p>
                 </div>
             </div>
 
             <div id="learning-content" class="learning-layer space-y-10 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 items-end">
                     <div class="space-y-5">
-                        <p class="school-kicker">Plateforme pédagogique</p>
-                        <h1 class="school-title">Espace <span>Formation</span></h1>
-                        <p class="school-copy max-w-2xl">Un espace complet pour suivre les cours en ligne, regarder les vidéos, télécharger les supports, valider les étapes et avancer dans l'Académie sans perdre le fil.</p>
+                        <p class="school-kicker">Suivi & formation</p>
+                        <h1 class="school-title">Espace <span>Personnel</span></h1>
+                        <p class="school-copy max-w-2xl">Un espace privé pour voir votre parcours de suivi, les rituels réalisés, vos étapes d'accompagnement et, si vous êtes validé comme élève, vos cours en ligne.</p>
                     </div>
                     <div class="grid grid-cols-3 gap-3">
                         <div class="learning-stat p-4">
@@ -2168,7 +2168,7 @@
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="learning-stat p-3">
-                                    <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Modules ouverts</p>
+                                    <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Accès ouverts</p>
                                     <strong id="learning-student-open-courses" class="block mt-2 text-2xl text-[#f2cb65] font-display">0</strong>
                                 </div>
                                 <div class="learning-stat p-3">
@@ -2178,13 +2178,36 @@
                             </div>
                         </div>
                         <div class="mt-4 border-t border-red-950/40 pt-4">
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Modules autorisés par Yann</p>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Modules formation autorisés par Yann</p>
                             <div id="learning-student-modules" class="flex flex-wrap gap-2"></div>
                         </div>
                     </div>
-                    <div class="flex flex-col md:flex-row gap-5 md:items-center md:justify-between">
+                    <div id="learning-client-followup" class="mb-6 border border-cyan-400/30 rounded p-5 bg-black/30 hidden">
+                        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+                            <div>
+                                <p class="school-kicker">Suivi client</p>
+                                <h2 class="school-subtitle mt-2">Parcours de rituel réalisé</h2>
+                                <p id="learning-client-journey-label" class="school-copy text-sm mt-2">Votre accompagnement avance étape par étape.</p>
+                            </div>
+                            <div class="learning-stat p-3 min-w-[180px]">
+                                <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Rituels réalisés</p>
+                                <strong id="learning-client-ritual-count" class="block mt-2 text-2xl text-[#29d6e8] font-display">0</strong>
+                            </div>
+                        </div>
+                        <div id="learning-client-journey-steps" class="grid grid-cols-1 md:grid-cols-5 gap-3 mt-5"></div>
+                        <div class="mt-5 border-t border-red-950/40 pt-4">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3">Rituels et accompagnements</p>
+                            <div id="learning-client-rituals" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+                        </div>
+                    </div>
+                    <div id="learning-training-notice" class="border border-or/30 rounded p-5 bg-black/30 hidden">
+                        <p class="school-kicker">Formation élève</p>
+                        <h2 class="school-subtitle mt-2">Accès formation non ouvert</h2>
+                        <p class="school-copy text-sm mt-2">Votre espace client est actif. La partie formation apparaîtra ici uniquement si Yann vous transforme en élève et vous ouvre des modules.</p>
+                    </div>
+                    <div id="learning-training-progress-panel" class="flex flex-col md:flex-row gap-5 md:items-center md:justify-between">
                         <div class="space-y-2">
-                            <h2 class="school-subtitle">Parcours élève</h2>
+                            <h2 class="school-subtitle">Formation élève</h2>
                             <p class="school-copy text-sm">Le Bilan des 4 Corps débloque le parcours. Les cours supérieurs restent verrouillés tant que les étapes précédentes ne sont pas validées.</p>
                         </div>
                         <div class="min-w-[220px]">
@@ -2194,7 +2217,7 @@
                     </div>
                 </div>
 
-                <div class="learning-grid">
+                <div id="learning-training-grid" class="learning-grid">
                     <aside class="learning-panel space-y-4">
                         <div class="flex items-center justify-between gap-4">
                             <h2 class="school-subtitle text-2xl">Catalogue</h2>
@@ -3356,6 +3379,23 @@
         const LEARNING_STORAGE_KEY = "etern_aile_learning_progress";
         const LEARNING_ACCESS_KEY = "etern_aile_learning_access";
         const ACADEMY_PEOPLE_STORAGE_KEY = "etern_aile_academy_people";
+        const CLIENT_JOURNEY_STEPS = [
+            "Problème",
+            "Bilan des 4 Corps",
+            "Décodage",
+            "Parcours personnalisé",
+            "Équilibre retrouvé"
+        ];
+        const CLIENT_RITUALS = [
+            { id: "mer", label: "🌊 Rituel de la Mer" },
+            { id: "marche", label: "🚶 Marche Thérapeutique" },
+            { id: "plantes", label: "💧 Bain des 7 Plantes" },
+            { id: "vapeur", label: "🌫 Bain de Vapeur" },
+            { id: "cascade", label: "🏞 Cascade & Renaissance" },
+            { id: "desengagement", label: "✂️ Désengagement" },
+            { id: "magnetisme", label: "👐 Magnétisme" },
+            { id: "maison", label: "🏠 Purification de Maison" }
+        ];
         let activeLearningCourseId = "bilan-4-corps";
         const DEFAULT_LEARNING_COURSES = [
             {
@@ -3437,24 +3477,27 @@
         function hasLearningAccess() {
             const access = getLearningAccess();
             if (!access) return false;
-            return !!findAuthorizedLearningPerson(access.email, access.code);
+            return !!findAuthorizedPersonalPerson(access.email, access.code);
         }
 
-        function findAuthorizedLearningPerson(email, code) {
+        function findAuthorizedPersonalPerson(email, code) {
             const cleanEmail = String(email || "").trim().toLowerCase();
             const cleanCode = String(code || "").trim();
             return academyPeople.find(person =>
                 person.email?.toLowerCase() === cleanEmail &&
                 person.accessCode === cleanCode &&
-                person.status === "student" &&
                 person.approved === true
             );
+        }
+
+        function isValidatedStudent(person) {
+            return person?.status === "student" && person.approved === true;
         }
 
         function getCurrentLearningPerson() {
             const access = getLearningAccess();
             if (!access) return null;
-            return findAuthorizedLearningPerson(access.email, access.code) || null;
+            return findAuthorizedPersonalPerson(access.email, access.code) || null;
         }
 
         function renderLearningAccessState() {
@@ -3477,15 +3520,15 @@
             const error = document.getElementById("learning-access-error");
             if (!email.includes("@")) {
                 if (error) {
-                    error.textContent = "Entrez l'email de l'élève autorisé.";
+                    error.textContent = "Entrez l'email enregistré dans votre fiche.";
                     error.classList.remove("hidden");
                 }
                 return;
             }
-            const authorizedPerson = findAuthorizedLearningPerson(email, code);
+            const authorizedPerson = findAuthorizedPersonalPerson(email, code);
             if (!authorizedPerson) {
                 if (error) {
-                    error.textContent = "Accès refusé. Cette adresse n'est pas encore validée comme élève, ou le code est incorrect.";
+                    error.textContent = "Accès refusé. Cette adresse n'est pas encore validée, ou le code est incorrect.";
                     error.classList.remove("hidden");
                 }
                 return;
@@ -3512,6 +3555,7 @@
 
         function getUnlockedLearningCourses(progress) {
             const currentPerson = getCurrentLearningPerson();
+            if (!isValidatedStudent(currentPerson)) return [];
             const visibleCourses = currentPerson
                 ? learningCourses.filter(course => currentPerson.allowedCourseIds?.includes(course.id))
                 : learningCourses;
@@ -3540,6 +3584,8 @@
             const bar = document.getElementById("learning-global-progress");
             if (bar) bar.style.width = `${percent}%`;
             renderLearningStudentCard(currentPerson, courses, percent);
+            renderClientFollowup(currentPerson);
+            renderTrainingVisibility(currentPerson);
 
             const list = document.getElementById("learning-course-list");
             if (!courses.length) {
@@ -3591,14 +3637,56 @@
             setText("learning-student-name", person.name || "Élève");
             setText("learning-student-status", `${getPersonStatusLabel(person)} · progression personnelle ${percent}%`);
             setText("learning-student-open-courses", String(courses.length));
-            setText("learning-student-phase", `Niveau ${person.niveauAcademie || 1}`);
+            setText("learning-student-phase", CLIENT_JOURNEY_STEPS[person.phaseActuelle || 0] || "Suivi");
 
             const modules = document.getElementById("learning-student-modules");
             if (modules) {
                 modules.innerHTML = courses.length
                     ? courses.map(course => `<span class="academy-chip">${escapeHtml(course.title)}</span>`).join("")
-                    : `<span class="academy-chip">En attente d'ouverture</span>`;
+                    : `<span class="academy-chip">${isValidatedStudent(person) ? "En attente d'ouverture" : "Formation non ouverte"}</span>`;
             }
+        }
+
+        function renderClientFollowup(person) {
+            const panel = document.getElementById("learning-client-followup");
+            if (!panel) return;
+            if (!person) {
+                panel.classList.add("hidden");
+                return;
+            }
+
+            panel.classList.remove("hidden");
+            const currentStep = Math.max(0, Math.min(Number(person.phaseActuelle) || 0, CLIENT_JOURNEY_STEPS.length - 1));
+            const completedRitualIds = Array.isArray(person.completedRitualIds) ? person.completedRitualIds : [];
+            setText("learning-client-journey-label", `${CLIENT_JOURNEY_STEPS[currentStep]} · votre parcours est suivi par Yann.`);
+            setText("learning-client-ritual-count", String(completedRitualIds.length));
+
+            const steps = document.getElementById("learning-client-journey-steps");
+            if (steps) {
+                steps.innerHTML = CLIENT_JOURNEY_STEPS.map((step, index) => {
+                    const state = index < currentStep ? "✓" : index === currentStep ? "●" : "○";
+                    const tone = index <= currentStep ? "text-[#f2cb65] border-or/50" : "text-gray-500 border-basalt-border";
+                    return `<div class="learning-resource ${tone}"><strong>${state} ${escapeHtml(step)}</strong></div>`;
+                }).join("");
+            }
+
+            const rituals = document.getElementById("learning-client-rituals");
+            if (rituals) {
+                rituals.innerHTML = CLIENT_RITUALS.map(ritual => {
+                    const done = completedRitualIds.includes(ritual.id);
+                    return `<div class="learning-resource ${done ? "border-cyan-400/40" : "border-basalt-border"}"><strong>${done ? "✓ " : ""}${escapeHtml(ritual.label)}</strong><p class="school-copy text-xs mt-1">${done ? "Réalisé" : "À définir avec Yann"}</p></div>`;
+                }).join("");
+            }
+        }
+
+        function renderTrainingVisibility(person) {
+            const notice = document.getElementById("learning-training-notice");
+            const progressPanel = document.getElementById("learning-training-progress-panel");
+            const trainingGrid = document.getElementById("learning-training-grid");
+            const canSeeTraining = isValidatedStudent(person);
+            notice?.classList.toggle("hidden", canSeeTraining);
+            progressPanel?.classList.toggle("hidden", !canSeeTraining);
+            trainingGrid?.classList.toggle("hidden", !canSeeTraining);
         }
 
         function openLearningCourse(courseId) {
@@ -4005,6 +4093,7 @@
                 phaseActuelle: Number.isFinite(person.phaseActuelle) ? person.phaseActuelle : 0,
                 niveauAcademie: Number.isFinite(person.niveauAcademie) ? person.niveauAcademie : 0,
                 allowedCourseIds: Array.isArray(person.allowedCourseIds) ? person.allowedCourseIds : [],
+                completedRitualIds: Array.isArray(person.completedRitualIds) ? person.completedRitualIds : [],
                 notes: Array.isArray(person.notes) ? person.notes : [],
                 createdAt: person.createdAt || new Date().toISOString(),
                 updatedAt: person.updatedAt || new Date().toISOString()
@@ -4248,7 +4337,8 @@
         function getPersonStatusLabel(person) {
             if (person.status === "student" && person.approved) return "Élève validé";
             if (person.status === "student" && !person.approved) return "Élève suspendu";
-            return "Client en accompagnement";
+            if (person.approved) return "Client validé";
+            return "Client en attente";
         }
 
         function renderPeopleAdminList() {
@@ -4260,6 +4350,16 @@
             }
             container.innerHTML = academyPeople.map(person => {
                 const latestNote = person.notes?.[person.notes.length - 1];
+                const currentStep = Math.max(0, Math.min(Number(person.phaseActuelle) || 0, CLIENT_JOURNEY_STEPS.length - 1));
+                const journeyOptions = CLIENT_JOURNEY_STEPS.map((step, index) => `
+                    <option value="${index}" ${currentStep === index ? "selected" : ""}>${escapeHtml(step)}</option>
+                `).join("");
+                const ritualChecks = CLIENT_RITUALS.map(ritual => `
+                    <label class="flex items-center gap-2 text-[10px] text-gray-400">
+                        <input type="checkbox" ${person.completedRitualIds?.includes(ritual.id) ? "checked" : ""} onchange="togglePersonRitual('${person.id}', '${ritual.id}', this.checked)">
+                        <span>${escapeHtml(ritual.label)}</span>
+                    </label>
+                `).join("");
                 const courseChecks = learningCourses.map(course => `
                     <label class="flex items-center gap-2 text-[10px] text-gray-400">
                         <input type="checkbox" ${person.allowedCourseIds?.includes(course.id) ? "checked" : ""} onchange="togglePersonCourseAccess('${person.id}', '${course.id}', this.checked)">
@@ -4273,15 +4373,22 @@
                                 <p class="text-[10px] text-lava-gold uppercase tracking-widest font-bold">${escapeHtml(getPersonStatusLabel(person))}</p>
                                 <h6 class="text-white font-display text-lg leading-tight">${escapeHtml(person.name)}</h6>
                                 <p class="text-xs text-gray-400">${escapeHtml(person.email)} · ${escapeHtml(person.phone || "Téléphone non renseigné")}</p>
-                                <p class="text-[10px] text-gray-500 mt-1">Code élève : <span class="text-[#f2cb65]">${escapeHtml(person.accessCode)}</span></p>
+                                <p class="text-[10px] text-gray-500 mt-1">Code personnel : <span class="text-[#f2cb65]">${escapeHtml(person.accessCode)}</span></p>
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <button onclick="promotePersonToStudent('${person.id}')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Transformer en élève</button>
-                                <button onclick="togglePersonApproval('${person.id}')" class="border border-basalt-border px-3 py-2 rounded text-[9px] text-gray-300 uppercase tracking-widest hover:text-white transition">${person.approved ? "Suspendre" : "Valider"}</button>
+                                <button onclick="togglePersonApproval('${person.id}')" class="border border-basalt-border px-3 py-2 rounded text-[9px] text-gray-300 uppercase tracking-widest hover:text-white transition">${person.approved ? "Suspendre l'accès" : "Valider l'accès"}</button>
                             </div>
                         </div>
                         <div class="border-t border-red-950/40 pt-3">
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Cours ouverts à cette personne</p>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Parcours client</p>
+                            <select onchange="updatePersonJourneyStep('${person.id}', this.value)" class="w-full bg-basalt border border-basalt-border rounded p-2 text-xs text-gray-200 mb-3">
+                                ${journeyOptions}
+                            </select>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${ritualChecks}</div>
+                        </div>
+                        <div class="border-t border-red-950/40 pt-3">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Formation élève ouverte à cette personne</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${courseChecks}</div>
                         </div>
                         <div class="border-t border-red-950/40 pt-3">
@@ -4332,6 +4439,7 @@
                 phaseActuelle: status === "student" ? 2 : 0,
                 niveauAcademie: status === "student" ? 1 : 0,
                 allowedCourseIds: status === "student" ? [learningCourses[0]?.id].filter(Boolean) : [],
+                completedRitualIds: [],
                 notes: note ? [{ at: now, text: note }] : [],
                 createdAt: now,
                 updatedAt: now
@@ -4363,14 +4471,41 @@
         async function togglePersonApproval(personId) {
             const person = academyPeople.find(item => item.id === personId);
             if (!person) return;
-            person.status = "student";
             person.approved = !person.approved;
             person.updatedAt = new Date().toISOString();
             person.notes = [
                 ...(person.notes || []),
-                { at: person.updatedAt, text: person.approved ? "Accès élève réactivé." : "Accès élève suspendu." }
+                { at: person.updatedAt, text: person.approved ? "Accès personnel réactivé." : "Accès personnel suspendu." }
             ];
-            await persistPeopleAndRefresh(person.approved ? "Accès élève réactivé." : "Accès élève suspendu.");
+            await persistPeopleAndRefresh(person.approved ? "Accès personnel réactivé." : "Accès personnel suspendu.");
+        }
+
+        async function updatePersonJourneyStep(personId, value) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            person.phaseActuelle = Math.max(0, Math.min(Number(value) || 0, CLIENT_JOURNEY_STEPS.length - 1));
+            person.updatedAt = new Date().toISOString();
+            person.notes = [
+                ...(person.notes || []),
+                { at: person.updatedAt, text: `Étape client mise à jour : ${CLIENT_JOURNEY_STEPS[person.phaseActuelle]}.` }
+            ];
+            await persistPeopleAndRefresh("Parcours client mis à jour.");
+        }
+
+        async function togglePersonRitual(personId, ritualId, checked) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            const current = new Set(Array.isArray(person.completedRitualIds) ? person.completedRitualIds : []);
+            if (checked) current.add(ritualId);
+            else current.delete(ritualId);
+            person.completedRitualIds = Array.from(current);
+            const ritual = CLIENT_RITUALS.find(item => item.id === ritualId);
+            person.updatedAt = new Date().toISOString();
+            person.notes = [
+                ...(person.notes || []),
+                { at: person.updatedAt, text: checked ? `Rituel réalisé : ${ritual?.label || ritualId}.` : `Rituel retiré du suivi : ${ritual?.label || ritualId}.` }
+            ];
+            await persistPeopleAndRefresh("Rituel client mis à jour.");
         }
 
         async function togglePersonCourseAccess(personId, courseId, checked) {
