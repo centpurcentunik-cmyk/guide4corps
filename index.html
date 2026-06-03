@@ -3050,6 +3050,39 @@
                     <div class="md:col-span-2">
                         <div id="admin-learning-resource-list" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
                     </div>
+                    <div class="md:col-span-2 border-t border-red-950/50 pt-4 mt-2">
+                        <h5 class="font-display text-xs text-lava-gold uppercase tracking-widest">Clients & Élèves</h5>
+                        <p class="text-[10px] text-gray-500 mt-1">Créez une fiche client, suivez son parcours, puis transformez-la en élève validé quand vous l'estimez prêt.</p>
+                    </div>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Nom du client
+                        <input type="text" id="admin-person-name" placeholder="Nom complet" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Email du client
+                        <input type="email" id="admin-person-email" placeholder="client@email.com" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Téléphone
+                        <input type="text" id="admin-person-phone" placeholder="0692..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
+                        Statut de départ
+                        <select id="admin-person-status" class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs">
+                            <option value="client">Client en accompagnement</option>
+                            <option value="student">Élève validé</option>
+                        </select>
+                    </label>
+                    <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold md:col-span-2">
+                        Note initiale
+                        <textarea id="admin-person-note" rows="2" placeholder="Bilan, état actuel, observation, prochaine étape..." class="mt-1 w-full bg-basalt border border-basalt-border rounded p-2 text-xs resize-none"></textarea>
+                    </label>
+                    <div class="md:col-span-2">
+                        <button onclick="createAcademyPerson()" class="btn-or px-4 py-2 rounded text-[9px]">Créer la fiche client</button>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div id="admin-people-list" class="grid grid-cols-1 xl:grid-cols-2 gap-3"></div>
+                    </div>
                 </div>
                 <p id="admin-save-status" class="text-[10px] text-emerald-500 mt-3 hidden">Modifications sauvegardées.</p>
             </div>
@@ -3352,13 +3385,20 @@
             }
         ];
         let learningCourses = JSON.parse(JSON.stringify(DEFAULT_LEARNING_COURSES));
+        let academyPeople = [];
 
         function getLearningProgress() {
             try {
-                return JSON.parse(localStorage.getItem(LEARNING_STORAGE_KEY)) || {};
+                return JSON.parse(localStorage.getItem(getLearningProgressKey())) || {};
             } catch (error) {
                 return {};
             }
+        }
+
+        function getLearningProgressKey() {
+            const access = getLearningAccess();
+            const identity = access?.personId || access?.email || "invite";
+            return `${LEARNING_STORAGE_KEY}_${identity}`;
         }
 
         function getLearningAccess() {
@@ -3371,7 +3411,26 @@
 
         function hasLearningAccess() {
             const access = getLearningAccess();
-            return !!access && access.code === platformSettings.learningAccessCode;
+            if (!access) return false;
+            if (access.code === platformSettings.learningAccessCode) return true;
+            return !!findAuthorizedLearningPerson(access.email, access.code);
+        }
+
+        function findAuthorizedLearningPerson(email, code) {
+            const cleanEmail = String(email || "").trim().toLowerCase();
+            const cleanCode = String(code || "").trim();
+            return academyPeople.find(person =>
+                person.email?.toLowerCase() === cleanEmail &&
+                person.accessCode === cleanCode &&
+                person.status === "student" &&
+                person.approved === true
+            );
+        }
+
+        function getCurrentLearningPerson() {
+            const access = getLearningAccess();
+            if (!access || access.code === platformSettings.learningAccessCode) return null;
+            return findAuthorizedLearningPerson(access.email, access.code) || null;
         }
 
         function renderLearningAccessState() {
@@ -3399,9 +3458,10 @@
                 }
                 return;
             }
-            if (code !== platformSettings.learningAccessCode) {
+            const authorizedPerson = findAuthorizedLearningPerson(email, code);
+            if (code !== platformSettings.learningAccessCode && !authorizedPerson) {
                 if (error) {
-                    error.textContent = "Code incorrect. Cet espace est réservé aux élèves validés.";
+                    error.textContent = "Accès refusé. Cette adresse n'est pas encore validée comme élève, ou le code est incorrect.";
                     error.classList.remove("hidden");
                 }
                 return;
@@ -3409,6 +3469,7 @@
             localStorage.setItem(LEARNING_ACCESS_KEY, JSON.stringify({
                 email,
                 code,
+                personId: authorizedPerson?.id || null,
                 unlockedAt: new Date().toISOString()
             }));
             if (error) error.classList.add("hidden");
@@ -3422,13 +3483,19 @@
         }
 
         function saveLearningProgress(progress) {
-            localStorage.setItem(LEARNING_STORAGE_KEY, JSON.stringify(progress));
+            localStorage.setItem(getLearningProgressKey(), JSON.stringify(progress));
         }
 
         function getUnlockedLearningCourses(progress) {
-            return learningCourses.map((course, index) => {
+            const currentPerson = getCurrentLearningPerson();
+            const visibleCourses = currentPerson
+                ? learningCourses.filter(course => currentPerson.allowedCourseIds?.includes(course.id))
+                : learningCourses;
+
+            return visibleCourses.map((course, index) => {
                 const previousCourse = learningCourses[index - 1];
-                const locked = index > 0 && !progress[previousCourse.id];
+                const previousVisibleCourse = visibleCourses[index - 1];
+                const locked = index > 0 && !progress[previousVisibleCourse.id];
                 return { ...course, locked };
             });
         }
@@ -3437,18 +3504,31 @@
             if (!hasLearningAccess()) return;
             const progress = getLearningProgress();
             const courses = getUnlockedLearningCourses(progress);
-            const completedCount = learningCourses.filter(course => progress[course.id]).length;
-            const percent = Math.round((completedCount / learningCourses.length) * 100);
-            const totalFiles = learningCourses.reduce((sum, course) => sum + course.resources.length, 0);
+            const completedCount = courses.filter(course => progress[course.id]).length;
+            const percent = courses.length ? Math.round((completedCount / courses.length) * 100) : 0;
+            const totalFiles = courses.reduce((sum, course) => sum + course.resources.length, 0);
 
-            setText("learning-stat-courses", String(learningCourses.length));
+            setText("learning-stat-courses", String(courses.length));
             setText("learning-stat-progress", `${percent}%`);
             setText("learning-stat-files", String(totalFiles));
-            setText("learning-progress-label", `${completedCount} cours validé${completedCount > 1 ? "s" : ""} sur ${learningCourses.length}`);
+            setText("learning-progress-label", `${completedCount} cours validé${completedCount > 1 ? "s" : ""} sur ${courses.length}`);
             const bar = document.getElementById("learning-global-progress");
             if (bar) bar.style.width = `${percent}%`;
 
             const list = document.getElementById("learning-course-list");
+            if (!courses.length) {
+                if (list) {
+                    list.innerHTML = `<div class="learning-course is-locked"><h3 class="text-xl">Aucun cours ouvert</h3><p class="school-copy text-xs mt-2">Votre accès élève est actif, mais aucun module n'a encore été autorisé par Yann.</p></div>`;
+                }
+                setText("learning-current-phase", "Accès en attente");
+                setText("learning-current-title", "Aucun cours ouvert");
+                setText("learning-current-description", "Votre espace personnel est prêt. Les cours apparaîtront ici dès que le Guide vous ouvrira les modules adaptés à votre parcours.");
+                setText("learning-resource-count", "0 fichier");
+                const resources = document.getElementById("learning-resource-list");
+                if (resources) resources.innerHTML = "";
+                return;
+            }
+
             if (list) {
                 list.innerHTML = courses.map(course => {
                     const done = !!progress[course.id];
@@ -3468,7 +3548,7 @@
             }
 
             if (!courses.some(course => course.id === activeLearningCourseId && !course.locked)) {
-                activeLearningCourseId = courses.find(course => !course.locked)?.id || learningCourses[0].id;
+                activeLearningCourseId = courses.find(course => !course.locked)?.id || courses[0]?.id || learningCourses[0].id;
             }
             renderLearningCourseDetail();
         }
@@ -3534,8 +3614,8 @@
         }
 
         function resetLearningProgress() {
-            localStorage.removeItem(LEARNING_STORAGE_KEY);
-            activeLearningCourseId = learningCourses[0].id;
+            localStorage.removeItem(getLearningProgressKey());
+            activeLearningCourseId = getUnlockedLearningCourses({}).find(course => !course.locked)?.id || learningCourses[0].id;
             renderLearningPlatform();
         }
 
@@ -3738,7 +3818,8 @@
             key: "sb_publishable_MJLXugkQWgCospkKB-rfEA_zATIOW9Y",
             bucket: "guide-images",
             settingsPath: "guide-settings.json",
-            learningCatalogPath: "academy/learning-catalog.json"
+            learningCatalogPath: "academy/learning-catalog.json",
+            peoplePath: "academy/people.json"
         };
 
         const defaultPlatformSettings = {
@@ -3811,6 +3892,10 @@
             return `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${supabaseConfig.learningCatalogPath}`;
         }
 
+        function remotePeopleUrl() {
+            return `${supabaseConfig.url}/storage/v1/object/public/${supabaseConfig.bucket}/${supabaseConfig.peoplePath}`;
+        }
+
         function normalizeLearningCatalog(catalog) {
             const source = Array.isArray(catalog?.courses) ? catalog.courses : Array.isArray(catalog) ? catalog : [];
             if (!source.length) return JSON.parse(JSON.stringify(DEFAULT_LEARNING_COURSES));
@@ -3856,6 +3941,59 @@
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(errorText || "Sauvegarde du catalogue Formation refusée.");
+            }
+        }
+
+        function normalizeAcademyPeople(payload) {
+            const source = Array.isArray(payload?.people) ? payload.people : Array.isArray(payload) ? payload : [];
+            return source.map(person => ({
+                id: person.id || `person-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+                name: person.name || "Client sans nom",
+                email: String(person.email || "").trim().toLowerCase(),
+                phone: person.phone || "",
+                status: person.status === "student" ? "student" : "client",
+                approved: person.approved === true,
+                accessCode: person.accessCode || generateStudentAccessCode(),
+                phaseActuelle: Number.isFinite(person.phaseActuelle) ? person.phaseActuelle : 0,
+                niveauAcademie: Number.isFinite(person.niveauAcademie) ? person.niveauAcademie : 0,
+                allowedCourseIds: Array.isArray(person.allowedCourseIds) ? person.allowedCourseIds : [],
+                notes: Array.isArray(person.notes) ? person.notes : [],
+                createdAt: person.createdAt || new Date().toISOString(),
+                updatedAt: person.updatedAt || new Date().toISOString()
+            })).filter(person => person.email);
+        }
+
+        async function loadRemoteAcademyPeople() {
+            try {
+                const response = await fetch(`${remotePeopleUrl()}?v=${Date.now()}`, { cache: "no-store" });
+                if (!response.ok) return;
+                const payload = await response.json();
+                academyPeople = normalizeAcademyPeople(payload);
+            } catch (error) {
+                console.warn("Registre clients/élèves indisponible", error);
+            }
+        }
+
+        async function saveRemoteAcademyPeople() {
+            const payload = {
+                updatedAt: new Date().toISOString(),
+                people: academyPeople
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+            const response = await fetch(`${supabaseConfig.url}/storage/v1/object/${supabaseConfig.bucket}/${supabaseConfig.peoplePath}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${supabaseConfig.key}`,
+                    "apikey": supabaseConfig.key,
+                    "Content-Type": "application/json",
+                    "Cache-Control": "60",
+                    "x-upsert": "true"
+                },
+                body: blob
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "Sauvegarde du registre clients/élèves refusée.");
             }
         }
 
@@ -4050,6 +4188,7 @@
                 if (learningCourses.some(course => course.id === currentValue)) courseSelect.value = currentValue;
             }
             renderLearningAdminResourceList();
+            renderPeopleAdminList();
         }
 
         function renderLearningAdminResourceList() {
@@ -4067,6 +4206,171 @@
                     <a href="${escapeHtml(resource.href)}" target="_blank" rel="noopener" class="text-[10px] text-gray-400 hover:text-white">Ouvrir le fichier</a>
                 </div>
             `).join("");
+        }
+
+        function generateStudentAccessCode() {
+            return `EA-${Math.random().toString(36).slice(2, 6).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+        }
+
+        function getPersonStatusLabel(person) {
+            if (person.status === "student" && person.approved) return "Élève validé";
+            if (person.status === "student" && !person.approved) return "Élève suspendu";
+            return "Client en accompagnement";
+        }
+
+        function renderPeopleAdminList() {
+            const container = document.getElementById("admin-people-list");
+            if (!container) return;
+            if (!academyPeople.length) {
+                container.innerHTML = `<p class="text-[10px] text-gray-500">Aucun client enregistré pour le moment.</p>`;
+                return;
+            }
+            container.innerHTML = academyPeople.map(person => {
+                const latestNote = person.notes?.[person.notes.length - 1];
+                const courseChecks = learningCourses.map(course => `
+                    <label class="flex items-center gap-2 text-[10px] text-gray-400">
+                        <input type="checkbox" ${person.allowedCourseIds?.includes(course.id) ? "checked" : ""} onchange="togglePersonCourseAccess('${person.id}', '${course.id}', this.checked)">
+                        <span>${escapeHtml(course.title)}</span>
+                    </label>
+                `).join("");
+                return `
+                    <article class="border border-red-950/50 rounded p-4 bg-black/30 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                            <div>
+                                <p class="text-[10px] text-lava-gold uppercase tracking-widest font-bold">${escapeHtml(getPersonStatusLabel(person))}</p>
+                                <h6 class="text-white font-display text-lg leading-tight">${escapeHtml(person.name)}</h6>
+                                <p class="text-xs text-gray-400">${escapeHtml(person.email)} · ${escapeHtml(person.phone || "Téléphone non renseigné")}</p>
+                                <p class="text-[10px] text-gray-500 mt-1">Code élève : <span class="text-[#f2cb65]">${escapeHtml(person.accessCode)}</span></p>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="promotePersonToStudent('${person.id}')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Transformer en élève</button>
+                                <button onclick="togglePersonApproval('${person.id}')" class="border border-basalt-border px-3 py-2 rounded text-[9px] text-gray-300 uppercase tracking-widest hover:text-white transition">${person.approved ? "Suspendre" : "Valider"}</button>
+                            </div>
+                        </div>
+                        <div class="border-t border-red-950/40 pt-3">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Cours ouverts à cette personne</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${courseChecks}</div>
+                        </div>
+                        <div class="border-t border-red-950/40 pt-3">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Dernière note</p>
+                            <p class="text-xs text-gray-300 mt-1">${latestNote ? escapeHtml(latestNote.text) : "Aucune note de suivi."}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                            <input id="person-note-${person.id}" type="text" placeholder="Ajouter une note de suivi..." class="bg-basalt border border-basalt-border rounded p-2 text-xs">
+                            <button onclick="addPersonFollowUp('${person.id}')" class="border border-or/50 px-3 py-2 rounded text-[9px] text-lava-gold uppercase tracking-widest hover:bg-or hover:text-black transition">Ajouter</button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        async function persistPeopleAndRefresh(message = "Registre mis à jour en ligne.") {
+            try {
+                await saveRemoteAcademyPeople();
+                renderPeopleAdminList();
+                renderLearningAccessState();
+                showAdminStatus(message);
+            } catch (error) {
+                renderPeopleAdminList();
+                showAdminStatus(`Mise à jour locale OK, mais sauvegarde en ligne impossible : ${error.message || error}`, true);
+            }
+        }
+
+        async function createAcademyPerson() {
+            const name = document.getElementById("admin-person-name")?.value.trim() || "";
+            const email = document.getElementById("admin-person-email")?.value.trim().toLowerCase() || "";
+            const phone = document.getElementById("admin-person-phone")?.value.trim() || "";
+            const status = document.getElementById("admin-person-status")?.value || "client";
+            const note = document.getElementById("admin-person-note")?.value.trim() || "";
+
+            if (!name || !email.includes("@")) {
+                showAdminStatus("Nom et email valide obligatoires pour créer une fiche client.", true);
+                return;
+            }
+            if (academyPeople.some(person => person.email === email)) {
+                showAdminStatus("Une fiche existe déjà pour cet email.", true);
+                return;
+            }
+
+            const now = new Date().toISOString();
+            const person = {
+                id: `person-${Date.now()}`,
+                name,
+                email,
+                phone,
+                status,
+                approved: status === "student",
+                accessCode: generateStudentAccessCode(),
+                phaseActuelle: status === "student" ? 2 : 0,
+                niveauAcademie: status === "student" ? 1 : 0,
+                allowedCourseIds: status === "student" ? [learningCourses[0]?.id].filter(Boolean) : [],
+                notes: note ? [{ at: now, text: note }] : [],
+                createdAt: now,
+                updatedAt: now
+            };
+            academyPeople.unshift(person);
+            ["admin-person-name", "admin-person-email", "admin-person-phone", "admin-person-note"].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = "";
+            });
+            await persistPeopleAndRefresh("Fiche client créée et sauvegardée.");
+        }
+
+        async function promotePersonToStudent(personId) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            person.status = "student";
+            person.approved = true;
+            person.phaseActuelle = Math.max(person.phaseActuelle || 0, 2);
+            person.niveauAcademie = Math.max(person.niveauAcademie || 0, 1);
+            if (!person.allowedCourseIds?.length) person.allowedCourseIds = [learningCourses[0]?.id].filter(Boolean);
+            person.updatedAt = new Date().toISOString();
+            person.notes = [
+                ...(person.notes || []),
+                { at: person.updatedAt, text: "Validation admin : client transformé en élève." }
+            ];
+            await persistPeopleAndRefresh("Client transformé en élève validé.");
+        }
+
+        async function togglePersonApproval(personId) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            person.status = "student";
+            person.approved = !person.approved;
+            person.updatedAt = new Date().toISOString();
+            person.notes = [
+                ...(person.notes || []),
+                { at: person.updatedAt, text: person.approved ? "Accès élève réactivé." : "Accès élève suspendu." }
+            ];
+            await persistPeopleAndRefresh(person.approved ? "Accès élève réactivé." : "Accès élève suspendu.");
+        }
+
+        async function togglePersonCourseAccess(personId, courseId, checked) {
+            const person = academyPeople.find(item => item.id === personId);
+            if (!person) return;
+            const current = new Set(person.allowedCourseIds || []);
+            if (checked) current.add(courseId);
+            else current.delete(courseId);
+            person.allowedCourseIds = [...current];
+            person.updatedAt = new Date().toISOString();
+            await persistPeopleAndRefresh("Accès cours mis à jour.");
+        }
+
+        async function addPersonFollowUp(personId) {
+            const person = academyPeople.find(item => item.id === personId);
+            const input = document.getElementById(`person-note-${personId}`);
+            const text = input?.value.trim() || "";
+            if (!person || !text) {
+                showAdminStatus("Ajoutez une note de suivi avant d'enregistrer.", true);
+                return;
+            }
+            person.notes = [
+                ...(person.notes || []),
+                { at: new Date().toISOString(), text }
+            ];
+            person.updatedAt = new Date().toISOString();
+            input.value = "";
+            await persistPeopleAndRefresh("Note de suivi ajoutée.");
         }
 
         async function uploadLearningResource() {
@@ -5014,6 +5318,7 @@
             applyPlatformSettings();
             renderAcademyPlatformDemo('stable');
             await loadRemoteLearningCatalog();
+            await loadRemoteAcademyPeople();
             renderLearningAccessState();
             populateLearningAdminForm();
             switchTab(activeTab);

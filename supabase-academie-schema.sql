@@ -21,6 +21,33 @@ create table if not exists public.academy_profiles (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.client_records (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid references public.academy_profiles(id) on delete set null,
+  name text not null,
+  email text not null,
+  phone text,
+  status text not null default 'client' check (status in ('client', 'student', 'suspended')),
+  access_code text unique not null default encode(gen_random_bytes(6), 'hex'),
+  approved_for_learning boolean not null default false,
+  phase_actuelle integer not null default 0 check (phase_actuelle between 0 and 4),
+  niveau_academie integer not null default 0 check (niveau_academie between 0 and 10),
+  allowed_course_ids uuid[] not null default '{}',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.client_followups (
+  id uuid primary key default gen_random_uuid(),
+  client_id uuid not null references public.client_records(id) on delete cascade,
+  session_date date not null default current_date,
+  body_focus text check (body_focus in ('Emotionnel', 'Physique', 'Mental', 'Spirituel', 'Global')),
+  note text not null,
+  next_action text,
+  visible_to_client boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists public.academy_courses (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
@@ -109,6 +136,8 @@ as $$
 $$;
 
 alter table public.academy_profiles enable row level security;
+alter table public.client_records enable row level security;
+alter table public.client_followups enable row level security;
 alter table public.academy_courses enable row level security;
 alter table public.academy_lessons enable row level security;
 alter table public.academy_resources enable row level security;
@@ -123,6 +152,32 @@ create policy "Admins manage profiles"
 on public.academy_profiles for all
 using (public.is_academy_admin())
 with check (public.is_academy_admin());
+
+create policy "Admins manage client records"
+on public.client_records for all
+using (public.is_academy_admin())
+with check (public.is_academy_admin());
+
+create policy "Clients read own client record"
+on public.client_records for select
+using (email = (select email from auth.users where id = auth.uid()) or public.is_academy_admin());
+
+create policy "Admins manage client followups"
+on public.client_followups for all
+using (public.is_academy_admin())
+with check (public.is_academy_admin());
+
+create policy "Clients read visible followups"
+on public.client_followups for select
+using (
+  visible_to_client = true
+  and exists (
+    select 1
+    from public.client_records cr
+    where cr.id = client_followups.client_id
+      and cr.email = (select email from auth.users where id = auth.uid())
+  )
+);
 
 create policy "Students read published accessible courses"
 on public.academy_courses for select
