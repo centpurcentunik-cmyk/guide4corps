@@ -1,0 +1,17 @@
+Actions terrain - Parcours Renaissance
+
+Objectif :
+Retrouver une ligne de base avant d'entrer dans l'Academie.
+
+Actions possibles :
+- Mer
+- Marche
+- Cascade
+- Bain des 7 plantes
+- Bain de vapeur
+- Desengagement
+- Magnetisme
+- Purification de la maison
+
+Note :
+La stabilite doit etre validee avant l'ouverture du cycle d'apprentissage.

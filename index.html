@@ -1309,6 +1309,145 @@
             background: var(--school-cyan);
             box-shadow: 0 0 16px rgba(41,214,232,0.65);
         }
+        .learning-shell {
+            position: relative;
+            overflow: hidden;
+            margin-inline: calc(50% - 50vw);
+            padding: clamp(2rem, 5vw, 4rem) max(1rem, calc((100vw - 1280px) / 2));
+            color: #f4efe5;
+            background:
+                radial-gradient(circle at 78% 8%, rgba(41,214,232,0.16), transparent 26%),
+                radial-gradient(circle at 18% 30%, rgba(212,175,55,0.13), transparent 26%),
+                linear-gradient(180deg, rgba(1,7,13,0.96), rgba(0,2,7,0.98)),
+                url("images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png") center / cover fixed no-repeat;
+        }
+        .learning-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.5;
+            background-image:
+                radial-gradient(circle, rgba(242,203,101,0.7) 0 1px, transparent 1.8px),
+                radial-gradient(circle, rgba(41,214,232,0.5) 0 1px, transparent 1.7px);
+            background-size: 160px 160px, 230px 230px;
+            background-position: 30px 50px, 95px 135px;
+        }
+        .learning-layer {
+            position: relative;
+            z-index: 2;
+        }
+        .learning-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+        .learning-panel,
+        .learning-course,
+        .learning-resource,
+        .learning-stat {
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 8px;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(41,214,232,0.08), transparent 31%),
+                linear-gradient(145deg, rgba(4,18,29,0.9), rgba(0,4,10,0.94));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 70px rgba(0,0,0,0.32);
+        }
+        .learning-panel {
+            padding: clamp(1.2rem, 3vw, 2rem);
+        }
+        .learning-course {
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+        }
+        .learning-course:hover,
+        .learning-course.is-active {
+            border-color: rgba(41,214,232,0.82);
+            transform: translateY(-2px);
+        }
+        .learning-course.is-locked {
+            opacity: 0.5;
+            filter: grayscale(0.65);
+        }
+        .learning-course h3,
+        .learning-panel h3,
+        .learning-resource strong {
+            color: var(--school-gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-weight: 700;
+            letter-spacing: 0.055em;
+            text-transform: uppercase;
+        }
+        .learning-video-frame {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(212,175,55,0.38);
+            border-radius: 8px;
+            aspect-ratio: 16 / 9;
+            background:
+                radial-gradient(circle at 50% 38%, rgba(41,214,232,0.18), transparent 34%),
+                linear-gradient(145deg, rgba(5,25,35,0.92), rgba(0,4,10,0.98));
+        }
+        .learning-video-frame video,
+        .learning-video-frame iframe {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 0;
+            object-fit: cover;
+        }
+        .learning-video-placeholder {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .learning-progress-track {
+            overflow: hidden;
+            height: 0.55rem;
+            border: 1px solid rgba(212,175,55,0.35);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.38);
+        }
+        .learning-progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #29d6e8, #d4af37);
+            box-shadow: 0 0 18px rgba(41,214,232,0.34);
+            transition: width 0.35s ease;
+        }
+        .learning-resource {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+        }
+        .learning-download {
+            border: 1px solid rgba(41,214,232,0.5);
+            border-radius: 6px;
+            padding: 0.55rem 0.75rem;
+            color: var(--school-cyan);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .learning-download:hover {
+            border-color: rgba(242,203,101,0.85);
+            color: var(--school-gold-light);
+        }
+        @media (max-width: 980px) {
+            .learning-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         .school-quote {
             padding: clamp(1.5rem, 4vw, 2.8rem);
             border-top: 1px solid rgba(212,175,55,0.55);
@@ -1458,6 +1597,9 @@
                 </button>
                 <button onclick="switchTab('school')" id="tab-btn-school" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     🎓 Haute École
+                </button>
+                <button onclick="switchTab('learning')" id="tab-btn-learning" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
+                    Espace Formation
                 </button>
                 <button onclick="switchTab('resonance')" id="tab-btn-resonance" class="lux-nav-btn px-1 py-2 hover:text-white transition-all duration-300">
                     <span id="tab-label-resonance">Résonance</span>
@@ -1965,6 +2107,106 @@
                     <span>Conditions générales</span>
                 </div>
                 <p>© 2026 Etern'Aile — Haute École des Guides.</p>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ONGLET : ESPACE FORMATION - PLATEFORME PEDAGO  -->
+        <!-- ============================================== -->
+        <section id="tab-learning" class="learning-shell hidden">
+            <div class="learning-layer space-y-10">
+                <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 items-end">
+                    <div class="space-y-5">
+                        <p class="school-kicker">Plateforme pédagogique</p>
+                        <h1 class="school-title">Espace <span>Formation</span></h1>
+                        <p class="school-copy max-w-2xl">Un espace complet pour suivre les cours en ligne, regarder les vidéos, télécharger les supports, valider les étapes et avancer dans l'Académie sans perdre le fil.</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="learning-stat p-4">
+                            <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Cours</p>
+                            <strong id="learning-stat-courses" class="block mt-2 text-3xl text-[#f2cb65] font-display">0</strong>
+                        </div>
+                        <div class="learning-stat p-4">
+                            <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Progression</p>
+                            <strong id="learning-stat-progress" class="block mt-2 text-3xl text-[#29d6e8] font-display">0%</strong>
+                        </div>
+                        <div class="learning-stat p-4">
+                            <p class="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-bold">Fichiers</p>
+                            <strong id="learning-stat-files" class="block mt-2 text-3xl text-[#f2cb65] font-display">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-panel">
+                    <div class="flex flex-col md:flex-row gap-5 md:items-center md:justify-between">
+                        <div class="space-y-2">
+                            <h2 class="school-subtitle">Parcours élève</h2>
+                            <p class="school-copy text-sm">Le Bilan des 4 Corps débloque le parcours. Les cours supérieurs restent verrouillés tant que les étapes précédentes ne sont pas validées.</p>
+                        </div>
+                        <div class="min-w-[220px]">
+                            <div class="learning-progress-track"><div id="learning-global-progress" class="learning-progress-bar"></div></div>
+                            <p id="learning-progress-label" class="text-[10px] text-gray-400 uppercase tracking-[0.12em] font-bold mt-2">Progression enregistrée localement</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-grid">
+                    <aside class="learning-panel space-y-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <h2 class="school-subtitle text-2xl">Catalogue</h2>
+                            <button type="button" onclick="resetLearningProgress()" class="guide-btn-outline text-[10px] px-4 py-2">Réinitialiser</button>
+                        </div>
+                        <div id="learning-course-list" class="space-y-3"></div>
+                    </aside>
+
+                    <main class="space-y-5">
+                        <section class="learning-panel space-y-5">
+                            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                <div>
+                                    <p id="learning-current-phase" class="school-kicker">Niveau 1</p>
+                                    <h2 id="learning-current-title" class="school-section-title">Cours</h2>
+                                    <p id="learning-current-description" class="school-copy mt-3"></p>
+                                </div>
+                                <button id="learning-complete-btn" type="button" onclick="toggleLearningLessonComplete()" class="guide-btn-cyan shrink-0">Marquer comme terminé</button>
+                            </div>
+
+                            <div class="learning-video-frame">
+                                <video id="learning-video-player" controls preload="metadata" poster="images/freepik_met-le-visage-de-limage-1-sur-limage-2_0001 (1)001.png" class="hidden"></video>
+                                <iframe id="learning-iframe-player" class="hidden" title="Vidéo du cours" allowfullscreen></iframe>
+                                <div id="learning-video-placeholder" class="learning-video-placeholder">
+                                    <div>
+                                        <p class="text-4xl mb-3">▶</p>
+                                        <p class="school-copy">Zone vidéo prête à recevoir vos vidéos MP4, Vimeo, YouTube non listées ou fichiers privés Supabase Storage.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="academy-chip">Vidéo en ligne</div>
+                                <div class="academy-chip">Fichiers à télécharger</div>
+                                <div class="academy-chip">Progression élève</div>
+                            </div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <div class="flex items-center justify-between gap-4 mb-5">
+                                <h2 class="school-subtitle text-2xl">Supports du cours</h2>
+                                <p id="learning-resource-count" class="academy-chip">0 fichier</p>
+                            </div>
+                            <div id="learning-resource-list" class="space-y-3"></div>
+                        </section>
+
+                        <section class="learning-panel">
+                            <h2 class="school-subtitle text-2xl">Architecture prévue</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                                <div class="academy-route-card"><h4 class="text-[#f2cb65] font-bold uppercase tracking-[0.12em] text-xs">Comptes élèves</h4><p class="school-copy text-sm mt-2">Connexion par email, profil élève, inscription à un parcours, droits d'accès par phase.</p></div>
+                                <div class="academy-route-card"><h4 class="text-[#f2cb65] font-bold uppercase tracking-[0.12em] text-xs">Cours & leçons</h4><p class="school-copy text-sm mt-2">Modules, vidéos, textes, validations, progression et déblocage automatique.</p></div>
+                                <div class="academy-route-card"><h4 class="text-[#f2cb65] font-bold uppercase tracking-[0.12em] text-xs">Vidéos & fichiers</h4><p class="school-copy text-sm mt-2">Stockage Supabase ou Vimeo privé, liens signés, PDF et carnets téléchargeables.</p></div>
+                                <div class="academy-route-card"><h4 class="text-[#f2cb65] font-bold uppercase tracking-[0.12em] text-xs">Admin Guide</h4><p class="school-copy text-sm mt-2">Ajouter un cours, déposer une vidéo, ajouter un fichier, valider un élève et suivre les avancées.</p></div>
+                            </div>
+                        </section>
+                    </main>
+                </div>
             </div>
         </section>
 
@@ -2886,7 +3128,7 @@
 
         function switchTab(tabId) {
             activeTab = tabId;
-            const tabs = ['tarot', 'guide', 'school', 'resonance'];
+            const tabs = ['tarot', 'guide', 'school', 'learning', 'resonance'];
             tabs.forEach(t => {
                 const sec = document.getElementById(`tab-${t}`);
                 const btn = t === 'tarot' ? document.getElementById('tab-btn-home') : document.getElementById(`tab-btn-${t}`);
@@ -3001,6 +3243,186 @@
                     `;
                 }).join("");
             }
+        }
+
+        const LEARNING_STORAGE_KEY = "etern_aile_learning_progress";
+        let activeLearningCourseId = "bilan-4-corps";
+        const learningCourses = [
+            {
+                id: "bilan-4-corps",
+                phase: "Phase 0",
+                title: "Bilan des 4 Corps",
+                duration: "42 min",
+                locked: false,
+                description: "Comprendre l'état actuel des corps émotionnel, physique, mental et spirituel avant d'ouvrir le parcours.",
+                videoSrc: "videos/guide-background.mp4",
+                resources: [
+                    { title: "Carnet de bord du Bilan", type: "TXT", href: "downloads/carnet-bord-4-corps.txt" },
+                    { title: "Ordre immuable des 4 Corps", type: "TXT", href: "downloads/ordre-4-corps.txt" }
+                ]
+            },
+            {
+                id: "renaissance-secours",
+                phase: "Phase 1",
+                title: "Parcours Renaissance",
+                duration: "1 h 15",
+                locked: false,
+                description: "Stabiliser, apaiser la surcharge et retrouver une ligne de base avant d'entrer dans l'Académie.",
+                videoSrc: "videos/haute-ecole-background.mp4",
+                resources: [
+                    { title: "Protocole Ancrage et Discernement", type: "TXT", href: "downloads/protocole-ancrage-discernement.txt" },
+                    { title: "Actions terrain de secours", type: "TXT", href: "downloads/actions-terrain-renaissance.txt" }
+                ]
+            },
+            {
+                id: "cycle-fondations",
+                phase: "Phase 2",
+                title: "Cycle Fondations",
+                duration: "10 modules",
+                locked: true,
+                description: "Apprendre le langage commun : éléments, capacités innées, archétypes, états de conscience, hygiène et souveraineté.",
+                videoSrc: "",
+                resources: [
+                    { title: "Plan des 10 niveaux", type: "TXT", href: "downloads/plan-10-niveaux-academie.txt" }
+                ]
+            },
+            {
+                id: "laboratoire-guides",
+                phase: "Phase 3",
+                title: "Laboratoire des Guides",
+                duration: "4 h / mois",
+                locked: true,
+                description: "Mettre en pratique les enseignements avec études de cas, binômes, débriefings et retours d'expérience.",
+                videoSrc: "",
+                resources: [
+                    { title: "Fiche étude de cas", type: "TXT", href: "downloads/fiche-etude-cas-laboratoire.txt" }
+                ]
+            }
+        ];
+
+        function getLearningProgress() {
+            try {
+                return JSON.parse(localStorage.getItem(LEARNING_STORAGE_KEY)) || {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function saveLearningProgress(progress) {
+            localStorage.setItem(LEARNING_STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        function getUnlockedLearningCourses(progress) {
+            return learningCourses.map((course, index) => {
+                const previousCourse = learningCourses[index - 1];
+                const locked = index > 0 && !progress[previousCourse.id];
+                return { ...course, locked };
+            });
+        }
+
+        function renderLearningPlatform() {
+            const progress = getLearningProgress();
+            const courses = getUnlockedLearningCourses(progress);
+            const completedCount = learningCourses.filter(course => progress[course.id]).length;
+            const percent = Math.round((completedCount / learningCourses.length) * 100);
+            const totalFiles = learningCourses.reduce((sum, course) => sum + course.resources.length, 0);
+
+            setText("learning-stat-courses", String(learningCourses.length));
+            setText("learning-stat-progress", `${percent}%`);
+            setText("learning-stat-files", String(totalFiles));
+            setText("learning-progress-label", `${completedCount} cours validé${completedCount > 1 ? "s" : ""} sur ${learningCourses.length}`);
+            const bar = document.getElementById("learning-global-progress");
+            if (bar) bar.style.width = `${percent}%`;
+
+            const list = document.getElementById("learning-course-list");
+            if (list) {
+                list.innerHTML = courses.map(course => {
+                    const done = !!progress[course.id];
+                    const active = course.id === activeLearningCourseId;
+                    return `
+                        <button type="button" class="learning-course ${active ? "is-active" : ""} ${course.locked ? "is-locked" : ""}" ${course.locked ? "disabled" : ""} onclick="openLearningCourse('${course.id}')">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-[0.14em] text-[#29d6e8] font-bold">${course.phase} · ${course.duration}</p>
+                                    <h3 class="mt-2 text-xl">${course.locked ? "🔒 " : done ? "✓ " : ""}${course.title}</h3>
+                                    <p class="school-copy text-xs mt-2">${course.description}</p>
+                                </div>
+                            </div>
+                        </button>
+                    `;
+                }).join("");
+            }
+
+            if (!courses.some(course => course.id === activeLearningCourseId && !course.locked)) {
+                activeLearningCourseId = courses.find(course => !course.locked)?.id || learningCourses[0].id;
+            }
+            renderLearningCourseDetail();
+        }
+
+        function openLearningCourse(courseId) {
+            const progress = getLearningProgress();
+            const course = getUnlockedLearningCourses(progress).find(item => item.id === courseId);
+            if (!course || course.locked) return;
+            activeLearningCourseId = courseId;
+            renderLearningPlatform();
+        }
+
+        function renderLearningCourseDetail() {
+            const progress = getLearningProgress();
+            const course = learningCourses.find(item => item.id === activeLearningCourseId) || learningCourses[0];
+            const isDone = !!progress[course.id];
+            setText("learning-current-phase", course.phase);
+            setText("learning-current-title", course.title);
+            setText("learning-current-description", course.description);
+            setText("learning-complete-btn", isDone ? "Marquer comme à revoir" : "Marquer comme terminé");
+            setText("learning-resource-count", `${course.resources.length} fichier${course.resources.length > 1 ? "s" : ""}`);
+
+            const video = document.getElementById("learning-video-player");
+            const iframe = document.getElementById("learning-iframe-player");
+            const placeholder = document.getElementById("learning-video-placeholder");
+            if (video && iframe && placeholder) {
+                video.classList.add("hidden");
+                iframe.classList.add("hidden");
+                placeholder.classList.remove("hidden");
+                video.removeAttribute("src");
+                iframe.removeAttribute("src");
+                if (course.videoSrc) {
+                    if (course.videoSrc.includes("youtube.com") || course.videoSrc.includes("vimeo.com")) {
+                        iframe.src = course.videoSrc;
+                        iframe.classList.remove("hidden");
+                    } else {
+                        video.src = course.videoSrc;
+                        video.classList.remove("hidden");
+                    }
+                    placeholder.classList.add("hidden");
+                }
+            }
+
+            const resources = document.getElementById("learning-resource-list");
+            if (resources) {
+                resources.innerHTML = course.resources.map(resource => `
+                    <div class="learning-resource">
+                        <div>
+                            <strong>${resource.title}</strong>
+                            <p class="school-copy text-xs mt-1">${resource.type} · Support téléchargeable</p>
+                        </div>
+                        <a class="learning-download" href="${resource.href}" download>Télécharger</a>
+                    </div>
+                `).join("");
+            }
+        }
+
+        function toggleLearningLessonComplete() {
+            const progress = getLearningProgress();
+            progress[activeLearningCourseId] = !progress[activeLearningCourseId];
+            saveLearningProgress(progress);
+            renderLearningPlatform();
+        }
+
+        function resetLearningProgress() {
+            localStorage.removeItem(LEARNING_STORAGE_KEY);
+            activeLearningCourseId = learningCourses[0].id;
+            renderLearningPlatform();
         }
 
         // Gematria pythagoricienne pour la Grille d'Inclusion
@@ -4329,6 +4751,7 @@
             await loadRemotePlatformSettings();
             applyPlatformSettings();
             renderAcademyPlatformDemo('stable');
+            renderLearningPlatform();
             switchTab(activeTab);
         });
 
