@@ -2118,7 +2118,7 @@
                 <div class="learning-panel space-y-6 text-center">
                     <p class="school-kicker">Accès réservé</p>
                     <h1 class="school-section-title">Espace Formation verrouillé</h1>
-                    <p class="school-copy max-w-2xl mx-auto">Cet espace est réservé aux personnes déjà accompagnées, validées et autorisées à entrer dans l'Académie. Entrez le code d'accès transmis personnellement par Yann.</p>
+                    <p class="school-copy max-w-2xl mx-auto">Cet espace est réservé aux personnes déjà accompagnées, validées et autorisées à entrer dans l'Académie. Entrez votre email et votre code élève personnel transmis par Yann.</p>
                     <div class="grid grid-cols-1 md:grid-cols-[1fr_0.72fr] gap-3 max-w-2xl mx-auto text-left">
                         <label class="block text-[10px] uppercase text-gray-400 tracking-wider font-semibold">
                             Email élève
@@ -2131,7 +2131,7 @@
                     </div>
                     <button type="button" onclick="unlockLearningAccess()" class="guide-btn-cyan">Entrer dans l'espace formation</button>
                     <p id="learning-access-error" class="text-red-400 text-xs hidden"></p>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.12em]">Accès accordé uniquement après paiement, validation du parcours et accord du Guide.</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-[0.12em]">Accès accordé uniquement après paiement, validation admin et ouverture des modules par le Guide.</p>
                 </div>
             </div>
 
@@ -3414,7 +3414,6 @@
         function hasLearningAccess() {
             const access = getLearningAccess();
             if (!access) return false;
-            if (access.code === platformSettings.learningAccessCode) return true;
             return !!findAuthorizedLearningPerson(access.email, access.code);
         }
 
@@ -3431,7 +3430,7 @@
 
         function getCurrentLearningPerson() {
             const access = getLearningAccess();
-            if (!access || access.code === platformSettings.learningAccessCode) return null;
+            if (!access) return null;
             return findAuthorizedLearningPerson(access.email, access.code) || null;
         }
 
@@ -3461,7 +3460,7 @@
                 return;
             }
             const authorizedPerson = findAuthorizedLearningPerson(email, code);
-            if (code !== platformSettings.learningAccessCode && !authorizedPerson) {
+            if (!authorizedPerson) {
                 if (error) {
                     error.textContent = "Accès refusé. Cette adresse n'est pas encore validée comme élève, ou le code est incorrect.";
                     error.classList.remove("hidden");
