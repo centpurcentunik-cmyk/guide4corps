@@ -713,7 +713,7 @@
                         <div class="lock-icon">🔒</div>
                         <h2>Version Premium verrouillée</h2>
                         <p class="lead">Débloquez le débrief du bilan, le parcours de soins, les cartes ancêtres et la ligne directe avec le Guide.</p>
-                        <button class="btn btn-primary" type="button" onclick="openAdminModal()">Accès Admin</button>
+                        <button class="btn btn-primary" type="button" onclick="openAdminModal(true)">Déverrouiller Premium</button>
                     </div>
                 </div>
                 <div class="paywall-content">
@@ -787,6 +787,7 @@
                 </div>
                 <div class="metrics">
                     <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
+                    <button class="btn btn-green" type="button" onclick="unlockPremium()">Déverrouiller Premium</button>
                     <button class="btn btn-primary" type="button" onclick="syncAdminForms(); saveData(); renderAll(); notify('Espace client mis à jour.')">Mettre à jour</button>
                     <button class="btn btn-danger" type="button" onclick="closeAdminModal()">Fermer</button>
                 </div>
@@ -1135,7 +1136,7 @@
                     <p class="eyebrow" style="color:var(--red);">Déblocage Premium</p>
                     <h3>Recevoir le débrief complet et le parcours adapté</h3>
                     <p class="lead">Le radar donne une première lecture. La version Premium ouvre le bilan, les soins, les ressources et le suivi direct.</p>
-                    <button class="btn btn-primary" type="button" onclick="openAdminModal()">Débloquer Premium</button>
+                    <button class="btn btn-primary" type="button" onclick="openAdminModal(true)">Débloquer Premium</button>
                 </div>
             `;
         }
@@ -1276,7 +1277,7 @@
         // ============================================================
         // ADMIN : modal, profil, soins, ancêtres
         // ============================================================
-        function openAdminModal() {
+        function openAdminModal(unlockAfterLogin = false) {
             if (sessionStorage.getItem("eternaile_admin_ok") !== "true") {
                 const password = prompt("Mot de passe admin :");
                 if (password !== ADMIN_PASSWORD) {
@@ -1284,6 +1285,10 @@
                     return;
                 }
                 sessionStorage.setItem("eternaile_admin_ok", "true");
+            }
+            if (unlockAfterLogin) {
+                unlockPremium();
+                return;
             }
             renderAdmin();
             document.getElementById("admin-modal").classList.add("show");
@@ -1306,6 +1311,14 @@
             clientData.status = status === "Premium" ? "Premium" : "Gratuit";
             saveData();
             renderAll();
+        }
+
+        function unlockPremium() {
+            clientData.status = "Premium";
+            saveData();
+            renderAll();
+            closeAdminModal();
+            notify("Premium déverrouillé.");
         }
 
         function syncAdminForms() {
