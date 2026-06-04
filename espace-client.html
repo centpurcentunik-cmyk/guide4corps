@@ -870,8 +870,8 @@
                     <button class="btn" type="button" onclick="createNewClient()">Nouveau client</button>
                     <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
                     <button class="btn btn-green" type="button" onclick="unlockPremium()">Déverrouiller Premium</button>
-                    <button class="btn btn-primary" type="button" onclick="saveTrackingToSupabase()">Enregistrer le suivi</button>
-                    <button class="btn btn-primary" type="button" onclick="syncAdminForms(); saveData(); renderAll(); notify('Espace client mis à jour.')">Mettre à jour</button>
+                    <button class="btn btn-primary" type="button" onclick="saveTrackingToSupabase()">Créer / enregistrer en ligne</button>
+                    <button class="btn" type="button" onclick="syncAdminForms(); saveData(); renderAll(); notify('Fiche mise à jour uniquement sur cet appareil.')">Sauver local</button>
                     <button class="btn btn-danger" type="button" onclick="closeAdminModal()">Fermer</button>
                 </div>
             </div>
@@ -1607,7 +1607,7 @@
             saveData();
             renderAll();
             renderAdmin();
-            notify("Fiche vierge créée. Renseignez au minimum le nom et le téléphone, puis cliquez sur Enregistrer le suivi.");
+            notify("Fiche vierge créée. Renseignez le nom et le téléphone, puis cliquez sur Créer / enregistrer en ligne.");
         }
 
         function renderAdmin() {
@@ -1725,9 +1725,14 @@
         async function saveTrackingToSupabase() {
             try {
                 syncAdminForms();
+                if (!clientData.profile.phone) {
+                    notify("Téléphone obligatoire pour créer la fiche en ligne.");
+                    setSupabaseStatus("Ajoutez le téléphone du client dans l'admin, puis cliquez sur Créer / enregistrer en ligne.", true);
+                    return;
+                }
                 const storageEmail = getClientStorageEmailFromProfile();
                 if (!storageEmail) {
-                    notify("Nom, téléphone ou email obligatoire pour créer la fiche client.");
+                    notify("Nom et téléphone obligatoires pour créer la fiche client.");
                     return;
                 }
 
@@ -1779,8 +1784,8 @@
                 await saveAncestorsToSupabase(user.id);
                 saveData();
                 renderAll();
-                setSupabaseStatus("Suivi enregistré dans Supabase.");
-                notify("Suivi Supabase enregistré.");
+                setSupabaseStatus(`Fiche en ligne créée / enregistrée pour ${clientData.profile.name} — ${clientData.profile.phone}.`);
+                notify("Fiche client enregistrée en ligne.");
             } catch (error) {
                 console.error(error);
                 setSupabaseStatus(`Sauvegarde Supabase impossible : ${formatSupabaseError(error)}`, true);
