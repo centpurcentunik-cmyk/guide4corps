@@ -201,6 +201,61 @@
             line-height: 1.7;
         }
 
+        .debrief-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .debrief-text {
+            max-width: 960px;
+            margin-top: 14px;
+            color: var(--muted);
+        }
+
+        .debrief-intro {
+            margin: 0 0 14px;
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.78;
+        }
+
+        .debrief-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .debrief-item {
+            border: 1px solid rgba(211, 164, 74, 0.26);
+            border-left: 4px solid var(--cyan);
+            border-radius: 14px;
+            background: rgba(7, 12, 18, 0.62);
+            padding: 16px 18px;
+            box-shadow: inset 0 0 30px rgba(0, 163, 224, 0.035);
+        }
+
+        .debrief-item-title {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gold);
+            font-family: Cinzel, serif;
+            font-size: 16px;
+            letter-spacing: 0.04em;
+        }
+
+        .debrief-item-body {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.72;
+        }
+
+        .debrief-paragraph {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.72;
+        }
+
         .grid { display: grid; gap: 16px; }
         .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -725,16 +780,16 @@
                     </div>
                 </div>
                 <div class="paywall-content">
-                    <div class="grid grid-2">
+                    <div class="grid debrief-grid">
                         <article class="card card-inner">
                             <p class="eyebrow">Débrief du bilan</p>
                             <h2>Bilan Histoire</h2>
-                            <p id="bilan-history" class="lead"></p>
+                            <div id="bilan-history" class="debrief-text"></div>
                         </article>
                         <article class="card card-inner">
                             <p class="eyebrow">Débrief du bilan</p>
                             <h2>Bilan Cicatrices du Cœur</h2>
-                            <p id="bilan-heart" class="lead"></p>
+                            <div id="bilan-heart" class="debrief-text"></div>
                         </article>
                     </div>
 
@@ -1123,11 +1178,63 @@
             if (login && clientData.profile.email) login.value = clientData.profile.email;
         }
 
+        function formatDebriefText(value) {
+            const raw = String(value || "").trim();
+            if (!raw) {
+                return `<p class="debrief-paragraph">Débrief premium à compléter par le Guide.</p>`;
+            }
+
+            const normalized = raw
+                .replace(/\r\n/g, "\n")
+                .replace(/\s*•\s*(Cicatrice\s+\d{1,3}\s*(?:\([^)]*\))?\s*:)/gi, "\n$1")
+                .replace(/\s+(Cicatrice\s+\d{1,3}\s*(?:\([^)]*\))?\s*:)/gi, "\n$1");
+
+            const chunks = normalized
+                .split(/(?=Cicatrice\s+\d{1,3}\s*(?:\([^)]*\))?\s*:)/gi)
+                .map(chunk => chunk.trim())
+                .filter(Boolean);
+
+            const intro = [];
+            const cicatrices = [];
+
+            chunks.forEach(chunk => {
+                const match = chunk.match(/^(Cicatrice\s+\d{1,3}\s*(?:\([^)]*\))?)\s*:\s*([\s\S]*)$/i);
+                if (match) {
+                    cicatrices.push({
+                        title: match[1],
+                        body: match[2].trim()
+                    });
+                } else {
+                    intro.push(chunk);
+                }
+            });
+
+            const introHtml = intro
+                .map(text => `<p class="debrief-intro">${escapeHtml(text).replace(/\n/g, "<br>")}</p>`)
+                .join("");
+
+            if (!cicatrices.length) {
+                return normalized
+                    .split(/\n{2,}/)
+                    .map(text => `<p class="debrief-paragraph">${escapeHtml(text).replace(/\n/g, "<br>")}</p>`)
+                    .join("");
+            }
+
+            const cicatricesHtml = cicatrices.map(item => `
+                <article class="debrief-item">
+                    <strong class="debrief-item-title">${escapeHtml(item.title)}</strong>
+                    <p class="debrief-item-body">${escapeHtml(item.body || "Analyse à compléter.").replace(/\n/g, "<br>")}</p>
+                </article>
+            `).join("");
+
+            return `${introHtml}<div class="debrief-list">${cicatricesHtml}</div>`;
+        }
+
         function renderProfile() {
             document.getElementById("client-name").textContent = clientData.profile.name;
             document.getElementById("client-bilan-short").textContent = clientData.profile.bilanHistory.slice(0, 180);
-            document.getElementById("bilan-history").textContent = clientData.profile.bilanHistory;
-            document.getElementById("bilan-heart").textContent = clientData.profile.bilanHeart;
+            document.getElementById("bilan-history").innerHTML = formatDebriefText(clientData.profile.bilanHistory);
+            document.getElementById("bilan-heart").innerHTML = formatDebriefText(clientData.profile.bilanHeart);
             document.getElementById("metric-cares").textContent = clientData.cares.filter(care => care.validated).length;
             document.getElementById("metric-ancestors").textContent = clientData.ancestors.length;
             document.getElementById("metric-journal").textContent = clientData.journal.length;
