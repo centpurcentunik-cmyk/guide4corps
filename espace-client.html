@@ -1346,13 +1346,8 @@
         // ============================================================
         function renderAncestors() {
             const container = document.getElementById("ancestor-grid");
-            const ancestorCare = getCareState("histoire-ancetre");
-            if (!ancestorCare.validated) {
-                container.innerHTML = `<div class="empty">La grille des cartes ancêtres s'affiche après validation de “Histoire de L'ANCÊTRE”.</div>`;
-                return;
-            }
             if (!clientData.ancestors.length) {
-                container.innerHTML = `<div class="empty">Aucune carte ancêtre enregistrée.</div>`;
+                container.innerHTML = `<div class="empty">Aucune carte ancêtre enregistrée pour ce client.</div>`;
                 return;
             }
             container.innerHTML = clientData.ancestors.map(ancestor => ancestorCardHtml(ancestor, false)).join("");
@@ -1689,6 +1684,7 @@
             ["ancestor-name", "ancestor-positive", "ancestor-risk", "ancestor-key"].forEach(id => document.getElementById(id).value = "");
             saveData();
             renderAll();
+            notify("Ancêtre ajouté. Cliquez sur “Enregistrer le suivi” pour l'envoyer en ligne.");
         }
 
         function deleteAncestor(id) {
