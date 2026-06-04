@@ -735,13 +735,11 @@
             </div>
             <div class="status-card">
                 <p class="eyebrow">Connexion client</p>
-                <label>Prénom
-                    <input id="client-firstname-login" type="text" placeholder="Votre prénom">
-                </label>
-                <label class="section">Téléphone
-                    <input id="client-phone-login" type="tel" placeholder="Téléphone du client">
+                <label>Code d'accès
+                    <input id="client-code-login" type="text" placeholder="Code transmis par le Guide">
                 </label>
                 <button class="btn btn-primary section" type="button" onclick="loadClientFromSupabase()">Charger mon suivi</button>
+                <button class="btn section" type="button" onclick="closeClientFile()">Fermer la fiche</button>
                 <p id="supabase-status" class="lead" style="font-size:12px;"></p>
             </div>
         </aside>
@@ -871,6 +869,7 @@
                     <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
                     <button class="btn btn-green" type="button" onclick="unlockPremium()">Déverrouiller Premium</button>
                     <button class="btn btn-primary" type="button" onclick="saveTrackingToSupabase()">Créer / enregistrer en ligne</button>
+                    <button class="btn btn-danger" type="button" onclick="deleteClientFromSupabase()">Supprimer ce client</button>
                     <button class="btn" type="button" onclick="syncAdminForms(); saveData(); renderAll(); notify('Fiche mise à jour uniquement sur cet appareil.')">Sauver local</button>
                     <button class="btn btn-danger" type="button" onclick="closeAdminModal()">Fermer</button>
                 </div>
@@ -887,6 +886,12 @@
                         </label>
                         <label>Nom du client
                             <input id="admin-name" type="text">
+                        </label>
+                        <label>Code d'accès client
+                            <div class="resource-row" style="margin-top:8px;">
+                                <input id="admin-access-code" type="text" placeholder="Code généré automatiquement">
+                                <button class="btn" type="button" onclick="generateAdminAccessCode()">Générer un code</button>
+                            </div>
                         </label>
                         <label>Téléphone du client
                             <input id="admin-phone" type="tel" placeholder="Téléphone du client">
@@ -1096,6 +1101,7 @@
                 status: "Gratuit",
                 profile: {
                     name: "Client ETERNAILE",
+                    accessCode: "",
                     phone: "",
                     email: "",
                     bilanHistory: "Son histoire à compléter par le Guide.",
@@ -1180,26 +1186,38 @@
                 .replace(/^-+|-+$/g, "");
         }
 
-        function normalizeNameForAccess(value) {
-            return String(value || "")
-                .trim()
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/[^a-z0-9]+/g, " ")
-                .trim();
-        }
-
-        function firstNameMatches(inputFirstName, storedName) {
-            const input = normalizeNameForAccess(inputFirstName);
-            const stored = normalizeNameForAccess(storedName);
-            if (!input || !stored) return false;
-            const firstToken = stored.split(" ")[0] || "";
-            return input === firstToken || stored.split(" ").includes(input);
-        }
-
         function isInternalClientEmail(value) {
             return /@(client\.eternaile\.local)$/.test(String(value || ""));
+        }
+
+        function normalizeAccessCode(value) {
+            return String(value || "")
+                .trim()
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, "");
+        }
+
+        function formatAccessCode(value) {
+            const code = normalizeAccessCode(value);
+            if (!code) return "";
+            return code.match(/.{1,4}/g).join("-");
+        }
+
+        function generateAccessCode() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            const block = () => {
+                let value = "";
+                for (let index = 0; index < 4; index += 1) {
+                    value += chars[Math.floor(Math.random() * chars.length)];
+                }
+                return value;
+            }
+            return `EA-${block()}-${block()}`;
+        }
+
+        function resolveClientStorageEmailFromCode(accessCode) {
+            const code = normalizeAccessCode(accessCode);
+            return code ? `code-${code.toLowerCase()}@client.eternaile.local` : "";
         }
 
         function resolveClientStorageEmail(input, fallbackName = "") {
@@ -1216,13 +1234,15 @@
         }
 
         function getClientStorageEmailFromProfile() {
-            return resolveClientStorageEmail(clientData.profile.phone)
+            return resolveClientStorageEmailFromCode(clientData.profile.accessCode)
+                || resolveClientStorageEmail(clientData.profile.phone)
                 || resolveClientStorageEmail(clientData.profile.email)
                 || resolveClientStorageEmail(clientData.profile.name);
         }
 
-        async function findClientUserByPhone(supabase, phone) {
-            const storageEmail = resolveClientStorageEmail(phone);
+        async function findClientUserByCode(supabase, accessCode) {
+            const storageEmail = resolveClientStorageEmailFromCode(accessCode);
+            const code = formatAccessCode(accessCode);
             const { data: directUser, error: directError } = await supabase
                 .from(SUPABASE_TABLES.users)
                 .select("*")
@@ -1234,7 +1254,7 @@
             const { data: legacyUsers, error: legacyError } = await supabase
                 .from(SUPABASE_TABLES.users)
                 .select("*")
-                .contains("diagnostic", { phone })
+                .contains("diagnostic", { accessCode: code })
                 .limit(5);
             if (legacyError) throw legacyError;
             return (legacyUsers || [])[0] || null;
@@ -1247,6 +1267,7 @@
             const profile = {
                 ...base.profile,
                 ...(data.profile || {}),
+                accessCode: data.profile?.accessCode || data.profile?.access_code || data.diagnostic?.accessCode || "",
                 phone: data.profile?.phone || data.profile?.telephone || data.diagnostic?.phone || "",
                 bilanNegative: data.profile?.bilanNegative || data.profile?.bilan_negative || data.diagnostic?.bilanNegative || base.profile.bilanNegative
             };
@@ -1293,10 +1314,8 @@
             const pill = document.getElementById("status-pill");
             pill.textContent = `Statut : ${clientData.status}`;
             pill.classList.toggle("premium", clientData.status === "Premium");
-            const firstNameLogin = document.getElementById("client-firstname-login");
-            const phoneLogin = document.getElementById("client-phone-login");
-            if (firstNameLogin) firstNameLogin.value = (clientData.profile.name || "").split(" ")[0] || "";
-            if (phoneLogin) phoneLogin.value = clientData.profile.phone || "";
+            const codeLogin = document.getElementById("client-code-login");
+            if (codeLogin && clientData.profile.accessCode) codeLogin.value = clientData.profile.accessCode;
         }
 
         function formatDebriefText(value) {
@@ -1604,15 +1623,29 @@
             }
             clientData = normalizeData(createDefaultData());
             clientData.status = "Premium";
+            clientData.profile.accessCode = generateAccessCode();
+            clientData.diagnostic.accessCode = clientData.profile.accessCode;
             saveData();
             renderAll();
             renderAdmin();
-            notify("Fiche vierge créée. Renseignez le nom et le téléphone, puis cliquez sur Créer / enregistrer en ligne.");
+            notify("Fiche vierge créée. Donnez ce code au client après l'enregistrement en ligne.");
+        }
+
+        function generateAdminAccessCode() {
+            const code = generateAccessCode();
+            document.getElementById("admin-access-code").value = code;
+            clientData.profile.accessCode = code;
+            clientData.diagnostic.accessCode = code;
+            saveData();
+            renderAll();
+            renderAdmin();
+            notify("Nouveau code généré.");
         }
 
         function renderAdmin() {
             document.getElementById("admin-status").value = clientData.status;
             document.getElementById("admin-name").value = clientData.profile.name;
+            document.getElementById("admin-access-code").value = clientData.profile.accessCode || "";
             document.getElementById("admin-phone").value = clientData.profile.phone || "";
             document.getElementById("admin-email").value = clientData.profile.email || "";
             document.getElementById("admin-bilan-history").value = clientData.profile.bilanHistory;
@@ -1639,38 +1672,30 @@
         function syncAdminForms() {
             clientData.status = document.getElementById("admin-status").value === "Premium" ? "Premium" : "Gratuit";
             clientData.profile.name = document.getElementById("admin-name").value.trim() || "Client ETERNAILE";
+            clientData.profile.accessCode = formatAccessCode(document.getElementById("admin-access-code").value);
             clientData.profile.phone = normalizePhone(document.getElementById("admin-phone").value);
             clientData.profile.email = document.getElementById("admin-email").value.trim().toLowerCase();
             clientData.profile.bilanHistory = document.getElementById("admin-bilan-history").value.trim();
             clientData.profile.bilanHeart = document.getElementById("admin-bilan-heart").value.trim();
             clientData.profile.bilanNegative = document.getElementById("admin-bilan-negative").value.trim();
+            clientData.diagnostic.accessCode = clientData.profile.accessCode;
             clientData.diagnostic.phone = clientData.profile.phone;
             clientData.diagnostic.publicEmail = clientData.profile.email;
             clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative;
         }
 
         async function loadClientFromSupabase() {
-            const firstName = document.getElementById("client-firstname-login").value.trim();
-            const phone = normalizePhone(document.getElementById("client-phone-login").value);
-            const storageEmail = resolveClientStorageEmail(phone);
-            if (!firstName) {
-                setSupabaseStatus("Entrez votre prénom.", true);
-                return;
-            }
-            if (!storageEmail) {
-                setSupabaseStatus("Entrez votre numéro de téléphone.", true);
+            const accessCode = formatAccessCode(document.getElementById("client-code-login").value);
+            if (!accessCode) {
+                setSupabaseStatus("Entrez votre code d'accès.", true);
                 return;
             }
             try {
                 const supabase = getSupabaseClient();
-                const user = await findClientUserByPhone(supabase, phone);
+                const user = await findClientUserByCode(supabase, accessCode);
 
                 if (!user) {
-                    setSupabaseStatus("Aucune fiche trouvée pour ce téléphone.", true);
-                    return;
-                }
-                if (!firstNameMatches(firstName, user.name)) {
-                    setSupabaseStatus("Accès refusé : le prénom ne correspond pas à cette fiche.", true);
+                    setSupabaseStatus("Aucune fiche trouvée pour ce code.", true);
                     return;
                 }
 
@@ -1686,7 +1711,8 @@
                     status: user.status || "Gratuit",
                     profile: {
                         name: user.name || "Client ETERNAILE",
-                        phone: user.diagnostic?.phone || phone,
+                        accessCode: user.diagnostic?.accessCode || accessCode,
+                        phone: user.diagnostic?.phone || "",
                         email: user.diagnostic?.publicEmail || (isInternalClientEmail(user.email) ? "" : user.email || ""),
                         bilanHistory: user.bilan_history || "",
                         bilanHeart: user.bilan_heart || "",
@@ -1725,19 +1751,26 @@
         async function saveTrackingToSupabase() {
             try {
                 syncAdminForms();
-                if (!clientData.profile.phone) {
-                    notify("Téléphone obligatoire pour créer la fiche en ligne.");
-                    setSupabaseStatus("Ajoutez le téléphone du client dans l'admin, puis cliquez sur Créer / enregistrer en ligne.", true);
+                if (!clientData.profile.accessCode) {
+                    clientData.profile.accessCode = generateAccessCode();
+                    clientData.diagnostic.accessCode = clientData.profile.accessCode;
+                    renderAdmin();
+                }
+                if (!clientData.profile.accessCode) {
+                    notify("Code d'accès obligatoire pour créer la fiche en ligne.");
+                    setSupabaseStatus("Générez un code d'accès, puis cliquez sur Créer / enregistrer en ligne.", true);
                     return;
                 }
                 const storageEmail = getClientStorageEmailFromProfile();
                 if (!storageEmail) {
-                    notify("Nom et téléphone obligatoires pour créer la fiche client.");
+                    notify("Code d'accès obligatoire pour créer la fiche client.");
                     return;
                 }
 
                 const supabase = getSupabaseClient();
+                clientData.profile.accessCode = formatAccessCode(clientData.profile.accessCode);
                 clientData.profile.phone = normalizePhone(clientData.profile.phone);
+                clientData.diagnostic.accessCode = clientData.profile.accessCode || "";
                 clientData.diagnostic.phone = clientData.profile.phone || "";
                 clientData.diagnostic.publicEmail = clientData.profile.email || "";
                 clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative || "";
@@ -1750,6 +1783,7 @@
                     bilan_heart: clientData.profile.bilanHeart,
                     diagnostic: {
                         ...clientData.diagnostic,
+                        accessCode: clientData.profile.accessCode || "",
                         phone: clientData.profile.phone || "",
                         publicEmail: clientData.profile.email || "",
                         bilanNegative: clientData.profile.bilanNegative || "",
@@ -1784,12 +1818,55 @@
                 await saveAncestorsToSupabase(user.id);
                 saveData();
                 renderAll();
-                setSupabaseStatus(`Fiche en ligne créée / enregistrée pour ${clientData.profile.name} — ${clientData.profile.phone}.`);
+                setSupabaseStatus(`Fiche en ligne créée / enregistrée. Code client : ${clientData.profile.accessCode}.`);
                 notify("Fiche client enregistrée en ligne.");
             } catch (error) {
                 console.error(error);
                 setSupabaseStatus(`Sauvegarde Supabase impossible : ${formatSupabaseError(error)}`, true);
                 notify("Sauvegarde Supabase impossible.");
+            }
+        }
+
+        function closeClientFile() {
+            clientData = normalizeData(createDefaultData());
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(clientData));
+            renderAll();
+            const codeLogin = document.getElementById("client-code-login");
+            if (codeLogin) codeLogin.value = "";
+            setSupabaseStatus("Fiche fermée. Entrez un nouveau code pour ouvrir une autre fiche.");
+        }
+
+        async function deleteClientFromSupabase() {
+            try {
+                syncAdminForms();
+                const accessCode = clientData.profile.accessCode;
+                if (!accessCode) {
+                    notify("Aucun code d'accès sur cette fiche.");
+                    return;
+                }
+                if (!confirm(`Supprimer définitivement la fiche en ligne liée au code ${accessCode} ?`)) {
+                    return;
+                }
+
+                const supabase = getSupabaseClient();
+                const user = await findClientUserByCode(supabase, accessCode);
+                if (!user) {
+                    setSupabaseStatus("Aucune fiche en ligne trouvée pour ce code.", true);
+                    return;
+                }
+
+                const { error } = await supabase
+                    .from(SUPABASE_TABLES.users)
+                    .delete()
+                    .eq("id", user.id);
+                if (error) throw error;
+
+                closeClientFile();
+                notify("Fiche client supprimée en ligne.");
+            } catch (error) {
+                console.error(error);
+                setSupabaseStatus(`Suppression impossible : ${formatSupabaseError(error)}`, true);
+                notify("Suppression impossible.");
             }
         }
 
