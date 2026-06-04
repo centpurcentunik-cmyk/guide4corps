@@ -863,6 +863,7 @@
                 <div>
                     <p class="eyebrow">Panneau Admin</p>
                     <h2>Gestion de l'espace client</h2>
+                    <p id="admin-supabase-status" class="lead" style="font-size:12px;max-width:760px;"></p>
                 </div>
                 <div class="metrics">
                     <button class="btn" type="button" onclick="createNewClient()">Nouveau client</button>
@@ -1154,10 +1155,12 @@
         }
 
         function setSupabaseStatus(message, isError = false) {
-            const status = document.getElementById("supabase-status");
-            if (!status) return;
-            status.textContent = message;
-            status.style.color = isError ? "var(--red)" : "var(--green)";
+            ["supabase-status", "admin-supabase-status"].forEach(id => {
+                const status = document.getElementById(id);
+                if (!status) return;
+                status.textContent = message;
+                status.style.color = isError ? "var(--red)" : "var(--green)";
+            });
         }
 
         function formatSupabaseError(error) {
