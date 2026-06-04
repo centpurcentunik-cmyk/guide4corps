@@ -535,6 +535,11 @@
             text-transform: uppercase;
         }
 
+        .resource-btn.ready {
+            border-color: rgba(0,163,224,0.5);
+            background: rgba(0,163,224,0.14);
+        }
+
         .resource-btn:disabled {
             cursor: not-allowed;
             opacity: 0.4;
@@ -1100,7 +1105,10 @@
                     id: care.id,
                     validated: false,
                     consequence: "",
-                    guideMessage: ""
+                    guideMessage: "",
+                    mp3Url: "",
+                    tutoUrl: "",
+                    pdfUrl: ""
                 })),
                 ancestors: [],
                 journal: [],
@@ -1149,6 +1157,7 @@
         function normalizeData(data) {
             const base = createDefaultData();
             const savedCares = Array.isArray(data.cares) ? data.cares : [];
+            const resourceMap = data.resources || data.diagnostic?.careResources || {};
             const profile = {
                 ...base.profile,
                 ...(data.profile || {}),
@@ -1160,11 +1169,15 @@
                 diagnostic: { ...base.diagnostic, ...(data.diagnostic || {}) },
                 cares: OFFICIAL_CARES.map(care => {
                     const saved = savedCares.find(item => item.id === care.id) || {};
+                    const resources = resourceMap[care.id] || {};
                     return {
                         id: care.id,
                         validated: saved.validated === true,
                         consequence: saved.consequence || "",
-                        guideMessage: saved.guideMessage || saved.guide_message || ""
+                        guideMessage: saved.guideMessage || saved.guide_message || "",
+                        mp3Url: saved.mp3Url || saved.mp3_url || resources.mp3Url || "",
+                        tutoUrl: saved.tutoUrl || saved.tuto_url || resources.tutoUrl || "",
+                        pdfUrl: saved.pdfUrl || saved.pdf_url || resources.pdfUrl || ""
                     };
                 }),
                 ancestors: Array.isArray(data.ancestors) ? data.ancestors : [],
@@ -1349,12 +1362,36 @@
                     ${isValidated && state.consequence ? `<p><strong>Conséquence réelle :</strong> ${escapeHtml(state.consequence)}</p>` : ""}
                     ${isValidated ? `<div class="card card-inner" style="margin-top:14px;background:rgba(0,163,224,0.08);border-color:rgba(0,163,224,0.28);"><p class="eyebrow">Message personnalisé du Guide</p><p class="lead">${escapeHtml(state.guideMessage || "Rituel validé, intégration en cours...")}</p></div>` : ""}
                     <div class="resource-row">
-                        <button class="resource-btn" ${isValidated ? "" : "disabled"} onclick="notify('MP3 prêt à connecter.')">Écouter le MP3</button>
-                        <button class="resource-btn" ${isValidated ? "" : "disabled"} onclick="notify('Tuto image prêt à connecter.')">Voir le Tuto Image</button>
-                        <button class="resource-btn" ${isValidated ? "" : "disabled"} onclick="notify('PDF prêt à connecter.')">Télécharger le PDF</button>
+                        <button class="resource-btn ${state.mp3Url ? "ready" : ""}" ${isValidated ? "" : "disabled"} onclick="openCareResource('${care.id}', 'mp3')">Écouter le MP3</button>
+                        <button class="resource-btn ${state.tutoUrl ? "ready" : ""}" ${isValidated ? "" : "disabled"} onclick="openCareResource('${care.id}', 'tuto')">Voir le Tuto Image</button>
+                        <button class="resource-btn ${state.pdfUrl ? "ready" : ""}" ${isValidated ? "" : "disabled"} onclick="openCareResource('${care.id}', 'pdf')">Télécharger le PDF</button>
                     </div>
                 </article>
             `;
+        }
+
+        function openCareResource(careId, type) {
+            const state = getCareState(careId);
+            const labels = {
+                mp3: "MP3",
+                tuto: "tuto image",
+                pdf: "PDF"
+            };
+            const url = {
+                mp3: state.mp3Url,
+                tuto: state.tutoUrl,
+                pdf: state.pdfUrl
+            }[type];
+
+            if (state.validated !== true) {
+                notify("Ce soin doit être validé avant d'ouvrir la ressource.");
+                return;
+            }
+            if (!url) {
+                notify(`Le ${labels[type]} n'est pas encore connecté pour ce soin.`);
+                return;
+            }
+            window.open(url, "_blank", "noopener");
         }
 
         function getCareState(id) {
@@ -1584,13 +1621,18 @@
 
                 const supabase = getSupabaseClient();
                 clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative || "";
+                clientData.diagnostic.careResources = buildCareResourceMap();
                 const userPayload = {
                     email: clientData.profile.email,
                     name: clientData.profile.name,
                     status: clientData.status,
                     bilan_history: clientData.profile.bilanHistory,
                     bilan_heart: clientData.profile.bilanHeart,
-                    diagnostic: { ...clientData.diagnostic, bilanNegative: clientData.profile.bilanNegative || "" },
+                    diagnostic: {
+                        ...clientData.diagnostic,
+                        bilanNegative: clientData.profile.bilanNegative || "",
+                        careResources: buildCareResourceMap()
+                    },
                     updated_at: new Date().toISOString()
                 };
 
@@ -1627,6 +1669,17 @@
                 setSupabaseStatus(`Sauvegarde Supabase impossible : ${formatSupabaseError(error)}`, true);
                 notify("Sauvegarde Supabase impossible.");
             }
+        }
+
+        function buildCareResourceMap() {
+            return clientData.cares.reduce((map, care) => {
+                map[care.id] = {
+                    mp3Url: care.mp3Url || "",
+                    tutoUrl: care.tutoUrl || "",
+                    pdfUrl: care.pdfUrl || ""
+                };
+                return map;
+            }, {});
         }
 
         async function saveAncestorsToSupabase(userId) {
@@ -1674,6 +1727,17 @@
                                             <label>Message personnalisé du Guide
                                                 <textarea onchange="updateCare('${care.id}', 'guideMessage', this.value)" placeholder="Message unique à laisser au client après ce rituel...">${escapeHtml(state.guideMessage || "")}</textarea>
                                             </label>
+                                            <div class="grid grid-3">
+                                                <label>Lien MP3
+                                                    <input type="url" value="${escapeHtml(state.mp3Url || "")}" placeholder="https://..." onchange="updateCare('${care.id}', 'mp3Url', this.value)">
+                                                </label>
+                                                <label>Lien tuto image
+                                                    <input type="url" value="${escapeHtml(state.tutoUrl || "")}" placeholder="https://..." onchange="updateCare('${care.id}', 'tutoUrl', this.value)">
+                                                </label>
+                                                <label>Lien PDF
+                                                    <input type="url" value="${escapeHtml(state.pdfUrl || "")}" placeholder="https://..." onchange="updateCare('${care.id}', 'pdfUrl', this.value)">
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 `;
