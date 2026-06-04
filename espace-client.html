@@ -719,7 +719,8 @@
             <div class="brand-sub">Guide des 4 Corps</div>
             <nav class="nav" aria-label="Navigation espace client">
                 <a href="#diagnostic">Radar gratuit</a>
-                <a href="#premium">Premium</a>
+                <a href="#bilan">Bilan</a>
+                <a href="#parcours-soins">Parcours de soins</a>
                 <a href="#journal">Journal</a>
                 <a href="index.html">Retour site</a>
             </nav>
@@ -742,7 +743,7 @@
                 <div>
                     <p class="eyebrow">Espace client dynamique</p>
                     <h1>Ma fiche client</h1>
-                    <p class="lead">Auto-diagnostic gratuit, journal de bord, parcours premium, cartes d'ancêtres et ligne directe.</p>
+                    <p class="lead">Auto-diagnostic gratuit, bilan personnel, parcours de soins, cartes d'ancêtres et ligne directe.</p>
                 </div>
                 <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
             </header>
@@ -780,29 +781,38 @@
                     </div>
                 </div>
                 <div class="paywall-content">
-                    <div class="grid debrief-grid">
-                        <article class="card card-inner">
-                            <p class="eyebrow">Débrief du bilan</p>
-                            <h2>Bilan Histoire</h2>
-                            <div id="bilan-history" class="debrief-text"></div>
-                        </article>
-                        <article class="card card-inner">
-                            <p class="eyebrow">Débrief du bilan</p>
-                            <h2>Bilan Cicatrices du Cœur</h2>
-                            <div id="bilan-heart" class="debrief-text"></div>
-                        </article>
-                    </div>
+                    <section id="bilan" class="section">
+                        <p class="eyebrow">Bilan personnel</p>
+                        <h2>Lecture du Guide</h2>
+                        <div class="grid debrief-grid section">
+                            <article class="card card-inner">
+                                <p class="eyebrow">Son histoire</p>
+                                <h2>Son histoire</h2>
+                                <div id="bilan-history" class="debrief-text"></div>
+                            </article>
+                            <article class="card card-inner">
+                                <p class="eyebrow">Les cicatrices de ton Cœur</p>
+                                <h2>Les Cicatrices de ton Cœur</h2>
+                                <div id="bilan-heart" class="debrief-text"></div>
+                            </article>
+                            <article class="card card-inner">
+                                <p class="eyebrow">Négatif identifié</p>
+                                <h2>Le Négatif</h2>
+                                <div id="bilan-negative" class="debrief-text"></div>
+                            </article>
+                        </div>
 
-                    <section class="section">
-                        <p class="eyebrow">Parcours premium</p>
-                        <h2>Parcours de soins ETERNAILE</h2>
-                        <div id="care-list" class="section grid"></div>
+                        <section class="section">
+                            <p class="eyebrow">Cartes d'ancêtres</p>
+                            <h2>Grille de la Tribu</h2>
+                            <div id="ancestor-grid" class="section grid grid-3"></div>
+                        </section>
                     </section>
 
-                    <section class="section">
-                        <p class="eyebrow">Cartes d'ancêtres</p>
-                        <h2>Grille de la Tribu</h2>
-                        <div id="ancestor-grid" class="section grid grid-3"></div>
+                    <section id="parcours-soins" class="section">
+                        <p class="eyebrow">Parcours de soins</p>
+                        <h2>Parcours de soins ETERNAILE</h2>
+                        <div id="care-list" class="section grid"></div>
                     </section>
 
                     <section class="section card card-inner">
@@ -877,6 +887,9 @@
                         </label>
                         <label>Bilan Cicatrices du Cœur
                             <textarea id="admin-bilan-heart"></textarea>
+                        </label>
+                        <label>Négatif identifié
+                            <textarea id="admin-bilan-negative" placeholder="Décrire ici les négatifs, influences, emprises ou charges identifiées..."></textarea>
                         </label>
                     </div>
                 </section>
@@ -1073,7 +1086,8 @@
                     name: "Client ETERNAILE",
                     email: "",
                     bilanHistory: "Débrief premium à compléter par Yann.",
-                    bilanHeart: "Débrief premium à compléter par Yann."
+                    bilanHeart: "Débrief premium à compléter par Yann.",
+                    bilanNegative: "Analyse du négatif à compléter par Yann."
                 },
                 diagnostic: {
                     emotionnel: 5,
@@ -1135,9 +1149,14 @@
         function normalizeData(data) {
             const base = createDefaultData();
             const savedCares = Array.isArray(data.cares) ? data.cares : [];
+            const profile = {
+                ...base.profile,
+                ...(data.profile || {}),
+                bilanNegative: data.profile?.bilanNegative || data.profile?.bilan_negative || data.diagnostic?.bilanNegative || base.profile.bilanNegative
+            };
             return {
                 status: data.status === "Premium" ? "Premium" : "Gratuit",
-                profile: { ...base.profile, ...(data.profile || {}) },
+                profile,
                 diagnostic: { ...base.diagnostic, ...(data.diagnostic || {}) },
                 cares: OFFICIAL_CARES.map(care => {
                     const saved = savedCares.find(item => item.id === care.id) || {};
@@ -1235,6 +1254,7 @@
             document.getElementById("client-bilan-short").textContent = clientData.profile.bilanHistory.slice(0, 180);
             document.getElementById("bilan-history").innerHTML = formatDebriefText(clientData.profile.bilanHistory);
             document.getElementById("bilan-heart").innerHTML = formatDebriefText(clientData.profile.bilanHeart);
+            document.getElementById("bilan-negative").innerHTML = formatDebriefText(clientData.profile.bilanNegative);
             document.getElementById("metric-cares").textContent = clientData.cares.filter(care => care.validated).length;
             document.getElementById("metric-ancestors").textContent = clientData.ancestors.length;
             document.getElementById("metric-journal").textContent = clientData.journal.length;
@@ -1458,6 +1478,7 @@
             document.getElementById("admin-email").value = clientData.profile.email || "";
             document.getElementById("admin-bilan-history").value = clientData.profile.bilanHistory;
             document.getElementById("admin-bilan-heart").value = clientData.profile.bilanHeart;
+            document.getElementById("admin-bilan-negative").value = clientData.profile.bilanNegative;
             renderAdminCares();
             renderAdminAncestors();
         }
@@ -1482,6 +1503,8 @@
             clientData.profile.email = document.getElementById("admin-email").value.trim().toLowerCase();
             clientData.profile.bilanHistory = document.getElementById("admin-bilan-history").value.trim();
             clientData.profile.bilanHeart = document.getElementById("admin-bilan-heart").value.trim();
+            clientData.profile.bilanNegative = document.getElementById("admin-bilan-negative").value.trim();
+            clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative;
         }
 
         async function loadClientFromSupabase() {
@@ -1518,7 +1541,8 @@
                         name: user.name || "Client ETERNAILE",
                         email: user.email || email,
                         bilanHistory: user.bilan_history || "",
-                        bilanHeart: user.bilan_heart || ""
+                        bilanHeart: user.bilan_heart || "",
+                        bilanNegative: user.diagnostic?.bilanNegative || ""
                     },
                     diagnostic: user.diagnostic || clientData.diagnostic,
                     cares: OFFICIAL_CARES.map(care => {
@@ -1559,13 +1583,14 @@
                 }
 
                 const supabase = getSupabaseClient();
+                clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative || "";
                 const userPayload = {
                     email: clientData.profile.email,
                     name: clientData.profile.name,
                     status: clientData.status,
                     bilan_history: clientData.profile.bilanHistory,
                     bilan_heart: clientData.profile.bilanHeart,
-                    diagnostic: clientData.diagnostic,
+                    diagnostic: { ...clientData.diagnostic, bilanNegative: clientData.profile.bilanNegative || "" },
                     updated_at: new Date().toISOString()
                 };
 
