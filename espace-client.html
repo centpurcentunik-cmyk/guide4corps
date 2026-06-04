@@ -735,8 +735,11 @@
             </div>
             <div class="status-card">
                 <p class="eyebrow">Connexion client</p>
-                <label>Téléphone ou email
-                    <input id="client-email-login" type="text" placeholder="0692... ou client@email.com">
+                <label>Prénom
+                    <input id="client-firstname-login" type="text" placeholder="Votre prénom">
+                </label>
+                <label class="section">Téléphone
+                    <input id="client-phone-login" type="tel" placeholder="0692...">
                 </label>
                 <button class="btn btn-primary section" type="button" onclick="loadClientFromSupabase()">Charger mon suivi</button>
                 <p id="supabase-status" class="lead" style="font-size:12px;"></p>
@@ -1177,6 +1180,24 @@
                 .replace(/^-+|-+$/g, "");
         }
 
+        function normalizeNameForAccess(value) {
+            return String(value || "")
+                .trim()
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, " ")
+                .trim();
+        }
+
+        function firstNameMatches(inputFirstName, storedName) {
+            const input = normalizeNameForAccess(inputFirstName);
+            const stored = normalizeNameForAccess(storedName);
+            if (!input || !stored) return false;
+            const firstToken = stored.split(" ")[0] || "";
+            return input === firstToken || stored.split(" ").includes(input);
+        }
+
         function isInternalClientEmail(value) {
             return /@(client\.eternaile\.local)$/.test(String(value || ""));
         }
@@ -1253,8 +1274,10 @@
             const pill = document.getElementById("status-pill");
             pill.textContent = `Statut : ${clientData.status}`;
             pill.classList.toggle("premium", clientData.status === "Premium");
-            const login = document.getElementById("client-email-login");
-            if (login) login.value = clientData.profile.phone || clientData.profile.email || "";
+            const firstNameLogin = document.getElementById("client-firstname-login");
+            const phoneLogin = document.getElementById("client-phone-login");
+            if (firstNameLogin) firstNameLogin.value = (clientData.profile.name || "").split(" ")[0] || "";
+            if (phoneLogin) phoneLogin.value = clientData.profile.phone || "";
         }
 
         function formatDebriefText(value) {
@@ -1608,10 +1631,15 @@
         }
 
         async function loadClientFromSupabase() {
-            const identifier = document.getElementById("client-email-login").value.trim();
-            const storageEmail = resolveClientStorageEmail(identifier);
+            const firstName = document.getElementById("client-firstname-login").value.trim();
+            const phone = normalizePhone(document.getElementById("client-phone-login").value);
+            const storageEmail = resolveClientStorageEmail(phone);
+            if (!firstName) {
+                setSupabaseStatus("Entrez votre prénom.", true);
+                return;
+            }
             if (!storageEmail) {
-                setSupabaseStatus("Entrez le téléphone, l'email ou le nom complet du client.", true);
+                setSupabaseStatus("Entrez votre numéro de téléphone.", true);
                 return;
             }
             try {
@@ -1624,7 +1652,11 @@
 
                 if (userError) throw userError;
                 if (!user) {
-                    setSupabaseStatus("Aucune fiche trouvée pour cet identifiant.", true);
+                    setSupabaseStatus("Aucune fiche trouvée pour ce téléphone.", true);
+                    return;
+                }
+                if (!firstNameMatches(firstName, user.name)) {
+                    setSupabaseStatus("Accès refusé : le prénom ne correspond pas à cette fiche.", true);
                     return;
                 }
 
@@ -1640,7 +1672,7 @@
                     status: user.status || "Gratuit",
                     profile: {
                         name: user.name || "Client ETERNAILE",
-                        phone: user.diagnostic?.phone || normalizePhone(identifier),
+                        phone: user.diagnostic?.phone || phone,
                         email: user.diagnostic?.publicEmail || (isInternalClientEmail(user.email) ? "" : user.email || ""),
                         bilanHistory: user.bilan_history || "",
                         bilanHeart: user.bilan_heart || "",
