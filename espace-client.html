@@ -735,8 +735,8 @@
             </div>
             <div class="status-card">
                 <p class="eyebrow">Connexion client</p>
-                <label>Email client
-                    <input id="client-email-login" type="email" placeholder="client@email.com">
+                <label>Téléphone ou email
+                    <input id="client-email-login" type="text" placeholder="0692... ou client@email.com">
                 </label>
                 <button class="btn btn-primary section" type="button" onclick="loadClientFromSupabase()">Charger mon suivi</button>
                 <p id="supabase-status" class="lead" style="font-size:12px;"></p>
@@ -864,6 +864,7 @@
                     <h2>Gestion de l'espace client</h2>
                 </div>
                 <div class="metrics">
+                    <button class="btn" type="button" onclick="createNewClient()">Nouveau client</button>
                     <button class="btn" type="button" onclick="exportData()">Exporter JSON</button>
                     <button class="btn btn-green" type="button" onclick="unlockPremium()">Déverrouiller Premium</button>
                     <button class="btn btn-primary" type="button" onclick="saveTrackingToSupabase()">Enregistrer le suivi</button>
@@ -884,7 +885,10 @@
                         <label>Nom du client
                             <input id="admin-name" type="text">
                         </label>
-                        <label>Email du client
+                        <label>Téléphone du client
+                            <input id="admin-phone" type="tel" placeholder="0692...">
+                        </label>
+                        <label>Email du client (optionnel)
                             <input id="admin-email" type="email" placeholder="client@email.com">
                         </label>
                         <label>Bilan Histoire
@@ -1089,6 +1093,7 @@
                 status: "Gratuit",
                 profile: {
                     name: "Client ETERNAILE",
+                    phone: "",
                     email: "",
                     bilanHistory: "Débrief premium à compléter par Yann.",
                     bilanHeart: "Débrief premium à compléter par Yann.",
@@ -1154,6 +1159,47 @@
             return message || "Erreur Supabase inconnue.";
         }
 
+        function normalizePhone(value) {
+            let digits = String(value || "").replace(/\D/g, "");
+            if (digits.startsWith("00262")) digits = digits.slice(2);
+            if (digits.startsWith("262")) digits = `0${digits.slice(3)}`;
+            if (digits.length === 9 && digits.startsWith("6")) digits = `0${digits}`;
+            return digits;
+        }
+
+        function slugifyClientName(value) {
+            return String(value || "")
+                .trim()
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+        }
+
+        function isInternalClientEmail(value) {
+            return /@(client\.eternaile\.local)$/.test(String(value || ""));
+        }
+
+        function resolveClientStorageEmail(input, fallbackName = "") {
+            const raw = String(input || "").trim().toLowerCase();
+            if (raw.includes("@")) return raw;
+
+            const phone = normalizePhone(raw);
+            if (phone.length >= 8) return `tel-${phone}@client.eternaile.local`;
+
+            const slug = slugifyClientName(raw || fallbackName);
+            if (slug.length >= 2) return `nom-${slug}@client.eternaile.local`;
+
+            return "";
+        }
+
+        function getClientStorageEmailFromProfile() {
+            return resolveClientStorageEmail(clientData.profile.email)
+                || resolveClientStorageEmail(clientData.profile.phone)
+                || resolveClientStorageEmail(clientData.profile.name);
+        }
+
         function normalizeData(data) {
             const base = createDefaultData();
             const savedCares = Array.isArray(data.cares) ? data.cares : [];
@@ -1161,6 +1207,7 @@
             const profile = {
                 ...base.profile,
                 ...(data.profile || {}),
+                phone: data.profile?.phone || data.profile?.telephone || data.diagnostic?.phone || "",
                 bilanNegative: data.profile?.bilanNegative || data.profile?.bilan_negative || data.diagnostic?.bilanNegative || base.profile.bilanNegative
             };
             return {
@@ -1207,7 +1254,7 @@
             pill.textContent = `Statut : ${clientData.status}`;
             pill.classList.toggle("premium", clientData.status === "Premium");
             const login = document.getElementById("client-email-login");
-            if (login && clientData.profile.email) login.value = clientData.profile.email;
+            if (login) login.value = clientData.profile.phone || clientData.profile.email || "";
         }
 
         function formatDebriefText(value) {
@@ -1509,9 +1556,22 @@
             document.getElementById("admin-modal").classList.remove("show");
         }
 
+        function createNewClient() {
+            if (!confirm("Créer une fiche vierge pour un nouveau client ? Les modifications non enregistrées de la fiche affichée seront remplacées à l'écran.")) {
+                return;
+            }
+            clientData = normalizeData(createDefaultData());
+            clientData.status = "Premium";
+            saveData();
+            renderAll();
+            renderAdmin();
+            notify("Fiche vierge créée. Renseignez au minimum le nom et le téléphone, puis cliquez sur Enregistrer le suivi.");
+        }
+
         function renderAdmin() {
             document.getElementById("admin-status").value = clientData.status;
             document.getElementById("admin-name").value = clientData.profile.name;
+            document.getElementById("admin-phone").value = clientData.profile.phone || "";
             document.getElementById("admin-email").value = clientData.profile.email || "";
             document.getElementById("admin-bilan-history").value = clientData.profile.bilanHistory;
             document.getElementById("admin-bilan-heart").value = clientData.profile.bilanHeart;
@@ -1537,17 +1597,21 @@
         function syncAdminForms() {
             clientData.status = document.getElementById("admin-status").value === "Premium" ? "Premium" : "Gratuit";
             clientData.profile.name = document.getElementById("admin-name").value.trim() || "Client ETERNAILE";
+            clientData.profile.phone = normalizePhone(document.getElementById("admin-phone").value);
             clientData.profile.email = document.getElementById("admin-email").value.trim().toLowerCase();
             clientData.profile.bilanHistory = document.getElementById("admin-bilan-history").value.trim();
             clientData.profile.bilanHeart = document.getElementById("admin-bilan-heart").value.trim();
             clientData.profile.bilanNegative = document.getElementById("admin-bilan-negative").value.trim();
+            clientData.diagnostic.phone = clientData.profile.phone;
+            clientData.diagnostic.publicEmail = clientData.profile.email;
             clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative;
         }
 
         async function loadClientFromSupabase() {
-            const email = document.getElementById("client-email-login").value.trim().toLowerCase();
-            if (!email.includes("@")) {
-                setSupabaseStatus("Entrez un email client valide.", true);
+            const identifier = document.getElementById("client-email-login").value.trim();
+            const storageEmail = resolveClientStorageEmail(identifier);
+            if (!storageEmail) {
+                setSupabaseStatus("Entrez le téléphone, l'email ou le nom complet du client.", true);
                 return;
             }
             try {
@@ -1555,12 +1619,12 @@
                 const { data: user, error: userError } = await supabase
                     .from(SUPABASE_TABLES.users)
                     .select("*")
-                    .eq("email", email)
+                    .eq("email", storageEmail)
                     .maybeSingle();
 
                 if (userError) throw userError;
                 if (!user) {
-                    setSupabaseStatus("Aucun client trouvé pour cet email.", true);
+                    setSupabaseStatus("Aucune fiche trouvée pour cet identifiant.", true);
                     return;
                 }
 
@@ -1576,7 +1640,8 @@
                     status: user.status || "Gratuit",
                     profile: {
                         name: user.name || "Client ETERNAILE",
-                        email: user.email || email,
+                        phone: user.diagnostic?.phone || normalizePhone(identifier),
+                        email: user.diagnostic?.publicEmail || (isInternalClientEmail(user.email) ? "" : user.email || ""),
                         bilanHistory: user.bilan_history || "",
                         bilanHeart: user.bilan_heart || "",
                         bilanNegative: user.diagnostic?.bilanNegative || ""
@@ -1614,22 +1679,28 @@
         async function saveTrackingToSupabase() {
             try {
                 syncAdminForms();
-                if (!clientData.profile.email || !clientData.profile.email.includes("@")) {
-                    notify("Email client obligatoire pour enregistrer dans Supabase.");
+                const storageEmail = getClientStorageEmailFromProfile();
+                if (!storageEmail) {
+                    notify("Nom, téléphone ou email obligatoire pour créer la fiche client.");
                     return;
                 }
 
                 const supabase = getSupabaseClient();
+                clientData.profile.phone = normalizePhone(clientData.profile.phone);
+                clientData.diagnostic.phone = clientData.profile.phone || "";
+                clientData.diagnostic.publicEmail = clientData.profile.email || "";
                 clientData.diagnostic.bilanNegative = clientData.profile.bilanNegative || "";
                 clientData.diagnostic.careResources = buildCareResourceMap();
                 const userPayload = {
-                    email: clientData.profile.email,
+                    email: storageEmail,
                     name: clientData.profile.name,
                     status: clientData.status,
                     bilan_history: clientData.profile.bilanHistory,
                     bilan_heart: clientData.profile.bilanHeart,
                     diagnostic: {
                         ...clientData.diagnostic,
+                        phone: clientData.profile.phone || "",
+                        publicEmail: clientData.profile.email || "",
                         bilanNegative: clientData.profile.bilanNegative || "",
                         careResources: buildCareResourceMap()
                     },
