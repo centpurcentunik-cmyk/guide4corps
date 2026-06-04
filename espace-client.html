@@ -1069,6 +1069,14 @@
             status.style.color = isError ? "var(--red)" : "var(--green)";
         }
 
+        function formatSupabaseError(error) {
+            const message = String(error?.message || error || "");
+            if (message.toLowerCase().includes("failed to fetch")) {
+                return "Supabase est inaccessible. Vérifiez l'URL du projet, la clé API, que le projet n'est pas en pause, et que le schéma SQL a bien été créé.";
+            }
+            return message || "Erreur Supabase inconnue.";
+        }
+
         function normalizeData(data) {
             const base = createDefaultData();
             const savedCares = Array.isArray(data.cares) ? data.cares : [];
@@ -1436,7 +1444,7 @@
                 setSupabaseStatus("Suivi client chargé depuis Supabase.");
             } catch (error) {
                 console.error(error);
-                setSupabaseStatus(`Chargement Supabase impossible : ${error.message || error}`, true);
+                setSupabaseStatus(`Chargement Supabase impossible : ${formatSupabaseError(error)}`, true);
             }
         }
 
@@ -1489,7 +1497,7 @@
                 notify("Suivi Supabase enregistré.");
             } catch (error) {
                 console.error(error);
-                setSupabaseStatus(`Sauvegarde Supabase impossible : ${error.message || error}`, true);
+                setSupabaseStatus(`Sauvegarde Supabase impossible : ${formatSupabaseError(error)}`, true);
                 notify("Sauvegarde Supabase impossible.");
             }
         }
