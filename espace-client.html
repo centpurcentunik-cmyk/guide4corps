@@ -1216,9 +1216,28 @@
         }
 
         function getClientStorageEmailFromProfile() {
-            return resolveClientStorageEmail(clientData.profile.email)
-                || resolveClientStorageEmail(clientData.profile.phone)
+            return resolveClientStorageEmail(clientData.profile.phone)
+                || resolveClientStorageEmail(clientData.profile.email)
                 || resolveClientStorageEmail(clientData.profile.name);
+        }
+
+        async function findClientUserByPhone(supabase, phone) {
+            const storageEmail = resolveClientStorageEmail(phone);
+            const { data: directUser, error: directError } = await supabase
+                .from(SUPABASE_TABLES.users)
+                .select("*")
+                .eq("email", storageEmail)
+                .maybeSingle();
+            if (directError) throw directError;
+            if (directUser) return directUser;
+
+            const { data: legacyUsers, error: legacyError } = await supabase
+                .from(SUPABASE_TABLES.users)
+                .select("*")
+                .contains("diagnostic", { phone })
+                .limit(5);
+            if (legacyError) throw legacyError;
+            return (legacyUsers || [])[0] || null;
         }
 
         function normalizeData(data) {
@@ -1644,13 +1663,8 @@
             }
             try {
                 const supabase = getSupabaseClient();
-                const { data: user, error: userError } = await supabase
-                    .from(SUPABASE_TABLES.users)
-                    .select("*")
-                    .eq("email", storageEmail)
-                    .maybeSingle();
+                const user = await findClientUserByPhone(supabase, phone);
 
-                if (userError) throw userError;
                 if (!user) {
                     setSupabaseStatus("Aucune fiche trouvée pour ce téléphone.", true);
                     return;
