@@ -49,3 +49,10 @@ create index if not exists ancetres_user_id_idx on public.ancetres(user_id);
 alter table public.users disable row level security;
 alter table public.suivi_soin disable row level security;
 alter table public.ancetres disable row level security;
+
+-- Réparation si Supabase affiche "new row violates row-level security policy" :
+-- Exécutez ce bloc dans SQL Editor, puis retournez sur le site et réessayez.
+grant usage on schema public to anon;
+grant select, insert, update, delete on public.users to anon;
+grant select, insert, update, delete on public.suivi_soin to anon;
+grant select, insert, update, delete on public.ancetres to anon;

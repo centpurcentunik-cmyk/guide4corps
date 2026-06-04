@@ -1165,6 +1165,9 @@
             if (message.toLowerCase().includes("failed to fetch")) {
                 return "Supabase est inaccessible. Vérifiez l'URL du projet, la clé API, que le projet n'est pas en pause, et que le schéma SQL a bien été créé.";
             }
+            if (message.toLowerCase().includes("row-level security") || message.includes("42501")) {
+                return "Supabase bloque l'écriture car la sécurité RLS est activée sur la table users. Ouvrez Supabase > SQL Editor, puis exécutez le script de désactivation RLS fourni par le Guide.";
+            }
             return message || "Erreur Supabase inconnue.";
         }
 
